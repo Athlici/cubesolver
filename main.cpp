@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 using namespace std;
 
 bool CheckFile(string filename) {
@@ -33,5 +34,10 @@ bool CheckFile(string filename) {
 
 int main(int argc, char** argv) {
   cout << CheckFile("/home/felix/Desktop/test") << endl;
+  char * buff;
+  buff = (char*) malloc(400000000);
+  for(int i=0;i<400000000;i++) *(buff+i) =42;
+  int foo = 0;
+  cin >> foo;
 }
 
