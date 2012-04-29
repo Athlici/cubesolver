@@ -23,8 +23,20 @@
  */
 
 #include <iostream>
+#include <fstream>
+using namespace std;
+
+bool CheckFile(string filename) {
+  fstream File(filename.c_str());
+  return File;
+}
 
 int main(int argc, char** argv) {
+
+cout << CheckFile("/home/felix/Desktop/test") << endl;
+
 int centers[24][36] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 ;
 }
+
+
