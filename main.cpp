@@ -32,11 +32,7 @@ bool CheckFile(string filename) {
 }
 
 int main(int argc, char** argv) {
-
-cout << CheckFile("/home/felix/Desktop/test") << endl;
-
-int centers[24][36] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-;
+  cout << CheckFile("/home/felix/Desktop/test") << endl;
 }
 
 
