@@ -4,7 +4,7 @@
  *  Created on: 29.04.2012
  *      Author: Felix Jung <felix.jung@wilhelm-gym.net>
  *
- *	Copyright (C) 2012 Felix Jung
+ *	Copyright (C) 2012 Felix Jung, Tobias Stamm
  *
  *  This file is part of cubesolver.
  *
@@ -25,23 +25,29 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+
 using namespace std;
-#include "main.h"
+
+char *corners, *edges, *centers;
+const int cornersize = 48454560;
+const int edgesize = 44089920;
+const int centersize = 25741485;
+
 #include "arrays.cpp"
 #include "helpers.cpp"
 #include "create.cpp"
-//#include "helpers.cpp"
+
 
 int main(int argc, char** argv) {
- getcenters;
- getedges;
- getcorners; 
+ getcenters();
+ getedges();
+ getcorners(); 
 
 // Position einlesen
 
 // Position lösen
 
-// Done XD
+// Done xD
  
   int foo = 0;
   cin >> foo;
