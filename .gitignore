@@ -9,3 +9,5 @@ debian/substvars
 debian/*substvars
 debian/files
 *~
+*.bin
+*.dat

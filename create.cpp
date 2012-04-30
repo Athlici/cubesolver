@@ -1,24 +1,20 @@
 void getcenters() {
- centers = (char*) malloc(centersize);  // TODO "centers" not declarated
- if (CheckFile("centers")) /*LoadFile(centers,"centers",centersize)*/;
- else {
-   for(int i=0;i<centersize;i++) *(centers+i) =255;
+ centers = (char*) malloc(centersize);  // TODO "centers" not declarated (and so on)
+ if(!LoadFile(centers,"centers",centersize)) {
+   for(int i=0;i<centersize;i++) *(centers+i) = 255;
  }
 }
 
 void getedges() {
  edges   = (char*) malloc(edgesize);
- if (CheckFile("edges")) /*LoadFile(edges,"edges",edgesize)*/;
- else {
-   for(int i=0;i<edgesize;i++) *(edges+i) =255;
+ if(!LoadFile(edges,"edges",edgesize)) {
+   for(int i=0;i<edgesize;i++) *(edges+i) = 255;
  }
 }
 
 void getcorners() {
  corners = (char*) malloc(cornersize);
- if (CheckFile("corners")) /*LoadFile(corners,"corners",cornersize)*/;
- else {
-   for(int i=0;i<cornersize;i++) *(corners+i) =255;
-	
+ if (!LoadFile(corners,"corners",cornersize)) {
+   for(int i=0;i<cornersize;i++) *(corners+i) = 255;	
  }
 }
