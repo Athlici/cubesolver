@@ -26,33 +26,24 @@
 #include <fstream>
 #include <cstdlib>
 using namespace std;
-
-char *corners,*edges,*centers;
-
-bool CheckFile(string filename) {
-  fstream File(filename.c_str());
-  return File;
-}
+#include "main.h"
+#include "arrays.cpp"
+#include "helpers.cpp"
+#include "create.cpp"
+//#include "helpers.cpp"
 
 int main(int argc, char** argv) {
+ getcenters;
+ getedges;
+ getcorners; 
 
- corners = (char*) malloc(48454560);
- edges   = (char*) malloc(44089920);
- centers = (char*) malloc(25741485);
+// Position einlesen
+
+// Position lösen
+
+// Done XD
  
- if (CheckFile("corners"))/*Datei laden*/;
- else {/*Arrayberechnen*/}
- 
- if (CheckFile("edges"))/*Datei laden*/;
- else {/*Arrayberechnen*/}
-
- if (CheckFile("centers"))/*Datei laden*/;
- else {/*Arrayberechnen*/}
-
-/*  char * buff;
-    buff = (char*) malloc(400000000);
-    for(int i=0;i<400000000;i++) *(buff+i) =42;*/  
   int foo = 0;
   cin >> foo;
-}
 
+}
