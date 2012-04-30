@@ -1,2 +1,11 @@
+Debug
+Release
+.*.sw*
+*.o
 cubesolver
+bin
+*log
+debian/substvars
+debian/*substvars
+debian/files
 *~
