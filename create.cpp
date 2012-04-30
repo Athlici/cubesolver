@@ -10,7 +10,9 @@ void getedges(void){
  edges   = (char*) malloc(edgesize);
  if (CheckFile("edges")) /*LoadFile(edges,"edges",edgesize)*/;
  else {
-   for(int i=0;i<edgesize;i++) *(edges+i) =255;
+   *edges=240;
+   for(int i=1;i<edgesize;i++) *(edges+i) =255;
+
  }
 }
 
