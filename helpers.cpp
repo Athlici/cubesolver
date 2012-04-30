@@ -4,11 +4,12 @@ bool CheckFile(string filename) {
   return File;
 }
 
-/* TODO
-void LoadFile(Speicheradresse,Dateiname,Bytezahl){
-Dein Teil mal wieder.
+
+void LoadFile(void * mem, string filename, size_t size) {
+// do stuff
 }
 
+/*
 void sethalfbyte(Speicheradresse,Position*2,Wert){
 4 bits setzen, die anderen unverändert lassen --> bithacks
 }
