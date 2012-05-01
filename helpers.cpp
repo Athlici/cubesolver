@@ -1,4 +1,4 @@
-
+//TODO: Entschuldigung, ich hatte die Arrays vermasselt, kannst du deine Funktionen auf unsigned chars umschreiben?
 int LoadFile(char* mem, string filename, int size) {
 	fstream File(filename.c_str(), ios::in | ios::binary);
 	if(!File.read(mem, size)) {File.clear(); return 1;} else return 0;  // return 1 in case of read error
@@ -9,12 +9,12 @@ int WriteFile(char* mem, string filename, int size) {
 	if(!File.write(mem, size)) {File.clear(); return 1;} else return 0;
 }
 
-//Dies muss zum macro werden.
+//Dies sollte zum macro werden.
 unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,bool c/*lower(0) or upper half(1)*/){
 // return ((b<<4c) OR (a AND (240-225c)));}
 }
 
-//Dies muss zum Macro werden.
+//Dies sollte zum Macro werden.
 unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, bool b/*lower(0) or upper half(1)*/){
 // return ((a AND (15+225c))<<4c);
 }
@@ -42,7 +42,7 @@ int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,uns
  if (d<g) g-=3;
  if (e<g) g-=3;
  if (f<g) g-=3;
-//return (Xa+Xb+Xc+Xd+Xe+3f+g);
+return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 
 int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f){
@@ -61,12 +61,12 @@ int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
  if (c<f) f--;
  if (d<f) f--;
  if (e<f) f--;
-//return (Xa+Xb+Xc+Xd+Xe+f);
+return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
 //Hier bitte a-h nach der Größen von a-h absteigend sortieren.
 // Und denn? --Felix
-//Danach wird mittels multiplikation und addition ein Skalarwert zurückgegeben, weil die Mittelstückke nur leider nicht unterscheidbar sind, 
+//Danach wird mittels multiplikation und addition ein Integer zurückgegeben, weil die Mittelstückke nur leider nicht unterscheidbar sind, 
 //ist das nicht so ganz leicht zu berechnen wie die anderen Sachen.
 }
