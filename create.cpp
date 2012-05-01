@@ -24,13 +24,13 @@ void getedges() {
       depth++;
       while (tmptmp<tmppos){
 	for (int i=0;i<18;i++) {
-	  unsigned char a=edgemove[*tmptmp][i];
-	  unsigned char b=edgemove[*(tmptmp+1)][i];
-          unsigned char c=edgemove[*(tmptmp+2)][i];
-          unsigned char d=edgemove[*(tmptmp+3)][i];
-          unsigned char e=edgemove[*(tmptmp+4)][i];
-          unsigned char f=edgemove[*(tmptmp+5)][i];
-          unsigned char g=edgemove[*(tmptmp+6)][i];
+	  unsigned char a=edgemove[i][*tmptmp];
+	  unsigned char b=edgemove[i][*(tmptmp+1)];
+          unsigned char c=edgemove[i][*(tmptmp+2)];
+          unsigned char d=edgemove[i][*(tmptmp+3)];
+          unsigned char e=edgemove[i][*(tmptmp+4)];
+          unsigned char f=edgemove[i][*(tmptmp+5)];
+          unsigned char g=edgemove[i][*(tmptmp+6)];
 	  tmptmp+=7;
 	  int h=posedges(a,b,c,d,e,f,g);
 	  if (depth<readhalfbyte(*(edges+h),h%2)){
