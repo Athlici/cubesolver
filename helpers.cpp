@@ -1,10 +1,9 @@
-//TODO: Entschuldigung, ich hatte die Arrays vermasselt, kannst du deine Funktionen auf unsigned chars umschreiben?
-int LoadFile(char* mem, string filename, int size) {
+int LoadFile(unsigned char* mem, string filename, int size) {
 	fstream File(filename.c_str(), ios::in | ios::binary);
 	if(!File.read(mem, size)) {File.clear(); return 1;} else return 0;  // return 1 in case of read error
 }
 
-int WriteFile(char* mem, string filename, int size) {
+int WriteFile(unsigned char* mem, string filename, int size) {
 	fstream File(filename.c_str(), ios::out | ios::binary);
 	if(!File.write(mem, size)) {File.clear(); return 1;} else return 0;
 }
