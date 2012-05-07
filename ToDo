@@ -1,5 +1,0 @@
-Für das erste Laden/Erstellen der Tabelle:
-	3 Speicherbereiche vom Typ unsigned char allociieren, etwa folgendes Schema:
-		unsigned char Corners 	48454560
-		unsigned char Edges 	44089920
-		unsigned char Centers	25741485
