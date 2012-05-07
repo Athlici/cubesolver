@@ -3,6 +3,7 @@ Release
 .*.sw*
 *.o
 cubesolver
+arrayhelp
 bin
 *log
 debian/substvars
