@@ -8,13 +8,13 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 	if(!File.write(mem, size)) {File.clear(); return 1;} else return 0;
 }
 
-//Dies sollte zum macro werden.
-unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,bool c/*lower(0) or upper half(1)*/){
+//Dies sollte zum inline werden, vllt.
+unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
 // return ((b<<4c) OR (a AND (240-225c)));}
 }
 
-//Dies sollte zum Macro werden.
-unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, bool b/*lower(0) or upper half(1)*/){
+//Dies sollte zum inline werden, vllt.
+unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
 // return ((a AND (15+225c))<<4c);
 }
 
