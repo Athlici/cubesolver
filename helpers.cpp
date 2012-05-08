@@ -1,3 +1,4 @@
+/*
 int LoadFile(unsigned char* mem, string filename, int size) {
 	fstream File(filename.c_str(), ios::in | ios::binary);
 	if(!File.read(mem, size)) {File.clear(); return 1;} else return 0;  // return 1 in case of read error
@@ -7,18 +8,18 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 	fstream File(filename.c_str(), ios::out | ios::binary);
 	if(!File.write(mem, size)) {File.clear(); return 1;} else return 0;
 }
+*/
 
 //Dies sollte zum inline werden, vllt.
 unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
-// return ((b<<4c) OR (a AND (240-225c)));}
+  return ((b<<4*c) || (a && (240-225*c)));
 }
 
 //Dies sollte zum inline werden, vllt.
 unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
-// return ((a AND (15+225c))<<4c);
+  return ((a && (15+225*b))<<4*b);
 }
 
-//Wenn man dieses unsigned char-Sache iwie nur einmal schreiben muss, dann bitte entsprechend ändern.
 int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
  if (a<b) b-=3;
  if (a<c) c-=3;
@@ -104,7 +105,7 @@ else if (h>b) {
           if (e>a) e-=4;
           else e-=3;}
           else if (f>c){
-            f-=2
+            f-=2;
             if (e>a) e-=4;
             else if (e>b) e-=3;
               else if (e>c) e-=2;}
@@ -132,7 +133,7 @@ else if (h>b) {
             if (e>a) e-=4;
             else e-=3;}
             else if (f>c){
-              f-=2
+              f-=2;
               if (e>a) e-=4;
               else if (e>b) e-=3;
                 else if (e>c) e-=2;}
@@ -146,7 +147,7 @@ else if (h>b) {
           if (e>a) e-=4;
           else e-=3;}
           else if (f>c){
-            f-=2
+            f-=2;
             if (e>a) e-=4;
             else if (e>b) e-=3;
               else if (e>c) e-=2;}
@@ -180,7 +181,7 @@ else if (h>b) {
               if (e>a) e-=4;
               else e-=3;}
               else if (f>c){
-                f-=2
+                f-=2;
                 if (e>a) e-=4;
                 else if (e>b) e-=3;
                   else if (e>c) e-=2;}
@@ -194,7 +195,7 @@ else if (h>b) {
                 if (e>a) e-=4;
                 else e-=3;}
                 else if (f>c){
-                  f-=2
+                  f-=2;
                   if (e>a) e-=4;
                   else if (e>b) e-=3;
                     else if (e>c) e-=2;}
@@ -214,7 +215,7 @@ else if (h>b) {
                   if (e>a) e-=4;
                   else e-=3;}
 		  else if (f>c){
-		    f-=2
+		    f-=2;
                     if (e>a) e-=4;
                     else if (e>b) e-=3;
 		      else if (e>c) e-=2;}
@@ -231,4 +232,5 @@ else if (h>b) {
 			    else if (e>d) e--;}
 	      }
       }
+//  return ...;
 }

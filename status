@@ -1,0 +1,15 @@
+What should work:
+  centermovearray
+
+  cornerdepth calculation
+  edgedepth calculation
+
+  general create functions
+
+What does not:
+  edgemovearray     ----\  arrayhelper
+  cornermovearray   ----/
+
+  centerdepth functions
+
+  loading function(5min)
