@@ -10,13 +10,13 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 */
 
-//Dies sollte zum inline werden, vllt.
-unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
+inline void 
+
+inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
   return ((b<<4*c) || (a && (240-225*c)));
 }
 
-//Dies sollte zum inline werden, vllt.
-unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
+inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
   return ((a && (15+225*b))<<4*b);
 }
 
