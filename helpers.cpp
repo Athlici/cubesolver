@@ -10,7 +10,64 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 */
 
-inline void 
+inline void movecube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
+ *WritePos=edgemove[Move][*CubePos];
+ *(WritePos+1)=edgemove[Move][*(CubePos+1)];
+ *(WritePos+2)=edgemove[Move][*(CubePos+2)];
+ *(WritePos+3)=edgemove[Move][*(CubePos+3)];
+ *(WritePos+4)=edgemove[Move][*(CubePos+4)];
+ *(WritePos+5)=edgemove[Move][*(CubePos+5)];
+ *(WritePos+6)=edgemove[Move][*(CubePos+6)];
+ *(WritePos+7)=cornermove[Move][*(CubePos+7)];
+ *(WritePos+8)=cornermove[Move][*(CubePos+8)];
+ *(WritePos+9)=cornermove[Move][*(CubePos+9)];
+ *(WritePos+10)=cornermove[Move][*(CubePos+10)];
+ *(WritePos+11)=cornermove[Move][*(CubePos+11)];
+ *(WritePos+12)=cornermove[Move][*(CubePos+12)];
+ *(WritePos+13)=cornermove[Move][*(CubePos+13)];
+ *(WritePos+14)=cornermove[Move][*(CubePos+14)];
+ *(WritePos+15)=cornermove[Move][*(CubePos+15)];
+ *(WritePos+16)=cornermove[Move][*(CubePos+16)];
+ *(WritePos+17)=cornermove[Move][*(CubePos+17)];
+ *(WritePos+18)=cornermove[Move][*(CubePos+18)];
+ *(WritePos+19)=cornermove[Move][*(CubePos+19)];
+ *(WritePos+20)=cornermove[Move][*(CubePos+20)];
+ *(WritePos+21)=cornermove[Move][*(CubePos+21)];
+ *(WritePos+22)=cornermove[Move][*(CubePos+22)];
+ *(WritePos+23)=cornermove[Move][*(CubePos+23)];
+ *(WritePos+24)=cornermove[Move][*(CubePos+24)];
+ *(WritePos+25)=cornermove[Move][*(CubePos+25)];
+ *(WritePos+26)=cornermove[Move][*(CubePos+26)];
+ *(WritePos+27)=cornermove[Move][*(CubePos+27)];
+ *(WritePos+28)=cornermove[Move][*(CubePos+28)];
+ *(WritePos+29)=cornermove[Move][*(CubePos+29)];
+ *(WritePos+30)=cornermove[Move][*(CubePos+30)];
+ *(WritePos+31)=edgemove[Move][*(CubePos+31)];
+ *(WritePos+32)=edgemove[Move][*(CubePos+32)];
+ *(WritePos+33)=edgemove[Move][*(CubePos+33)];
+ *(WritePos+34)=edgemove[Move][*(CubePos+34)];
+ *(WritePos+35)=edgemove[Move][*(CubePos+35)];
+ *(WritePos+36)=edgemove[Move][*(CubePos+36)];
+ *(WritePos+37)=edgemove[Move][*(CubePos+37)];
+ *(WritePos+38)=edgemove[Move][*(CubePos+38)];
+ *(WritePos+39)=edgemove[Move][*(CubePos+39)];
+ *(WritePos+40)=edgemove[Move][*(CubePos+40)];
+ *(WritePos+41)=edgemove[Move][*(CubePos+41)];
+ *(WritePos+42)=edgemove[Move][*(CubePos+42)];
+ *(WritePos+43)=edgemove[Move][*(CubePos+43)];
+ *(WritePos+44)=edgemove[Move][*(CubePos+44)];
+ *(WritePos+45)=edgemove[Move][*(CubePos+45)];
+ *(WritePos+46)=edgemove[Move][*(CubePos+46)];
+ *(WritePos+47)=edgemove[Move][*(CubePos+47)];
+ *(WritePos+48)=edgemove[Move][*(CubePos+48)];
+ *(WritePos+49)=edgemove[Move][*(CubePos+49)];
+ *(WritePos+50)=edgemove[Move][*(CubePos+50)];
+ *(WritePos+51)=edgemove[Move][*(CubePos+51)];
+ *(WritePos+52)=edgemove[Move][*(CubePos+52)];
+ *(WritePos+53)=edgemove[Move][*(CubePos+53)];
+ *(WritePos+54)=edgemove[Move][*(CubePos+54)];
+}
+
 
 inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
   return ((b<<4*c) || (a && (240-225*c)));
@@ -234,3 +291,4 @@ else if (h>b) {
       }
 //  return ...;
 }
+
