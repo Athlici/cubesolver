@@ -67,36 +67,42 @@ int main(int argc, char** argv) {
   }
   for (int i=0;i<3;i++){
     for (int j=0;j<24;j++){
-     edgeturn[i][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][j]]]];
-     centerturn[i][j]=center[12+i][center[15+i][center[18+i][center[21+i][j]]]];
-     cornerturn[i][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][j]]]];
+     edgeturn[i][j]=edgemove[12+i][edgemove[15+i][edgemove[18+i][edgemove[21+i][j]]]];
+     centerturn[i][j]=centermove[12+i][centermove[15+i][centermove[18+i][centermove[21+i][j]]]];
+     cornerturn[i][j]=cornermove[12+i][cornermove[15+i][cornermove[18+i][cornermove[21+i][j]]]];
     }
   }
   for (int k=0;k<3;k++){
     for (int j=0;j<24;j++){
-       edgeturn[4*k+3][j]=edge[k][edge[3+k][edge[6+k][edge[9+k][j]]]];
-       centerturn[4*k+3][j]=center[k][center[3+k][center[6+k][center[9+k][j]]]];
-       cornerturn[4*k+3][j]=corner[k][corner[3+k][corner[6+k][corner[9+k][j]]]];
+       edgeturn[4*k+3][j]=edgemove[k][edgemove[3+k][edgemove[6+k][edgemove[9+k][j]]]];
+       centerturn[4*k+3][j]=centermove[k][centermove[3+k][centermove[6+k][centermove[9+k][j]]]];
+       cornerturn[4*k+3][j]=cornermove[k][cornermove[3+k][cornermove[6+k][cornermove[9+k][j]]]];
     }
     for (int i=0;i<3;i++){
       for (int j=0;j<24;j++){
-       edgeturn[i+4*(k+1)][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][edge[k][edge[3+k][edge[6+k][edge[9+k][j]]]]]]]];
-       centerturn[i+4*(k+1)][j]=center[12+i][center[15+i][center[18+i][center[21+i][center[k][center[3+k][center[6+k][center[9+k][j]]]]]]]];
-       cornerturn[i+4*(k+1)][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][corner[k][corner[3+k][corner[6+k][corner[9+k][j]]]]]]]];
+       edgeturn[i+4*(k+1)][j]=edgemove[12+i][edgemove[15+i][edgemove[18+i][edgemove[21+i][
+					edgemove[k][edgemove[3+k][edgemove[6+k][edgemove[9+k][j]]]]]]]];
+       centerturn[i+4*(k+1)][j]=centermove[12+i][centermove[15+i][centermove[18+i][centermove[21+i][
+					centermove[k][centermove[3+k][centermove[6+k][centermove[9+k][j]]]]]]]];
+       cornerturn[i+4*(k+1)][j]=cornermove[12+i][cornermove[15+i][cornermove[18+i][cornermove[21+i][
+					cornermove[k][cornermove[3+k][cornermove[6+k][cornermove[9+k][j]]]]]]]];
       }
     }
   }
   for (int k=0;k<2;k++){
     for (int j=0;j<24;j++){
-       edgeturn[4*k+3][j]=edge[24+2*k][edge[27+2*k][edge[30+2*k][edge[33+2*k][j]]]];
-       centerturn[4*k+3][j]=center[24+2*k][center[27+2*k][center[30+2*k][center[33+2*k][j]]]];
-       cornerturn[4*k+3][j]=corner[24+2*k][corner[27+2*k][corner[30+2*k][corner[33+2*k][j]]]];
+       edgeturn[4*k+15][j]=edgemove[24+2*k][edgemove[27+2*k][edgemove[30+2*k][edgemove[33+2*k][j]]]];
+       centerturn[4*k+15][j]=centermove[24+2*k][centermove[27+2*k][centermove[30+2*k][centermove[33+2*k][j]]]];
+       cornerturn[4*k+15][j]=cornermove[24+2*k][cornermove[27+2*k][cornermove[30+2*k][cornermove[33+2*k][j]]]];
     }
     for (int i=0;i<3;i++){
       for (int j=0;j<24;j++){
-       edgeturn[i+4*(k+1)][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][edge[24+2*k][edge[27+2*k][edge[30+2*k][edge[33+2*k][j]]]]]]]];
-       centerturn[i+4*(k+1)][j]=center[12+i][center[15+i][center[18+i][center[21+i][center[24+2*k][center[27+2*k][center[30+2*k][center[33+2*k][j]]]]]]]];
-       cornerturn[i+4*(k+1)][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][corner[24+2*k][corner[27+2*k][corner[30+2*k][corner[33+2*k][j]]]]]]]];
+       edgeturn[i+4*(k+4)][j]=edgemove[12+i][edgemove[15+i][edgemove[18+i][edgemove[21+i][
+					edgemove[24+2*k][edgemove[27+2*k][edgemove[30+2*k][edgemove[33+2*k][j]]]]]]]];
+       centerturn[i+4*(k+4)][j]=centermove[12+i][centermove[15+i][centermove[18+i][centermove[21+i][
+					centermove[24+2*k][centermove[27+2*k][centermove[30+2*k][centermove[33+2*k][j]]]]]]]];
+       cornerturn[i+4*(k+4)][j]=cornermove[12+i][cornermove[15+i][cornermove[18+i][cornermove[21+i][
+					cornermove[24+2*k][cornermove[27+2*k][cornermove[30+2*k][cornermove[33+2*k][j]]]]]]]];
       }
     }
   }
