@@ -36,7 +36,7 @@ const int centersize = 25741485;
 #include "arrays.cpp"
 #include "helpers.cpp"
 #include "create.cpp"
-
+#include "solve.cpp"
 
 int main(int argc, char** argv) {
 // getcenters();
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 // Position lösen
 
 // Done xD
- 
+
   int foo = 0;
   cin >> foo;
 
