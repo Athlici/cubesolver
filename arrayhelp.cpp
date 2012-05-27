@@ -65,6 +65,41 @@ int main(int argc, char** argv) {
      //if (corner[i][corner[i][corner[i][corner[i][j]]]]!=j) cout << "Logic corner mistake in line " << i+0 << " char " << j+0 << "\n";  
     }
   }
+  for (int i=0;i<3;i++){
+    for (int j=0;j<24;j++){
+     edgeturn[i][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][j]]]];
+     centerturn[i][j]=center[12+i][center[15+i][center[18+i][center[21+i][j]]]];
+     cornerturn[i][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][j]]]];
+    }
+  }
+  for (int k=0;k<3;k++){
+    for (int j=0;j<24;j++){
+       edgeturn[4*k+3][j]=edge[k][edge[3+k][edge[6+k][edge[9+k][j]]]];
+       centerturn[4*k+3][j]=center[k][center[3+k][center[6+k][center[9+k][j]]]];
+       cornerturn[4*k+3][j]=corner[k][corner[3+k][corner[6+k][corner[9+k][j]]]];
+    }
+    for (int i=0;i<3;i++){
+      for (int j=0;j<24;j++){
+       edgeturn[i+4*(k+1)][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][edge[k][edge[3+k][edge[6+k][edge[9+k][j]]]]]]]];
+       centerturn[i+4*(k+1)][j]=center[12+i][center[15+i][center[18+i][center[21+i][center[k][center[3+k][center[6+k][center[9+k][j]]]]]]]];
+       cornerturn[i+4*(k+1)][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][corner[k][corner[3+k][corner[6+k][corner[9+k][j]]]]]]]];
+      }
+    }
+  }
+  for (int k=0;k<2;k++){
+    for (int j=0;j<24;j++){
+       edgeturn[4*k+3][j]=edge[24+2*k][edge[27+2*k][edge[30+2*k][edge[33+2*k][j]]]];
+       centerturn[4*k+3][j]=center[24+2*k][center[27+2*k][center[30+2*k][center[33+2*k][j]]]];
+       cornerturn[4*k+3][j]=corner[24+2*k][corner[27+2*k][corner[30+2*k][corner[33+2*k][j]]]];
+    }
+    for (int i=0;i<3;i++){
+      for (int j=0;j<24;j++){
+       edgeturn[i+4*(k+1)][j]=edge[12+i][edge[15+i][edge[18+i][edge[21+i][edge[24+2*k][edge[27+2*k][edge[30+2*k][edge[33+2*k][j]]]]]]]];
+       centerturn[i+4*(k+1)][j]=center[12+i][center[15+i][center[18+i][center[21+i][center[24+2*k][center[27+2*k][center[30+2*k][center[33+2*k][j]]]]]]]];
+       cornerturn[i+4*(k+1)][j]=corner[12+i][corner[15+i][corner[18+i][corner[21+i][corner[24+2*k][corner[27+2*k][corner[30+2*k][corner[33+2*k][j]]]]]]]];
+      }
+    }
+  }
   cout << "unsigned char centermove[36][24] =  {   ";
   for (int i=0;i<35;i++){
     cout << "                                        {";
@@ -94,4 +129,34 @@ int main(int argc, char** argv) {
   cout << "                                        {";
   for (int j=0;j<23;j++) cout << edgemove[17][j]+0 << ",";
   cout << edgemove[17][23]+0 << "}};\n";
+
+  cout << "unsigned char centerturn[23][24] =  {   ";
+  for (int i=0;i<22;i++){
+    cout << "                                        {";
+    for (int j=0;j<23;j++) cout << centerturn[i][j]+0 << ",";
+    cout << centerturn[i][23]+0 << "},\n";
+  }
+  cout << "                                        {";
+  for (int j=0;j<23;j++) cout << centerturn[22][j]+0 << ",";
+  cout << centerturn[22][23]+0 << "}};\n";
+
+  cout << "unsigned char cornerturn[23][24] =  {   ";
+  for (int i=0;i<22;i++){
+    cout << "                                        {";
+    for (int j=0;j<23;j++) cout << cornerturn[i][j]+0 << ",";
+    cout << cornerturn[i][23]+0 << "},\n";
+  }
+  cout << "                                        {";
+  for (int j=0;j<23;j++) cout << cornerturn[22][j]+0 << ",";
+  cout << cornerturn[22][23]+0 << "}};\n";
+
+  cout << "unsigned char edgeturn[23][24] =  {   ";
+  for (int i=0;i<22;i++){
+    cout << "                                        {";
+    for (int j=0;j<23;j++) cout << edgeturn[i][j]+0 << ",";
+    cout << edgeturn[i][23]+0 << "},\n";
+  }
+  cout << "                                        {";
+  for (int j=0;j<23;j++) cout << edgeturn[22][j]+0 << ",";
+  cout << edgeturn[22][23]+0 << "}};\n";
 }
