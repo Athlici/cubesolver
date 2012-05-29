@@ -53,5 +53,6 @@ unsigned char* solve(unsigned char* Position){
 	Posend+=55+Depth; 
 	}
     }
+    Depth++;
   }
 }
