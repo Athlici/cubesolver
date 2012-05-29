@@ -13,10 +13,11 @@ unsigned char* solve(unsigned char* Position){
   }
   while (min>0){
     Postmp=Posbegin;
-    Postion=Posend;
+    Position=Posend;
     while (Postmp<Position){
-      if (Depth>1) unsigned char tmp=*(Postmp+54+Depth)/3*3;
-      else unsigned char tmp=36;
+      unsigned char tmp;
+      if (Depth>1) tmp=*(Postmp+54+Depth)/3*3;
+      else tmp=36;
       for (unsigned char i=0;i<tmp;i++){
 	movecube(Postmp,Posend,i);
 	Posend+=55;
@@ -37,7 +38,20 @@ unsigned char* solve(unsigned char* Position){
         *Posend=i;
         Posend++;
       }
-    //...
+    }
+    Postmp=Posend;
+    for (unsigned char* i=Position;i<Postmp;i+=55+Depth){
+      unsigned char tmp=calcdepth(i);
+      if(tmp<min){
+	min=tmp;
+	Posend=Postmp;
+	for (unsigned char j=0;j<55+Depth;j++) *(Posend+j)=*(i+j);
+	Posend+=55+Depth;
+      }
+      else if(tmp==min){
+        for (unsigned char j=0;j<55+Depth;j++) *(Posend+j)=*(i+j);
+	Posend+=55+Depth; 
+	}
     }
   }
 }

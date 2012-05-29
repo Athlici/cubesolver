@@ -10,6 +10,9 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 */
 
+unsigned char calcdepth(unsigned char* CubePos){
+}
+
 /*inline*/ void turncube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
  *WritePos=edgeturn[Move][*CubePos];
  *(WritePos+1)=edgeturn[Move][*(CubePos+1)];
