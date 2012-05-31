@@ -10,16 +10,6 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 */
 
-unsigned char calcdepth(unsigned char* CubePos){
-return 	*(edges+posedges(*CubePos,*(CubePos+1),*(CubePos+2),*(CubePos+3),*(CubePos+4),*(CubePos+5),*(CubePos+6)))+
-	*(corners+poscorners(*(CubePos+7),*(CubePos+8),*(CubePos+9),*(CubePos+10),*(CubePos+15),*(CubePos+16),*(CubePos+17),*(CubePos+18)))+
-	*(corners+poscorners(*(CubePos+11),*(CubePos+12),*(CubePos+13),*(CubePos+14),*(CubePos+19),*(CubePos+20),*(CubePos+21),*(CubePos+22)))+
-	*(corners+poscorners(*(CubePos+23),*(CubePos+24),*(CubePos+25),*(CubePos+26),*(CubePos+27),*(CubePos+28),*(CubePos+29),*(CubePos+30)))+
-        *(centers+poscenters(*(CubePos+31),*(CubePos+32),*(CubePos+33),*(CubePos+34),*(CubePos+39),*(CubePos+40),*(CubePos+41),*(CubePos+42)))+
-        *(centers+poscenters(*(CubePos+35),*(CubePos+36),*(CubePos+37),*(CubePos+38),*(CubePos+43),*(CubePos+44),*(CubePos+45),*(CubePos+46)))+
-        *(centers+poscenters(*(CubePos+47),*(CubePos+48),*(CubePos+49),*(CubePos+50),*(CubePos+51),*(CubePos+52),*(CubePos+53),*(CubePos+54)));
-}
-
 /*inline*/ void turncube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
  *WritePos=edgeturn[Move][*CubePos];
  *(WritePos+1)=edgeturn[Move][*(CubePos+1)];
