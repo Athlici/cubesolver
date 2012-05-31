@@ -43,9 +43,10 @@ unsigned char* solve(unsigned char* Position){
     Postmp=Posend;
     for (unsigned char* i=Position;i<Postmp;i+=55+Depth){
       unsigned char tmp=*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+
-//        *(corners+poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+15),*(i+16),*(i+17),*(i+18)))+
-//        *(corners+poscorners(*(i+11),*(i+12),*(i+13),*(i+14),*(i+19),*(i+20),*(i+21),*(i+22)))+
-//        *(corners+poscorners(*(i+23),*(i+24),*(i+25),*(i+26),*(i+27),*(i+28),*(i+29),*(i+30)))+
+//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
+//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
+//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
+//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
         *(centers+poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)))+
         *(centers+poscenters(*(i+35),*(i+36),*(i+37),*(i+38),*(i+43),*(i+44),*(i+45),*(i+46)))+
         *(centers+poscenters(*(i+47),*(i+48),*(i+49),*(i+50),*(i+51),*(i+52),*(i+53),*(i+54)));
