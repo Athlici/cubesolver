@@ -116,15 +116,15 @@ int main(int argc, char** argv) {
   for (int j=0;j<23;j++) cout << centermove[35][j]+0 << ",";
   cout << centermove[35][23]+0 << "}};\n";
 
-  cout << "unsigned char cornermove[18][24] =  {   ";
+  cout << "unsigned char cornermove[36][24] =  {   ";
   for (int i=0;i<35;i++){
     cout << "                                        {";
     for (int j=0;j<23;j++) cout << cornermove[i][j]+0 << ",";
-    cout << centermove[i][23]+0 << "},\n";
+    cout << cornermove[i][23]+0 << "},\n";
   }
   cout << "                                        {";
-  for (int j=0;j<23;j++) cout << centermove[35][j]+0 << ",";
-  cout << centermove[35][23]+0 << "}};\n";
+  for (int j=0;j<23;j++) cout << cornermove[35][j]+0 << ",";
+  cout << cornermove[35][23]+0 << "}};\n";
 
   cout << "unsigned char edgemove[18][24] =  {   ";
   for (int i=0;i<17;i++){
