@@ -131,7 +131,7 @@ inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b
 }
 
 inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
-  return ((a && (15+225*b))<<4*b);
+  return ((a && (15+225*b))>>4*b);
 }
 
 int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
@@ -346,6 +346,6 @@ else if (h>b) {
 			    else if (e>d) e--;}
 	      }
       }
-//  return ...;
+  return a+b+c+d+e+f+g+h;
 }
 

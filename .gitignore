@@ -12,3 +12,5 @@ debian/files
 *.bin
 *.dat
 tmp
+arrayhelp/test
+arrayhelp/prog

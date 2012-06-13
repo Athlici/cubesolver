@@ -39,7 +39,7 @@ const int centersize = 25741485;
 #include "solve.cpp"
 
 int main(int argc, char** argv) {
-// getcenters();
+ getcenters();
 // getedges();
 // getcorners(); 
 

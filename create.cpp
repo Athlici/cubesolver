@@ -2,7 +2,7 @@ void getcenters() {
   centers = (unsigned char*) malloc(centersize);
 //  if(!LoadFile(centers,"centers",centersize)) {
     *centers=240;
-    for(int i=1;i<centersize;i++) *(centers+i) = 255;
+    for(int i=1;i<centersize;i++) *(centers+i) = 15;
     cout << "initialized center memory.\n";
     unsigned char depth=0;
     unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
@@ -70,10 +70,10 @@ void getcenters() {
     }
 //  }
 }
-/*
+
 void getedges() {
   edges   = (unsigned char*) malloc(edgesize);
-  if(!LoadFile(edges,"edges",edgesize)) {
+//  if(!LoadFile(edges,"edges",edgesize)) {
     *edges=240;
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
     unsigned char depth=0;
@@ -135,12 +135,13 @@ void getedges() {
 	tmpend=tmpbegin-tmppos+tmpend;
       }
     }
-  }
+      cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";
+//  }
 }
 
 void getcorners() {
  corners = (unsigned char*) malloc(cornersize);
-  if(!LoadFile(corners,"corners",cornersize)) {
+//  if(!LoadFile(corners,"corners",cornersize)) {
     *corners=240;
     for(int i=1;i<cornersize;i++) *(corners+i) = 255;
     unsigned char depth=0;
@@ -198,5 +199,5 @@ void getcorners() {
 	tmpend=tmpbegin-tmppos+tmpend;
       }
     }
-  }
-}*/
+//  }
+}
