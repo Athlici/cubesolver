@@ -179,173 +179,32 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
-//Hier bitte a-d und e-h der Größe nach absteigend sortieren.
-if (h>a) {
-  f-=4;
-  e-=4;}
-else if (h>b) {
-  if (g>a){
-    f-=4;
-    e-=4;}
-  else {
-    if (f>a){
-      f-=4;
-      e-=4;}
-    else {
-      f-=3;
-      if (e>a) e-=4;
-      else e-=3;}
-       }
-     }
-  else if (h>c) {
-    if (g>a){
-      f-=4;
-      e-=4;}
-    else if (g>b){
-      if (f>a){
-        f-=4;
-        e-=4;}
-      else {
-        f-=3;
-        if (e>a) e-=4;
-        else e-=3;}
-	 }
-      else {
-        if (f>a){
-          f-=4;
-          e-=4;}
-        else if (f>b){
-          f-=3;
-          if (e>a) e-=4;
-          else e-=3;}
-          else if (f>c){
-            f-=2;
-            if (e>a) e-=4;
-            else if (e>b) e-=3;
-              else if (e>c) e-=2;}
-	     }
-       }
-    else if (h>d) {
-      if (g>a){
-        f-=4;
-	e-=4;}
-      else if (g>b){
-        if (f>a){
-          f-=4;
-          e-=4;}
-        else {
-          f-=3;
-          if (e>a) e-=4;
-          else e-=3;}
-	   }
-	else if (g>c){
-          if (f>a){
-            f-=4;
-            e-=4;}
-          else if (f>b){
-            f-=3;
-            if (e>a) e-=4;
-            else e-=3;}
-            else if (f>c){
-              f-=2;
-              if (e>a) e-=4;
-              else if (e>b) e-=3;
-                else if (e>c) e-=2;}
-	       }
-      else {
-        if (f>a){
-          f-=4;
-          e-=4;}
-        else if (f>b){
-          f-=3;
-          if (e>a) e-=4;
-          else e-=3;}
-          else if (f>c){
-            f-=2;
-            if (e>a) e-=4;
-            else if (e>b) e-=3;
-              else if (e>c) e-=2;}
-                else if (f>d){
-                  f--;
-                  if (e>a) e-=4;
-                    else if (e>b) e-=3;
-                      else if (e>c) e-=2;
-                        else e--;}
-		 }
-	 }
-      else {
-	if (g>a){
-	f-=4;
-	e-=4;}
-	else if (g>b){
-            if (f>a){
-              f-=4;
-              e-=4;}
-            else {
-              f-=3;
-              if (e>a) e-=4;
-              else e-=3;}
-	     }
-	  else if (g>c){
-            if (f>a){
-              f-=4;
-              e-=4;}
-            else if (f>b){
-              f-=3;
-              if (e>a) e-=4;
-              else e-=3;}
-              else if (f>c){
-                f-=2;
-                if (e>a) e-=4;
-                else if (e>b) e-=3;
-                  else if (e>c) e-=2;}
-	     }
-	    else if (g>d){
-              if (f>a){
-                f-=4;
-                e-=4;}
-              else if (f>b){
-                f-=3;
-                if (e>a) e-=4;
-                else e-=3;}
-                else if (f>c){
-                  f-=2;
-                  if (e>a) e-=4;
-                  else if (e>b) e-=3;
-                    else if (e>c) e-=2;}
-                  else if (f>d){
-                    f--;
-                    if (e>a) e-=4;
-                    else if (e>b) e-=3;
-                      else if (e>c) e-=2;
-                        else e--;}
-		 }
-	      else {
-		if (f>a){
-		  f-=4;
-		  e-=4;}
-		else if (f>b){
-		  f-=3;
-                  if (e>a) e-=4;
-                  else e-=3;}
-		  else if (f>c){
-		    f-=2;
-                    if (e>a) e-=4;
-                    else if (e>b) e-=3;
-		      else if (e>c) e-=2;}
-		    else if (f>d){
-		      f--;
-                      if (e>a) e-=4;
-                      else if (e>b) e-=3;
-                        else if (e>c) e-=2;
-			  else e--;}
-		      else {
-			if (e>a) e-=4;
-			else if (e>b) e-=3;
-			  else if (e>c) e-=2;
-			    else if (e>d) e--;}
-	      }
-      }
+//Hier bitte a-d und e-h der Größe nach aufsteigend sortieren.
+ 
+  if (h>d) h--;
+  if (h>c) h--;
+  if (g>d) g--;
+  if (h>b) h--;
+  if (f>d) f--;
+  if (g>c) g--;
+  if (h>a) h--;
+  if (e>d) e--;
+  if (f>c) f--;
+  if (g>b) g--;
+  if (e>c) e--;
+  if (f>b) f--;
+  if (g>a) g--;
+  if (e>b) e--;
+  if (f>a) f--;
+  if (e>a) e--;
+
+  h-=g;
+  d-=c;
+  g-=f;
+  c-=b;
+  f-=e;
+  b-=a;
+
   return a+b+c+d+e+f+g+h;
 }
 

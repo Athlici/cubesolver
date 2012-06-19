@@ -25,9 +25,9 @@ void getcenters() {
           unsigned char g=centermove[i][*(tmptmp+6)];
 	  unsigned char h=centermove[i][*(tmptmp+7)];
 	  tmptmp+=8;
-	  int i=poscenters(a,b,c,d,e,f,g,h);
-	  if (depth<readhalfbyte(*(centers+i),i%2)){
-	    *(centers+i)=sethalfbyte(*(centers+i),depth,i%2);
+	  int j=poscenters(a,b,c,d,e,f,g,h);
+	  if (depth<readhalfbyte(*(centers+j),j%2)){
+	    *(centers+i)=sethalfbyte(*(centers+j),depth,j%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -163,9 +163,9 @@ void getcorners() {
           unsigned char e=cornermove[i][*(tmptmp+4)];
           unsigned char f=cornermove[i][*(tmptmp+5)];
 	  tmptmp+=6;
-	  int i=poscorners(a,b,c,d,e,f);
-	  if (depth<readhalfbyte(*(corners+i),i%2)){
-	    *(corners+i)=sethalfbyte(*(corners+i),depth,i%2);
+	  int g=poscorners(a,b,c,d,e,f);
+	  if (depth<readhalfbyte(*(corners+g),g%2)){
+	    *(corners+i)=sethalfbyte(*(corners+g),depth,g%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
