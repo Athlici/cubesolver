@@ -1,4 +1,4 @@
-CXXFLAGS=-g -O0
+CXXFLAGS= -Ofast
 
 debug: cubesolver
 

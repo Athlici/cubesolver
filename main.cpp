@@ -40,8 +40,8 @@ const int centersize = 25741485;
 
 int main(int argc, char** argv) {
 // getcenters();
- getedges();
-// getcorners(); 
+// getedges();
+ getcorners(); 
 
 // Position einlesen
 

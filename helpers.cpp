@@ -135,27 +135,29 @@ inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char
 }
 
 int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
- if (a<b) b-=3;
- if (a<c) c-=3;
- if (b<c) c-=3;
- if (a<d) d-=3;
- if (b<d) d-=3; 
- if (c<d) d-=3;
- if (a<e) e-=3;
- if (b<e) e-=3;
- if (c<e) e-=3;
- if (d<e) e-=3;
- if (a<f) f-=3;
- if (b<f) f-=3;
- if (c<f) f-=3;
- if (d<f) f-=3;
- if (e<f) f-=3;
- if (a<g) g-=3;
- if (b<g) g-=3;
- if (c<g) g-=3;
- if (d<g) g-=3;
- if (e<g) g-=3;
- if (f<g) g-=3;
+ unsigned char B=b,C=c,D=d,E=e,F=f,G=g; 
+
+ if (a<B) b-=3;
+ if (a<C) c-=3;
+ if (B<C) c-=3;
+ if (a<D) d-=3;
+ if (B<D) d-=3; 
+ if (C<D) d-=3;
+ if (a<E) e-=3;
+ if (B<E) e-=3;
+ if (C<E) e-=3;
+ if (D<E) e-=3;
+ if (a<F) f-=3;
+ if (B<F) f-=3;
+ if (C<F) f-=3;
+ if (D<F) f-=3;
+ if (E<F) f-=3;
+ if (a<G) g-=3;
+ if (B<G) g-=3;
+ if (C<G) g-=3;
+ if (D<G) g-=3;
+ if (E<G) g-=3;
+ if (F<G) g-=3;
 return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 

@@ -26,8 +26,8 @@ void getcenters() {
 	  unsigned char h=centermove[i][*(tmptmp+7)];
 	  tmptmp+=8;
 	  int j=poscenters(a,b,c,d,e,f,g,h);
-	  if (depth<readhalfbyte(*(centers+j),j%2)){
-	    *(centers+i)=sethalfbyte(*(centers+j),depth,j%2);
+	  if (depth<readhalfbyte(*(centers+(j>>1)),j%2)){
+	    *(centers+i)=sethalfbyte(*(centers+(j>>1)),depth,j%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -97,8 +97,8 @@ void getedges() {
           unsigned char g=edgemove[i][*(tmptmp+6)];
 	  tmptmp+=7;
 	  int h=posedges(a,b,c,d,e,f,g);
-	  if (depth<readhalfbyte(*(edges+(h>>2)),h%2)){
-	    *(edges+h)=sethalfbyte(*(edges+(h>>2)),depth,h%2);
+	  if (depth<readhalfbyte(*(edges+(h>>1)),h%2)){
+	    *(edges+h)=sethalfbyte(*(edges+(h>>1)),depth,h%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -135,7 +135,7 @@ void getedges() {
 	tmpend=tmpbegin-tmppos+tmpend;
       }
     }
-      cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";
+      cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
 //  }
 }
 
@@ -176,6 +176,7 @@ void getcorners() {
 	  }
 	}
       }
+	cout << "starting copy \n";
       if (tmpend-tmppos>tmppos-tmpbegin){
 	for (int i=tmppos-tmpbegin;i>4;i-=6){
 	  *(tmppos-i)=*(tmpend-i);
@@ -198,6 +199,7 @@ void getcorners() {
 	}
 	tmpend=tmpbegin-tmppos+tmpend;
       }
+      cout << ((tmpend-tmpbegin)/6) << " positions after depth " << depth+0 << "\n";
     }
 //  }
 }
