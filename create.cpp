@@ -1,7 +1,7 @@
 void getcenters() {
   centers = (unsigned char*) malloc(centersize);
 //  if(!LoadFile(centers,"centers",centersize)) {
-    *centers=240;
+    *centers=15;	//to be calculated
     for(int i=1;i<centersize;i++) *(centers+i) = 15;
     cout << "initialized center memory.\n";
     unsigned char depth=0;
@@ -74,7 +74,7 @@ void getcenters() {
 void getedges() {
   edges   = (unsigned char*) malloc(edgesize);
 //  if(!LoadFile(edges,"edges",edgesize)) {
-    *edges=240;
+    *edges=15;
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
     unsigned char depth=0;
     unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
@@ -97,8 +97,8 @@ void getedges() {
           unsigned char g=edgemove[i][*(tmptmp+6)];
 	  tmptmp+=7;
 	  int h=posedges(a,b,c,d,e,f,g);
-	  if (depth<readhalfbyte(*(edges+h),h%2)){
-	    *(edges+h)=sethalfbyte(*(edges+h),depth,h%2);
+	  if (depth<readhalfbyte(*(edges+(h>>2)),h%2)){
+	    *(edges+h)=sethalfbyte(*(edges+(h>>2)),depth,h%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -142,7 +142,7 @@ void getedges() {
 void getcorners() {
  corners = (unsigned char*) malloc(cornersize);
 //  if(!LoadFile(corners,"corners",cornersize)) {
-    *corners=240;
+    *corners=15;
     for(int i=1;i<cornersize;i++) *(corners+i) = 255;
     unsigned char depth=0;
     unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
@@ -164,8 +164,8 @@ void getcorners() {
           unsigned char f=cornermove[i][*(tmptmp+5)];
 	  tmptmp+=6;
 	  int g=poscorners(a,b,c,d,e,f);
-	  if (depth<readhalfbyte(*(corners+g),g%2)){
-	    *(corners+i)=sethalfbyte(*(corners+g),depth,g%2);
+	  if (depth<readhalfbyte(*(corners+(g>>1)),g%2)){
+	    *(corners+i)=sethalfbyte(*(corners+(g>>1)),depth,g%2);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;

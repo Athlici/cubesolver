@@ -127,11 +127,11 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 
 inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
-  return ((b<<4*c) || (a && (240-225*c)));
+  return ((b<<4*c) | (a & (240-225*c)));
 }
 
 inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
-  return ((a && (15+225*b))>>4*b);
+  return ((a & (15+225*b))>>4*b);
 }
 
 int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
@@ -160,21 +160,23 @@ return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 
 int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f){
- if (a<b) b--;
- if (a<c) c--;
- if (b<c) c--;
- if (a<d) d--;
- if (b<d) d--;
- if (c<d) d--;
- if (a<e) e--;
- if (b<e) e--;
- if (c<e) e--;
- if (d<e) e--;
- if (a<f) f--;
- if (b<f) f--;
- if (c<f) f--;
- if (d<f) f--;
- if (e<f) f--;
+ unsigned char B=b,C=c,D=d,E=e,F=f;
+
+ if (a<B) b--;		//the order might be changed by using <= signs
+ if (a<C) c--;
+ if (B<C) c--;
+ if (a<D) d--;
+ if (B<D) d--;
+ if (C<D) d--;
+ if (a<E) e--;
+ if (B<E) e--;
+ if (C<E) e--;
+ if (D<E) e--;
+ if (a<F) f--;
+ if (B<F) f--;
+ if (C<F) f--;
+ if (D<F) f--;
+ if (E<F) f--;
 return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
