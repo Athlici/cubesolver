@@ -12,5 +12,9 @@ debian/files
 *.bin
 *.dat
 tmp
-arrayhelp/cornertest
-arrayhelp/prog
+arrayhelp/code1
+arrayhelp/code2
+arrayhelp/code3
+arrayhelp/code4
+arrayhelp/code5
+tests/cornertest
