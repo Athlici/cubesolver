@@ -17,4 +17,5 @@ arrayhelp/code2
 arrayhelp/code3
 arrayhelp/code4
 arrayhelp/code5
-tests/cornertest
+tests/coredgtest
+tests/arraytest
