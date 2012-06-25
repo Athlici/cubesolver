@@ -1,21 +1,21 @@
-void getcenters() {
-  centers = (unsigned char*) malloc(centersize);
-//  if(!LoadFile(centers,"centers",centersize)) {
-    *centers=15;	//to be calculated
-    for(int i=1;i<centersize;i++) *(centers+i) = 15;
-    cout << "initialized center memory.\n";
-    unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
-    unsigned char* tmptmp=tmpbegin;
-    for(int i=0;i<8;i++) { *tmptmp=i; tmptmp++;}
-    unsigned char* tmpend=tmptmp;
+void getcenters() {							//documentation just for one because they are very similiar
+  centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
+//  if(!LoadFile(centers,"centers",centersize)) {			//Load the array from disk or calculate it
+    *centers=15;	//to be verified				//The starting Position is set to have depth 0
+    for(int i=1;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
+    cout << "initialized center memory.\n";				//little status update
+    unsigned char depth=0;						//setting of the depth counter
+    unsigned char* tmpbegin=(unsigned char*) malloc(1000000);		//allocating the space for the temporary positions(might be too less)
+    unsigned char* tmptmp=tmpbegin;					//just temporary
+    for(int i=0;i<8;i++) { *tmptmp=i; tmptmp++;}			//adding starting position to the temporary memory
+    unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
     unsigned char* tmppos=tmptmp;
-    while (tmpend>tmpbegin){
-      tmptmp=tmpbegin;
-      tmppos=tmpend;
-      depth++;
-      while (tmptmp<tmppos){
-	for (int i=0;i<36;i++) {
+    while (tmpend>tmpbegin){						//continue as long as there are Positions left(while might be wrong)
+      tmptmp=tmpbegin;							//set tmp-variable to beginning to let it run through
+      tmppos=tmpend;							//set to the last position of the current depth
+      depth++;								//increase the depth(too early but works better here)
+      while (tmptmp<tmppos){						//do moves as long as you are in the current depth
+	for (int i=0;i<36;i++) {					//do all possible moves on it PROTIP: 3 are actually senseless
 	  unsigned char a=centermove[i][*tmptmp];
 	  unsigned char b=centermove[i][*(tmptmp+1)];
           unsigned char c=centermove[i][*(tmptmp+2)];
@@ -25,9 +25,9 @@ void getcenters() {
           unsigned char g=centermove[i][*(tmptmp+6)];
 	  unsigned char h=centermove[i][*(tmptmp+7)];
 	  tmptmp+=8;
-	  int j=poscenters(a,b,c,d,e,f,g,h);
-	  if (depth<readhalfbyte(*(centers+(j>>1)),j%2)){
-	    *(centers+i)=sethalfbyte(*(centers+(j>>1)),depth,j%2);
+	  int j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
+	  if (depth<readhalfbyte(*(centers+(j>>1)),j%2)){		//and look it up int the table + compare
+	    *(centers+i)=sethalfbyte(*(centers+(j>>1)),depth,j%2);	//when it is smaller it into the next round.
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -40,8 +40,8 @@ void getcenters() {
 	  }
 	}
       }
-      if (tmpend-tmppos>tmppos-tmpbegin){
-	for (int i=tmppos-tmpbegin;i>6;i-=8){
+      if (tmpend-tmppos>tmppos-tmpbegin){				//copying functions; 2 cases
+	for (int i=tmppos-tmpbegin;i>6;i-=8){				//not everything has to be copied when final area is bigger than given space
 	  *(tmppos-i)=*(tmpend-i);
 	  *(tmppos-i+1)=*(tmpend-i+1);
           *(tmppos-i+2)=*(tmpend-i+2);
@@ -66,7 +66,7 @@ void getcenters() {
 	}
 	tmpend=tmpbegin-tmppos+tmpend;
       }
-      cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";
+      cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";	//little status update
     }
 //  }
 }

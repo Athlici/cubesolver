@@ -127,15 +127,15 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 
 inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
-  return ((b<<4*c) | (a & (240-225*c)));
+  return ((b<<4*c) | (a & (240-225*c)));		//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
 inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
-  return ((a & (15+225*b))>>4*b);
+  return ((a & (15+225*b))>>4*b);			//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
 int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
- unsigned char B=b,C=c,D=d,E=e,F=f,G=g; 
+ unsigned char B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
  if (a<B) b-=3;
  if (a<C) c-=3;
@@ -162,7 +162,7 @@ return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 
 int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f){
- unsigned char B=b,C=c,D=d,E=e,F=f;
+ unsigned char B=b,C=c,D=d,E=e,F=f;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
  if (a<C) c--;
@@ -183,6 +183,8 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
+//and the same again for the centers, this is more difficult because 4 center pieces are inperceptible and therefore the memory usage is reduced by 24.
+
 //Hier bitte a-d und e-h der Größe nach aufsteigend sortieren.
  
   if (h>d) h--;
@@ -209,6 +211,6 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   f-=e;
   b-=a;
 
-  return a+b+c+d+e+f+g+h;
+  return a+b+c+d+e+f+g+h;//DUMMY
 }
 

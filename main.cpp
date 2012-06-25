@@ -29,17 +29,17 @@
 using namespace std;
 
 unsigned char *corners, *edges, *centers;
-const int cornersize = 48454560;
-const int edgesize = 44089920;
-const int centersize = 25741485;
+const int cornersize = 48454560;			//Size of the array for cornerdepthlookups in Bytes
+const int edgesize = 44089920;				//same for edges
+const int centersize = 25741485;			//and centers
 
-#include "arrays.cpp"
-#include "helpers.cpp"
-#include "create.cpp"
-#include "solve.cpp"
+#include "arrays.cpp"					//file with all the arrays for making the turns
+#include "helpers.cpp"					//various helper files for read, write, turnmaking and depthcalculations
+#include "create.cpp"					//creates the depthlookuptables
+#include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
-// getcenters();
+// getcenters();					//creation and looding of the tables
 // getedges();
  getcorners(); 
 
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
 // Done xD
 
-  int foo = 0;
+  int foo = 0;						//temporary too make the programm last longer on screen
   cin >> foo;
 
 }
