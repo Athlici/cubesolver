@@ -13,11 +13,14 @@ unsigned char things[6];
 void sort(unsigned char amount){
   for (unsigned char tmp=0; tmp<=amount; tmp++) size[tmp]=things[tmp];
   for (char i=0; i<amount; i++){
-    for (unsigned char j=amount-1; j>=0; j--){
-      if (things[j]>things[j+1]){
+    for (unsigned char j=amount--; j>=0; j--){
+      /*if (things[j]>things[j++]){
         unsigned char tmp=things[j];
-        things[j]=things[j+1];
-        things[j+1]=tmp;}
+        things[j]=things[j++];
+        things[j++]=tmp;}*/
+      unsigned char tmp=things[j]^((things[j]^things[j++]) & -(things[j]<things[j++]));
+      things[j]+=things[j++]-tmp;
+      things[j++]=tmp;
     }
   }
 }
