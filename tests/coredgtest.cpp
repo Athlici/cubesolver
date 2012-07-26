@@ -25,7 +25,7 @@ void sort(unsigned char amount){
   }
 }
 
-int main(int argc, char** argv) {
+int main() {
 
 int tmp=0;
 

@@ -183,7 +183,8 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
-//and the same again for the centers, this is more difficult because 4 center pieces are inperceptible and therefore the memory usage is reduced by 24.
+//and the same again for the centers, this is more difficult because 4 center pieces are inperceptible
+//but therefore the memory usage is also reduced by a factor of 24.
 
 //Hier bitte a-d und e-h der Größe nach aufsteigend sortieren.
  

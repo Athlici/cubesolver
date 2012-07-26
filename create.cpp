@@ -5,9 +5,9 @@ void getcenters() {							//documentation just for one because they are very sim
     for(int i=1;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
     cout << "initialized center memory.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
-    unsigned char* tmpbegin=(unsigned char*) malloc(1000000);		//allocating the space for the temporary positions(might be too less)
+    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)
     unsigned char* tmptmp=tmpbegin;					//just temporary
-    for(int i=0;i<8;i++) { *tmptmp=i; tmptmp++;}			//adding starting position to the temporary memory
+    for(unsigned char i=0;i<8;i++) { *tmptmp=i; tmptmp++;}		//adding starting position to the temporary memory
     unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){						//continue as long as there are Positions left(while might be wrong)
@@ -24,10 +24,9 @@ void getcenters() {							//documentation just for one because they are very sim
           unsigned char f=centermove[i][*(tmptmp+5)];
           unsigned char g=centermove[i][*(tmptmp+6)];
 	  unsigned char h=centermove[i][*(tmptmp+7)];
-	  tmptmp+=8;
 	  int j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
-	  if (depth<readhalfbyte(*(centers+(j>>1)),j%2)){		//and look it up int the table + compare
-	    *(centers+i)=sethalfbyte(*(centers+(j>>1)),depth,j%2);	//when it is smaller it into the next round.
+	  if (depth<readhalfbyte(*(centers+(j>>1)),j&1)){		//and look it up int the table + compare
+	    *(centers+(j>>1))=sethalfbyte(*(centers+(j>>1)),depth,j&1);	//when it is smaller it into the next round.
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -39,6 +38,7 @@ void getcenters() {							//documentation just for one because they are very sim
 	    tmpend+=8;
 	  }
 	}
+	tmptmp+=8;
       }
       if (tmpend-tmppos>tmppos-tmpbegin){				//copying functions; 2 cases
 	for (int i=tmppos-tmpbegin;i>6;i-=8){				//not everything has to be copied when final area is bigger than given space
@@ -69,6 +69,7 @@ void getcenters() {							//documentation just for one because they are very sim
       cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";	//little status update
     }
 //  }
+  cout << "center table created\n"; 
 }
 
 void getedges() {
@@ -76,10 +77,11 @@ void getedges() {
 //  if(!LoadFile(edges,"edges",edgesize)) {
     *edges=15;
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
+    cout << "initiated edges memory\n";
     unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
+    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);
     unsigned char* tmptmp=tmpbegin;
-    for(int i=0;i<7;i++) {*tmptmp= 3*i; tmptmp++;}
+    for(unsigned char i=0;i<7;i++) {*tmptmp= 3*i; tmptmp++;}
     unsigned char* tmpend=tmptmp;
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){
@@ -95,10 +97,9 @@ void getedges() {
           unsigned char e=edgemove[i][*(tmptmp+4)];
           unsigned char f=edgemove[i][*(tmptmp+5)];
           unsigned char g=edgemove[i][*(tmptmp+6)];
-	  tmptmp+=7;
 	  int h=posedges(a,b,c,d,e,f,g);
-	  if (depth<readhalfbyte(*(edges+(h>>1)),h%2)){
-	    *(edges+h)=sethalfbyte(*(edges+(h>>1)),depth,h%2);
+	  if (depth<readhalfbyte(*(edges+(h>>1)),h&1)){
+	    *(edges+(h>>1))=sethalfbyte(*(edges+(h>>1)),depth,h&1);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -109,6 +110,7 @@ void getedges() {
 	    tmpend+=7;
 	  }
 	}
+        tmptmp+=7;
       }
       if (tmpend-tmppos>tmppos-tmpbegin){
 	for (int i=tmppos-tmpbegin;i>5;i-=7){
@@ -134,9 +136,9 @@ void getedges() {
 	}
 	tmpend=tmpbegin-tmppos+tmpend;
       }
-    }
-      cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
 //  }
+      cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
+  }
 }
 
 void getcorners() {
@@ -145,9 +147,9 @@ void getcorners() {
     *corners=15;
     for(int i=1;i<cornersize;i++) *(corners+i) = 255;
     unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(1000000);
+    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);
     unsigned char* tmptmp=tmpbegin;
-    for(int i=0;i<6;i++) { *tmptmp=i; tmptmp++;}
+    for(unsigned char i=0;i<6;i++) { *tmptmp=i; tmptmp++;}
     unsigned char* tmpend=tmptmp;
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){
@@ -162,10 +164,12 @@ void getcorners() {
           unsigned char d=cornermove[i][*(tmptmp+3)];
           unsigned char e=cornermove[i][*(tmptmp+4)];
           unsigned char f=cornermove[i][*(tmptmp+5)];
-	  tmptmp+=6;
 	  int g=poscorners(a,b,c,d,e,f);
-	  if (depth<readhalfbyte(*(corners+(g>>1)),g%2)){
-	    *(corners+i)=sethalfbyte(*(corners+(g>>1)),depth,g%2);
+	  if (g>cornersize*2)
+	    cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << "\n";
+	  else{
+	  if (depth<readhalfbyte(*(corners+(g>>1)),g&1)){
+	    *(corners+(g>>1))=sethalfbyte(*(corners+(g>>1)),depth,g&1);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -174,7 +178,9 @@ void getcorners() {
             *(tmpend+5)=f;
 	    tmpend+=6;
 	  }
+	  }
 	}
+        tmptmp+=6;
       }
 	cout << "starting copy \n";
       if (tmpend-tmppos>tmppos-tmpbegin){
