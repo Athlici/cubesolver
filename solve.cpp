@@ -42,15 +42,19 @@ unsigned char* solve(unsigned char* Position){
     }
     Postmp=Posend;
     for (unsigned char* i=Position;i<Postmp;i+=56+Depth){	//value each new position
-      unsigned char tmp=42;
-/*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+	//based on the sum of the lookup tables
-//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
-//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
-//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
-//        *(corners+poscorners(*(i+),*(i+),*(i+),*(i+),*(i+),*(i+)))+
-        *(centers+poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)))+
-        *(centers+poscenters(*(i+35),*(i+36),*(i+37),*(i+38),*(i+43),*(i+44),*(i+45),*(i+46)))+
-        *(centers+poscenters(*(i+47),*(i+48),*(i+49),*(i+50),*(i+51),*(i+52),*(i+53),*(i+54)));*/
+      unsigned char tmp=*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+	//based on the sum of the lookup tables
+	    *(corners+poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)))+
+	    *(corners+poscorners(cornerturn[*(i+13)][],cornerturn[*(i+14)][],
+		cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]))+	//14,13,12
+	    *(corners+poscorners(cornerturn[*(i+19)][2],cornerturn[*(i+20)][2],
+		cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]))+
+	    *(corners+poscorners(cornerturn[*(i+25)][1],cornerturn[*(i+26)][1],
+		cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],cornerturn[*(i+29)][0],cornerturn[*(i+30)][0]))+
+	    *(centers+poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)))+
+	    *(centers+poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],
+		centerturn[*(i+38)][3],centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]))+
+	    *(centers+poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],
+		centerturn[*(i+50)][0],centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0]));
       if(tmp<min){						//and keep only minimal values
 	min=tmp;
 	Posend=Postmp;

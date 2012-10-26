@@ -6,8 +6,9 @@ void getcenters() {							//documentation just for one because they are very sim
     cout << "initialized center memory.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)
-    unsigned char* tmptmp=tmpbegin;					//just temporary
-    for(unsigned char i=0;i<8;i++) { *tmptmp=i; tmptmp++;}		//adding starting position to the temporary memory
+    unsigned char* tmptmp=tmpbegin+8;					//just temporary
+    *tmptmp=0;*(tmptmp+1)=1;*(tmptmp+2)=2;*(tmptmp+3)=3; 		//adding starting position to the temporary memory
+    *(tmptmp+4)=8;*(tmptmp+5)=9;*(tmptmp+6)=10;*(tmptmp+7)=11;		//this are two solves opposite center-quads
     unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){						//continue as long as there are Positions left(while might be wrong)
