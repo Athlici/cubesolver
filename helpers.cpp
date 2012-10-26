@@ -186,9 +186,21 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
 //and the same again for the centers, this is more difficult because 4 center pieces are inperceptible
 //but therefore the memory usage is also reduced by a factor of 24.
 
-//Hier bitte a-d und e-h der Größe nach aufsteigend sortieren.
+  if (a>b){unsigned char tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
+  if (b>c){unsigned char tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
+  if (c>d){unsigned char tmp=d;d=c;c=tmp;}
+  if (a>b){unsigned char tmp=b;b=a;a=tmp;}
+  if (b>c){unsigned char tmp=c;c=b;b=tmp;}
+  if (a>b){unsigned char tmp=b;b=a;a=tmp;}
+
+  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
+  if (f>g){unsigned char tmp=g;g=f;f=tmp;}
+  if (g>h){unsigned char tmp=h;h=g;g=tmp;}
+  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
+  if (f>g){unsigned char tmp=g;g=f;f=tmp;}
+  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
  
-  if (h>d) h--;
+  if (h>d) h--;						//decrease some values of the secondary positions, if these are already taken
   if (h>c) h--;
   if (g>d) g--;
   if (h>b) h--;
@@ -205,13 +217,13 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   if (f>a) f--;
   if (e>a) e--;
 
-  h-=g;
+  h-=g;							//decrease every value so that the magic formula can be applied
   d-=c;
   g-=f;
   c-=b;
   f-=e;
   b-=a;
 
-  return a+b+c+d+e+f+g+h;//DUMMY
-}
+  return a+b+c+d+e+f+g+h;//DUMMY	This is not the magic formula
 
+}
