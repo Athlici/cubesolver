@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>			//change the constants so that they admit the nonimplemented moves
 
 using namespace std;
 
@@ -12,7 +12,7 @@ unsigned char edge[6][24] = {		{22,23,21,3,4,5,6,7,8,2,0,1,10,9,11,15,16,17,18,1
                 	                {0,1,2,3,4,5,6,7,8,9,10,11,15,17,16,18,19,20,21,22,23,12,14,13}};
 
 int main(int argc, char** argv) {
-  for (int i=0;i<3;i++){
+  for (int i=0;i<3;i++){				//sets the first 3 lines
     for (int j=0;j<24;j++){
      edgeturn[i][j]=edgemove[12+i][edgemove[15+i][edgemove[18+i][edgemove[21+i][j]]]];
     }
