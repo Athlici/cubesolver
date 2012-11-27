@@ -224,6 +224,15 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   f-=e;
   b-=a;
 
-  return a+b+c+d+e+f+g+h;//DUMMY	This is not the magic formula
+  h--;
+  g--;
+  f--;
+  d--;
+  c--;
+  b--;
+
+  return (436050*a*a*a-4845*a*a*a*a-1279080*b*b+19380*b*b*b+4845*a*a*(12*b-3035)+29070*a*(7575-88*b+2*b*b-4*c)+2500020*c-58140*c*c
+		-19380*b*(6*c-1451)+116280*d+25234*e-2051*e*e+e*e*e*(74-e)+3884*f-432*e*f+12*e*e*f-216*f*f+12*e*f*f+4*f*f*f+420*g
+		-24*e*g-24*f*g-12*g*g+24*h)/24;		//This is the magic formula
 
 }

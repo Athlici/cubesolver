@@ -44,7 +44,7 @@ unsigned char* solve(unsigned char* Position){
     for (unsigned char* i=Position;i<Postmp;i+=56+Depth){	//value each new position
       unsigned char tmp=*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+	//based on the sum of the lookup tables
 	    *(corners+poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)))+
-	    *(corners+poscorners(cornerturn[*(i+13)][],cornerturn[*(i+14)][],
+	    *(corners+poscorners(cornerturn[*(i+13)][],cornerturn[*(i+14)][],			//hier etwas einfügen, was? frag Patrick
 		cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]))+	//14,13,12
 	    *(corners+poscorners(cornerturn[*(i+19)][2],cornerturn[*(i+20)][2],
 		cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]))+
