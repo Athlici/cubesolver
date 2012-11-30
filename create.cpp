@@ -7,8 +7,9 @@ void getcenters() {							//documentation just for one because they are very sim
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)
     unsigned char* tmptmp=tmpbegin+8;					//just temporary
-    *tmptmp=0;*(tmptmp+1)=1;*(tmptmp+2)=2;*(tmptmp+3)=3; 		//adding starting position to the temporary memory
-    *(tmptmp+4)=8;*(tmptmp+5)=9;*(tmptmp+6)=10;*(tmptmp+7)=11;		//this are two solves opposite center-quads
+    *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 		//adding starting position to the temporary memory
+    *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;		//this are two solves opposite center-quads
+    //*(tmpbegin+4)=4;*(tmpbegin+5)=5;*(tmpbegin+6)=6;*(tmpbegin+7)=7;	//tmp for testing
     unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){						//continue as long as there are Positions left(while might be wrong)
@@ -25,6 +26,7 @@ void getcenters() {							//documentation just for one because they are very sim
           unsigned char f=centermove[i][*(tmptmp+5)];
           unsigned char g=centermove[i][*(tmptmp+6)];
 	  unsigned char h=centermove[i][*(tmptmp+7)];
+  //cout <<a+0<<";"<<b+0<<";"<<c+0<<";"<<d+0<<";"<<e+0<<";"<<f+0<<";"<<g+0<<";"<<h+0<<"\n";
 	  int j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
 	  if (depth<readhalfbyte(*(centers+(j>>1)),j&1)){		//and look it up int the table + compare
 	    *(centers+(j>>1))=sethalfbyte(*(centers+(j>>1)),depth,j&1);	//when it is smaller it into the next round.
