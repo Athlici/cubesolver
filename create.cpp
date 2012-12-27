@@ -1,14 +1,16 @@
 void getcenters() {							//documentation just for one because they are very similiar
   centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
-//  if(!LoadFile(centers,"centers",centersize)) {			//Load the array from disk or calculate it
-    *centers=15;	//to be verified				//The starting Position is set to have depth 0
-    for(int i=1;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
+  //FILE *centerfile;	centerfile=fopen("centertable8","r");		//File object for disk operations
+  //if(centerfile==NULL) {						//Load the array from disk or calculate it
+  //  cout<<"Couldn't find centertables on disk.\n";			
+    for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
+    *(centers+1512)=240;        //to be verified                         //The starting Position is set to have depth 0
     cout << "initialized center memory.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)
     unsigned char* tmptmp=tmpbegin+8;					//just temporary
-    *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 		//adding starting position to the temporary memory
-    *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;		//this are two solves opposite center-quads
+    *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 	//adding starting position to the temporary memory
+    *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;	//this are two solves opposite center-quads
     //*(tmpbegin+4)=4;*(tmpbegin+5)=5;*(tmpbegin+6)=6;*(tmpbegin+7)=7;	//tmp for testing
     unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
     unsigned char* tmppos=tmptmp;
@@ -70,8 +72,13 @@ void getcenters() {							//documentation just for one because they are very sim
 	tmpend=tmpbegin-tmppos+tmpend;
       }
       cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";	//little status update
-    }
-//  }
+    }/*
+    fclose(centerfile);fopen("centertable8","w");					//reopen file for writing
+    fwrite(centers,1,sizeof(centers),centerfile);fclose(centerfile);				//and write the array, close afterwards
+  }else{
+    cout<<"Found centertables on disk.\n";						//tell the user whats happening
+    fread(centers,1,centersize,centerfile);fclose(centerfile);				//read array and close afterwards.
+  }*/
   cout << "center table created\n"; 
 }
 

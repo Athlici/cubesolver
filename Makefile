@@ -1,19 +1,12 @@
-CXXFLAGS= -Ofast
+CXXFLAGS= -Ofast -std=c++0x -pthread
 
-debug: cubesolver
-
-release: CXXFLAGS=-O3
 release:
-	$(MAKE) clean
-	$(MAKE) cubesolver
+	g++ -Ofast -o cubesolver -std=c++0x -pthread main.cpp
+#	$(MAKE) clean
+#	$(MAKE) cubesolver
 
-cubesolver: main.o
-	g++ $(CXXFLAGS) -o cubesolver $^
-
-install: release
-	install -Ds -m 755 -o root -g root cubesolver $(DESTDIR)/bin/cubesolver
+cubesolver: arrays.o calc.o
+	g++ $(CXXFLAGS) -o cubesolver main.cpp arrays.o calc.o
 
 clean:
 	rm -f *.o cubesolver
-
-# vim:noexpandtab:

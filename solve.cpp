@@ -42,14 +42,14 @@ unsigned char* solve(unsigned char* Position){
     }
     Postmp=Posend;
     for (unsigned char* i=Position;i<Postmp;i+=56+Depth){	//value each new position
-      unsigned char tmp=*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+	//based on the sum of the lookup tables
+      unsigned char tmp=/*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)))+	//based on the sum of the lookup tables
 	    *(corners+poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)))+		//recheck the correctness of the turn operations
 	    *(corners+poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],			
 		cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]))+	//14,13,12
 	    *(corners+poscorners(cornerturn[*(i+19)][1],cornerturn[*(i+20)][1],
-		cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]))+
-	    *(corners+poscorners(cornerturn[*(i+25)][0],cornerturn[*(i+26)][0],
-		cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],cornerturn[*(i+29)][0],cornerturn[*(i+30)][0]))+
+		cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]))+  //solve centers as
+	    *(corners+poscorners(cornerturn[*(i+25)][0],cornerturn[*(i+26)][0],					//Proof of Concept
+		cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],cornerturn[*(i+29)][0],cornerturn[*(i+30)][0]))+*/
 	    *(centers+poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)))+
 	    *(centers+poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],
 		centerturn[*(i+38)][3],centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]))+
@@ -69,4 +69,10 @@ unsigned char* solve(unsigned char* Position){
     for (int i=0;i<(Posend-Postmp);i+=1) *(Posbegin+i)=*(Postmp+i);	//plain backcopying of the postitions
     Posend=Posbegin-Posend+Postmp;
   }
+  unsigned char *back; back=(unsigned char*) malloc(Depth*(Posend-Posbegin)/(Depth+55));	//RECHECK EVERYTHING HERE
+  *back=Depth;
+  for (int i=0;i<(Posend-Posbegin)/(Depth+55);i++){
+    for (int j=0,j<=Depth;j++)*(back+1+i*Depth+j)=*(Posbegin+i*(Depth+55)+j+55)
+  }
+  return back;		//this should be it, hopefully.
 }
