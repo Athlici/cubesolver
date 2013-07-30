@@ -80,6 +80,7 @@ void getcenters() {							//documentation just for one because they are very sim
     fread(centers,1,centersize,centerfile);fclose(centerfile);				//read array and close afterwards.
   }*/
   cout << "center table created\n"; 
+  free(tmpbegin);
 }
 
 void getedges() {
@@ -149,6 +150,7 @@ void getedges() {
 //  }
       cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
   }
+  free(tmpbegin);
 }
 
 void getcorners() {
@@ -192,7 +194,6 @@ void getcorners() {
 	}
         tmptmp+=6;
       }
-	cout << "starting copy \n";
       if (tmpend-tmppos>tmppos-tmpbegin){
 	for (int i=tmppos-tmpbegin;i>4;i-=6){
 	  *(tmppos-i)=*(tmpend-i);
@@ -218,4 +219,5 @@ void getcorners() {
       cout << ((tmpend-tmpbegin)/6) << " positions after depth " << depth+0 << "\n";
     }
 //  }
+  free(tmpbegin);
 }

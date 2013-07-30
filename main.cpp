@@ -17,6 +17,7 @@ const int centersize = 25741485;			//and centers
 #include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
+
 thread t1(getcenters);					//creation and looding of the tables
 thread t2(getedges);
 thread t3(getcorners); 
@@ -25,6 +26,11 @@ t1.join();
 t2.join();
 t3.join();
 
+/*
+getcenters();
+getedges();
+getcorners();
+*/
 // Position einlesen
 unsigned char *position;
 position=(unsigned char*) malloc(56);

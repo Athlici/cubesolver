@@ -56,7 +56,7 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
 //and the same again for the centers, this is more difficult because 4 center pieces are inperceptible
-//but therefore the memory usage is also reduced by a factor of 24.
+//but therefore the memory usage is also reduced by a factor of 24^2.
 
   if (a>b){unsigned char tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
   if (b>c){unsigned char tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
@@ -103,8 +103,28 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   c--;
   b--;
 
-  return (436050*a*a*a-4845*a*a*a*a-1279080*b*b+19380*b*b*b+4845*a*a*(12*b-3035)+29070*a*(7575-88*b+2*b*b-4*c)+2500020*c-58140*c*c
+/*  return (436050*a*a*a-4845*a*a*a*a-1279080*b*b+19380*b*b*b+4845*a*a*(12*b-3035)+29070*a*(7575-88*b+2*b*b-4*c)+2500020*c-58140*c*c
 		-19380*b*(6*c-1451)+116280*d+25234*e-2051*e*e+e*e*e*(74-e)+3884*f-432*e*f+12*e*e*f-216*f*f+12*e*f*f+4*f*f*f+420*g
-		-24*e*g-24*f*g-12*g*g+24*h)/24;		//This is the magic formula
+		-24*e*g-24*f*g-12*g*g+24*h)/24;*/		//This is the magic formula (may be derived using sums.)
+/*  return 4842-(1615*(-90*a*a*a+a*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(b*b*b-66*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8-
+   ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+e*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;*/
+  return a+b+c+d+e+f+g+h	//this is so damn hard.
+}
 
+unsigned char max(unsigned char *Position){
+/*  unsigned char values[8]={*(edges+posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6))),
+    *(corners+poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12))),
+    *(corners+poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],
+      cornerturn[*(i+17)][2],cornerturn[*(i+18)][2])),
+    *(corners+poscorners(cornerturn[*(i+19)][1],cornerturn[*(i+20)][1],cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],
+      cornerturn[*(i+23)][1],cornerturn[*(i+24)][1])), 
+    *(corners+poscorners(cornerturn[*(i+25)][0],cornerturn[*(i+26)][0],cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],
+      cornerturn[*(i+29)][0],cornerturn[*(i+30)][0])),
+    *(centers+poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42))),
+    *(centers+poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],centerturn[*(i+38)][3],
+      centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3])),
+    *(centers+poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
+      centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0]))};*/
+	//it might be convenient/right to use the halfbyte functions here.
+	//which functions do the turns have? (mappin of the pieces to the (right) positions of the original pieces)
 }
