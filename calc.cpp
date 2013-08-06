@@ -105,11 +105,8 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
 
 /*  return (436050*a*a*a-4845*a*a*a*a-1279080*b*b+19380*b*b*b+4845*a*a*(12*b-3035)+29070*a*(7575-88*b+2*b*b-4*c)+2500020*c-58140*c*c
 		-19380*b*(6*c-1451)+116280*d+25234*e-2051*e*e+e*e*e*(74-e)+3884*f-432*e*f+12*e*e*f-216*f*f+12*e*f*f+4*f*f*f+420*g
-		-24*e*g-24*f*g-12*g*g+24*h)/24;		//This is the magic formula (may be derived using sums.)
-  return 4842-(1615*(-90*a*a*a+a*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(b*b*b-66*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8-
-   ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+e*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;*/
-//  return a+b+c+d+e+f+g+h	//this is so damn hard.
-  return 4842-(2423*(a*a*a*a-90*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(-66*b*b+b*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/12- 
+		-24*e*g-24*f*g-12*g*g+24*h)/24;		//This is the magic formula (may be derived using sums.)*/
+  return 4842-(1615*(a*a*a*a-90*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(-66*b*b+b*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8- 
    ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+3*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;
 }
 /*
@@ -140,4 +137,4 @@ unsigned char max(unsigned char *i){
   for(unsigned char i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
   return tmp;									//and return it
 }
-*
+*/
