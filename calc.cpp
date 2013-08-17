@@ -57,7 +57,7 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
 //and the same again for the centers, this is more difficult because 4 center pieces are inperceptible
 //but therefore the memory usage is also reduced by a factor of 24^2.
-
+/*
   if (a>b){unsigned char tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
   if (b>c){unsigned char tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
   if (c>d){unsigned char tmp=d;d=c;c=tmp;}
@@ -71,7 +71,19 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   if (e>f){unsigned char tmp=f;f=e;e=tmp;}
   if (f>g){unsigned char tmp=g;g=f;f=tmp;}
   if (e>f){unsigned char tmp=f;f=e;e=tmp;}
- 
+*/
+  if (a>b)std::swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
+  if (c>d)std::swap(c,d);              			//with increasing size from a-d;e-h
+  if (a>c)std::swap(a,c);
+  if (b>d)std::swap(b,d);
+  if (b>c)std::swap(b,c);
+
+  if (e>f)std::swap(e,f);
+  if (g>h)std::swap(g,h);
+  if (e>g)std::swap(e,g);
+  if (f>h)std::swap(f,h);
+  if (f>g)std::swap(f,g);
+
   if (h>d) h--;						//decrease some values of the secondary positions, if these are already taken
   if (h>c) h--;
   if (g>d) g--;
@@ -109,8 +121,8 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   return 4842-(1615*(a*a*a*a-90*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(-66*b*b+b*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8- 
    ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+3*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;
 }
-/*
-unsigned char max(unsigned char *i){
+
+unsigned char max(unsigned char* i){
   int address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),	//calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
     poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],
@@ -125,16 +137,15 @@ unsigned char max(unsigned char *i){
     poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
       centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
 	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
-  unsigned char values[8]={readhalfbyte(*(edges+address[0]>>1),address[0]&1),	//lookup the associated depth values
-    *(corners+readhalfbyte(*(corners+address[1]>>1),address[1]&1)),
-    *(corners+readhalfbyte(*(corners+address[2]>>1),address[2]&1)),
-    *(corners+readhalfbyte(*(corners+address[3]>>1),address[3]&1)), 
-    *(corners+readhalfbyte(*(corners+address[4]>>1),address[4]&1)),
-    *(centers+readhalfbyte(*(centers+address[5]>>1),address[5]&1)),
-    *(centers+readhalfbyte(*(centers+address[6]>>1),address[6]&1)),
-    *(centers+readhalfbyte(*(centers+address[7]>>1),address[7]&1))};
+  unsigned char values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
+    *(corners+readhalfbyte(*(corners+address[1]/2),address[1]&1)),
+    *(corners+readhalfbyte(*(corners+address[2]/2),address[2]&1)),
+    *(corners+readhalfbyte(*(corners+address[3]/2),address[3]&1)), 
+    *(corners+readhalfbyte(*(corners+address[4]/2),address[4]&1)),
+    *(centers+readhalfbyte(*(centers+address[5]/2),address[5]&1)),
+    *(centers+readhalfbyte(*(centers+address[6]/2),address[6]&1)),
+    *(centers+readhalfbyte(*(centers+address[7]/2),address[7]&1))};
   unsigned char tmp=values[0];
   for(unsigned char i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
   return tmp;									//and return it
 }
-*/

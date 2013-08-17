@@ -69,8 +69,8 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 
 /*inline*/ void movecube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
- *WritePos=edgemove[Move][*CubePos];
- *(WritePos+1)=edgemove[Move][*(CubePos+1)];
+ *WritePos=edgemove[Move][*CubePos];				//extra precautions necessary here, due to the reduced size of
+ *(WritePos+1)=edgemove[Move][*(CubePos+1)];			//the edge move table.
  *(WritePos+2)=edgemove[Move][*(CubePos+2)];
  *(WritePos+3)=edgemove[Move][*(CubePos+3)];
  *(WritePos+4)=edgemove[Move][*(CubePos+4)];

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
 
 #include "../arrays.cpp"
 #include "../helpers.cpp"
@@ -16,10 +17,19 @@ inline void fix(unsigned char a){		//number to be corrected. (easy because the l
 }
 
 inline void fix2(unsigned char a,unsigned char b){
-  for(unsigned char i=a;i<23;i++){pos[i]--;taken[pos[i]]=i;}		//shift the whole array one to the left
+  pos[a]=128;
+  for(unsigned char i=pos[a+1];i<20;i++){pos[taken[i]]--;taken[pos[taken[i]-1]]=taken[i];}	//shift the whole array one to the left
   pos[b]=19;taken[19]=b;						//and set the old value of D at the end.
 }
 
+void regenerate(unsigned char a, unsigned char b, unsigned char c, unsigned char d){
+  unsigned char tmp=0;
+  for(unsigned char i=0;i<a;i++){taken[tmp]=i;tmp++;}
+  for(unsigned char i=a+1;i<b;i++){taken[tmp]=i;tmp++;}
+  for(unsigned char i=b+1;i<c;i++){taken[tmp]=i;tmp++;}
+  for(unsigned char i=c+1;i<d;i++){taken[tmp]=i;tmp++;}
+  for(unsigned char i=d+1;i<24;i++){taken[tmp]=i;tmp++;}
+}
 
 int main(void){
 
@@ -41,13 +51,16 @@ do{
       else{
 	if(e!=16){e++;E=taken[e];f=e;F=taken[f+1];g=f;G=taken[g+2];h=g;H=taken[h+3];}
 	else{
-	  if(D!=23){fix(D);D++;}								//increase, but update the taken numbers
+	  if(D!=23){/*fix(D);*/D++;regenerate(A,B,C,D);}					//increase, but update the taken numbers
 	  else{
-	    if(C!=22){fix(C);C++;D=C+1;fix2(D,23);}
+	    if(C!=22){/*fix(C);C++;D=C+1;fix2(D,23);*/
+	      C++;D=C+1;regenerate(A,B,C,D);}
 	    else{
-	      if(B!=21){fix(B);B++;C=B+1;fix2(C,22);D=C+1;fix2(D,23);}
+	      if(B!=21){/*fix(B);B++;C=B+1;fix2(C,22);D=C+1;fix2(D,23);*/
+		B++;C=B+1;D=C+1;regenerate(A,B,C,D);}
 	      else{
-		fix(A);A++;B=A+1;fix2(B,21);C=B+1;fix2(C,22);D=C+1;fix2(D,23);
+		/*fix(A);A++;B=A+1;fix2(B,21);C=B+1;fix2(C,22);D=C+1;fix2(D,23);*/
+		A++;B=A+1;C=B+1;D=C+1;regenerate(A,B,C,D);
 		cout << A+0 << "\n";
 	      }
 	    }
@@ -57,6 +70,6 @@ do{
       }
     }
   }
-}while(A!=20||B!=21||C!=22||D!=23||E!=16||F!=16||G!=16||H!=16);
+}while(A<21);
 
 }

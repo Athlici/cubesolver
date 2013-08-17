@@ -14,7 +14,7 @@ const int centersize = 25741485;			//and centers
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
-#include "solve.cpp"					//solves a given cube position optimal
+#include "solve2.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
 
@@ -34,15 +34,27 @@ getcorners();
 // Position einlesen
 unsigned char *position;
 position=(unsigned char*) malloc(56);
-for(int i=0;i<7;i++)*(position+i)=i;
-for(int i=0;i<24;i++)*(position+i+7)=i;
+for(unsigned char i=0;i<7;i++)*(position+i)=i;		//just setting a solved edges/corners/centers set
+for(unsigned char i=0;i<24;i++){*(position+i+7)=i;*(position+i+31)=i;}
 
+//{22, 33, 11, 18, 15, 20, 19}
+movecube(position,position,22);
+movecube(position,position,33);
+movecube(position,position,11);
+movecube(position,position,18);
+movecube(position,position,15);
+movecube(position,position,20);
+movecube(position,position,8);
+
+solve(position);
+
+cout<< "solution found \n" ;
 
 // Position lösen
 
 // Done xD
 
-  int foo = 0;						//temporary too make the programm last longer on screen
-  cin >> foo;
+//  int foo = 0;						//temporary too make the programm last longer on screen
+//  cin >> foo;
 
 }
