@@ -1,7 +1,7 @@
-CXXFLAGS= -Ofast -std=c++0x -pthread
+CXXFLAGS= -Ofast -std=c++0x -pthread -ggdb
 
 release:
-	g++ -Ofast -o cubesolver -std=c++0x -pthread main.cpp
+	g++ $(CXXFLAGS) -o cubesolver main.cpp
 #	$(MAKE) clean
 #	$(MAKE) cubesolver
 

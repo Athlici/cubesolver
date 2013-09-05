@@ -20,3 +20,4 @@ arrayhelp/code5
 tests/coredgtest
 tests/arraytest
 tests/centertest
+perf*

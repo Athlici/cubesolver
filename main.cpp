@@ -5,7 +5,7 @@
 
 using namespace std;
 
-unsigned char *corners, *edges, *centers;
+unsigned char *corners, *edges, *centers, *solution;
 const int cornersize = 48454560;			//Size of the array for cornerdepthlookups in Bytes
 const int edgesize = 44089920;				//same for edges
 const int centersize = 25741485;			//and centers
@@ -33,7 +33,7 @@ getcorners();
 */
 // Position einlesen
 unsigned char *position;
-position=(unsigned char*) malloc(56);
+position=(unsigned char*) malloc(55);solution=(unsigned char*) malloc(50);
 for(unsigned char i=0;i<7;i++)*(position+i)=i;		//just setting a solved edges/corners/centers set
 for(unsigned char i=0;i<24;i++){*(position+i+7)=i;*(position+i+31)=i;}
 
@@ -46,9 +46,11 @@ movecube(position,position,15);
 movecube(position,position,20);
 movecube(position,position,8);
 
-solve(position);
+unsigned char searchspace=0;
+while(!solve(position,searchspace))			//Add in threads here to account for cubeturns.(better way???)
+{cout << "finished search at Depth: " << searchspace+0 << "\n";searchspace++;}
 
-cout<< "solution found \n" ;
+cout<< "solution found with " << searchspace+0 << " moves.\n" ;
 
 // Position lösen
 

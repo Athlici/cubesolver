@@ -69,13 +69,14 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 
 /*inline*/ void movecube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
- *WritePos=edgemove[Move][*CubePos];				//extra precautions necessary here, due to the reduced size of
- *(WritePos+1)=edgemove[Move][*(CubePos+1)];			//the edge move table.
- *(WritePos+2)=edgemove[Move][*(CubePos+2)];
- *(WritePos+3)=edgemove[Move][*(CubePos+3)];
- *(WritePos+4)=edgemove[Move][*(CubePos+4)];
- *(WritePos+5)=edgemove[Move][*(CubePos+5)];
- *(WritePos+6)=edgemove[Move][*(CubePos+6)];
+ unsigned char tmp=edgemap[Move];if(tmp!=18){			//check wether we have to act on the edge positions at all
+   *WritePos=edgemove[tmp][*CubePos];
+   *(WritePos+1)=edgemove[tmp][*(CubePos+1)];
+   *(WritePos+2)=edgemove[tmp][*(CubePos+2)];
+   *(WritePos+3)=edgemove[tmp][*(CubePos+3)];
+   *(WritePos+4)=edgemove[tmp][*(CubePos+4)];
+   *(WritePos+5)=edgemove[tmp][*(CubePos+5)];
+   *(WritePos+6)=edgemove[tmp][*(CubePos+6)];}
  *(WritePos+7)=cornermove[Move][*(CubePos+7)];
  *(WritePos+8)=cornermove[Move][*(CubePos+8)];
  *(WritePos+9)=cornermove[Move][*(CubePos+9)];
@@ -124,4 +125,10 @@ int WriteFile(unsigned char* mem, string filename, int size) {
  *(WritePos+52)=centermove[Move][*(CubePos+52)];
  *(WritePos+53)=centermove[Move][*(CubePos+53)];
  *(WritePos+54)=centermove[Move][*(CubePos+54)];
+}
+
+bool solved(unsigned char* Position){
+  for(unsigned char i=0;i<7;i++){if(*(Position+i)!=i)return false;}
+  for(unsigned char i=0;i<24;i++){if(*(Position+i+7)!=i||*(Position+i+31)!=i)return false;}
+  return true;
 }

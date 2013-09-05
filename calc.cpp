@@ -138,13 +138,13 @@ unsigned char max(unsigned char* i){
       centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
 	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
   unsigned char values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
-    *(corners+readhalfbyte(*(corners+address[1]/2),address[1]&1)),
-    *(corners+readhalfbyte(*(corners+address[2]/2),address[2]&1)),
-    *(corners+readhalfbyte(*(corners+address[3]/2),address[3]&1)), 
-    *(corners+readhalfbyte(*(corners+address[4]/2),address[4]&1)),
-    *(centers+readhalfbyte(*(centers+address[5]/2),address[5]&1)),
-    *(centers+readhalfbyte(*(centers+address[6]/2),address[6]&1)),
-    *(centers+readhalfbyte(*(centers+address[7]/2),address[7]&1))};
+    readhalfbyte(*(corners+address[1]/2),address[1]&1),
+    readhalfbyte(*(corners+address[2]/2),address[2]&1),
+    readhalfbyte(*(corners+address[3]/2),address[3]&1), 
+    readhalfbyte(*(corners+address[4]/2),address[4]&1),
+    readhalfbyte(*(centers+address[5]/2),address[5]&1),
+    readhalfbyte(*(centers+address[6]/2),address[6]&1),
+    readhalfbyte(*(centers+address[7]/2),address[7]&1)};
   unsigned char tmp=values[0];
   for(unsigned char i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
   return tmp;									//and return it
