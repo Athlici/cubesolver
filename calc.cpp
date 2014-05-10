@@ -1,8 +1,8 @@
-inline unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
+unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
   return ((b<<4*c) | (a & (240-225*c)));		//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
-inline unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
+unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
   return ((a & (15+225*b))>>4*b);			//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
@@ -55,7 +55,7 @@ return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
 int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
-//and the same again for the centers, this is more difficult because 4 center pieces are inperceptible
+//and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 /*
   if (a>b){unsigned char tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
@@ -72,17 +72,17 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   if (f>g){unsigned char tmp=g;g=f;f=tmp;}
   if (e>f){unsigned char tmp=f;f=e;e=tmp;}
 */
-  if (a>b)std::swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
-  if (c>d)std::swap(c,d);              			//with increasing size from a-d;e-h
-  if (a>c)std::swap(a,c);
-  if (b>d)std::swap(b,d);
-  if (b>c)std::swap(b,c);
+  if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
+  if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
+  if (a>c)swap(a,c);
+  if (b>d)swap(b,d);
+  if (b>c)swap(b,c);
 
-  if (e>f)std::swap(e,f);
-  if (g>h)std::swap(g,h);
-  if (e>g)std::swap(e,g);
-  if (f>h)std::swap(f,h);
-  if (f>g)std::swap(f,g);
+  if (e>f)swap(e,f);
+  if (g>h)swap(g,h);
+  if (e>g)swap(e,g);
+  if (f>h)swap(f,h);
+  if (f>g)swap(f,g);
 
   if (h>d) h--;						//decrease some values of the secondary positions, if these are already taken
   if (h>c) h--;
