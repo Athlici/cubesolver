@@ -1,10 +1,11 @@
+//something is seriously wrong here regarding the starting Positions!!!
 void getcenters() {							//documentation just for one because they are very similiar
   centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
   //FILE *centerfile;	centerfile=fopen("centertable8","r");		//File object for disk operations
   //if(centerfile==NULL) {						//Load the array from disk or calculate it
   //  cout<<"Couldn't find centertables on disk.\n";			
     for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
-    *(centers+1512)=240;        //to be verified                        //The starting Position is set to have depth 0
+    *(centers+3025/2)=sethalfbyte(255,0,3025&1);                        //The starting Position is set to have depth 0
     cout << "initialized center memory.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)

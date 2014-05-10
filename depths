@@ -1,0 +1,38 @@
+initialized center memory.
+13 positions after depth 1
+229 positions after depth 2
+4302 positions after depth 3
+64570 positions after depth 4
+750140 positions after depth 5
+6356320 positions after depth 6
+25791391 positions after depth 7
+18361188 positions after depth 8
+154816 positions after depth 9
+0 positions after depth 10
+center table created
+initiated edges memory
+18 positions after depth 1
+244 positions after depth 2
+2874 positions after depth 3
+28000 positions after depth 4
+205416 positions after depth 5
+1168516 positions after depth 6
+5402628 positions after depth 7
+20776176 positions after depth 8
+45391616 positions after depth 9
+15139615 positions after depth 10
+64736 positions after depth 11
+0 positions after depth 12
+25 positions after depth 1
+445 positions after depth 2
+7103 positions after depth 3
+99225 positions after depth 4
+1180368 positions after depth 5
+10522884 positions after depth 6
+49315611 positions after depth 7
+35627156 positions after depth 8
+156302 positions after depth 9
+0 positions after depth 10
+
+edgedepth: 9; cornerdepths: 2;10;9;10; centerdepths: 9;9;10
+edgedepth: 47066392; cornerdepths: 0;7878207;53995396;81283634; centerdepths: 3025;48020700;14245141

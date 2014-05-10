@@ -136,6 +136,7 @@ unsigned char max(unsigned char* i){
       centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]),
     poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
       centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
+//    cout << address[6]+0 << "\n";
 	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
   unsigned char values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
     readhalfbyte(*(corners+address[1]/2),address[1]&1),
