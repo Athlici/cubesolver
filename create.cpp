@@ -5,11 +5,11 @@ void getcenters() {							//documentation just for one because they are very sim
   //if(centerfile==NULL) {						//Load the array from disk or calculate it
   //  cout<<"Couldn't find centertables on disk.\n";			
     for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
-    *(centers+3025/2)=sethalfbyte(255,0,3025&1);                        //The starting Position is set to have depth 0
+    *(centers+3025/2)=sethalfbyte(255,0,3025%2);                        //The starting Position is set to have depth 0
     cout << "initialized center memory.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
-    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(might be too less)
-    unsigned char* tmptmp=tmpbegin+8;					//just temporary
+    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(inaccurate estimate)
+    unsigned char* tmptmp=tmpbegin+8;				//just temporary  ??
     *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 	//adding starting position to the temporary memory
     *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;	//this are two solves opposite center-quads
     //*(tmpbegin+4)=4;*(tmpbegin+5)=5;*(tmpbegin+6)=6;*(tmpbegin+7)=7;	//tmp for testing
@@ -31,8 +31,8 @@ void getcenters() {							//documentation just for one because they are very sim
 	  unsigned char h=centermove[i][*(tmptmp+7)];
   //cout <<a+0<<";"<<b+0<<";"<<c+0<<";"<<d+0<<";"<<e+0<<";"<<f+0<<";"<<g+0<<";"<<h+0<<"\n";
 	  int j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
-	  if (depth<readhalfbyte(*(centers+(j>>1)),j&1)){		//and look it up int the table + compare
-	    *(centers+(j>>1))=sethalfbyte(*(centers+(j>>1)),depth,j&1);	//when it is smaller it into the next round.
+	  if (depth<readhalfbyte(*(centers+j/2),j%2)){			//and look it up int the table + compare
+	    *(centers+j/2)=sethalfbyte(*(centers+j/2),depth,j%2);	//when it is smaller keep it in the next round.
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
@@ -46,7 +46,7 @@ void getcenters() {							//documentation just for one because they are very sim
 	}
 	tmptmp+=8;
       }
-      if (tmpend-tmppos>tmppos-tmpbegin){				//copying functions; 2 cases
+      if (tmpend-tmppos>tmppos-tmpbegin){				//copying functions; 2 cases		(might be replaced by memmove)
 	for (int i=tmppos-tmpbegin;i>6;i-=8){				//not everything has to be copied when final area is bigger than given space
 	  *(tmppos-i)=*(tmpend-i);
 	  *(tmppos-i+1)=*(tmpend-i+1);
