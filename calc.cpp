@@ -1,13 +1,23 @@
-unsigned char sethalfbyte(unsigned char a/*Eingangsbyte*/,unsigned char b/*Modifikation*/,unsigned char c/*lower(0) or upper half(1)*/){
-  return ((b<<4*c) | (a & (240-225*c)));		//returns the upper part of the byte when c==1 otherwise the lower part
+inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+  return (b<<4*c)|(a&(240-225*c));			//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
-unsigned char readhalfbyte(unsigned char a/*Eingangsbyte*/, unsigned char b/*lower(0) or upper half(1)*/){
-  return ((a & (15+225*b))>>4*b);			//sets the upper part of the byte when c==1 otherwise the lower part
+inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+  return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
-int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g){
- unsigned char B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
+//inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+////  if(c)return (b<<4)|(a&15); else return b|(a&240);
+//  return c ? (b<<4)|(a&15) : b|(a&240);
+//}
+//
+//inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+////  if(c)return a>>4; else return a&15
+//  return c ? a>>4 : a&15;
+//}
+
+uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
+ uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
  if (a<B) b-=3;
  if (a<C) c-=3;
@@ -33,8 +43,8 @@ int posedges(unsigned char a,unsigned char b,unsigned char c,unsigned char d,uns
 return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 
-int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f){
- unsigned char B=b,C=c,D=d,E=e,F=f;			//the same for the corners
+uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
+ uchar B=b,C=c,D=d,E=e,F=f;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
  if (a<C) c--;
@@ -54,23 +64,23 @@ int poscorners(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
 return (4037880*a+175560*b+7980*c+380*d+19*e+f);
 }
 
-int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g, unsigned char h){
+uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 /*
-  if (a>b){unsigned char tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
-  if (b>c){unsigned char tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
-  if (c>d){unsigned char tmp=d;d=c;c=tmp;}
-  if (a>b){unsigned char tmp=b;b=a;a=tmp;}
-  if (b>c){unsigned char tmp=c;c=b;b=tmp;}
-  if (a>b){unsigned char tmp=b;b=a;a=tmp;}
+  if (a>b){uchar tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
+  if (b>c){uchar tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
+  if (c>d){uchar tmp=d;d=c;c=tmp;}
+  if (a>b){uchar tmp=b;b=a;a=tmp;}
+  if (b>c){uchar tmp=c;c=b;b=tmp;}
+  if (a>b){uchar tmp=b;b=a;a=tmp;}
 
-  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
-  if (f>g){unsigned char tmp=g;g=f;f=tmp;}
-  if (g>h){unsigned char tmp=h;h=g;g=tmp;}
-  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
-  if (f>g){unsigned char tmp=g;g=f;f=tmp;}
-  if (e>f){unsigned char tmp=f;f=e;e=tmp;}
+  if (e>f){uchar tmp=f;f=e;e=tmp;}
+  if (f>g){uchar tmp=g;g=f;f=tmp;}
+  if (g>h){uchar tmp=h;h=g;g=tmp;}
+  if (e>f){uchar tmp=f;f=e;e=tmp;}
+  if (f>g){uchar tmp=g;g=f;f=tmp;}
+  if (e>f){uchar tmp=f;f=e;e=tmp;}
 */
   if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
   if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
@@ -115,15 +125,15 @@ int poscenters(unsigned char a,unsigned char b,unsigned char c,unsigned char d,u
   c--;
   b--;
 
-/*  return (436050*a*a*a-4845*a*a*a*a-1279080*b*b+19380*b*b*b+4845*a*a*(12*b-3035)+29070*a*(7575-88*b+2*b*b-4*c)+2500020*c-58140*c*c
-		-19380*b*(6*c-1451)+116280*d+25234*e-2051*e*e+e*e*e*(74-e)+3884*f-432*e*f+12*e*e*f-216*f*f+12*e*f*f+4*f*f*f+420*g
-		-24*e*g-24*f*g-12*g*g+24*h)/24;		//This is the magic formula (may be derived using sums.)*/
-  return 4842-(1615*(a*a*a*a-90*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(-66*b*b+b*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8- 
-   ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+3*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;
+//  return 4842-(1615*(a*a*a*a-90*a*a*a+a*a*(3035-12*b)-6*a*(7575-88*b+2*b*b-4*c)-4*(-66*b*b+b*b*b+b*(1451-6*c)+129*c-3*c*c+6*d)))/8- 
+//     ((e-17)*(1094*e-57*e*e+e*e*e-7104))/24+((1+f)*(1032+3*e*e+3*e*(f-37)-55*f+f*f))/6-((1+g)*(2*e+2*f+g-36))/2+h;
+  return (b*(28120380+b*(19380*b-1279080)-116280*c)+a*(220205250+b*(58140*b-2558160)+a*((436050-4845*a)*a+58140*b-14704575)-116280*c)+
+   (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
+// This is the Horner-Form of the commented Formula, hopefully faster to calculate
 }
 
-unsigned char max(unsigned char* i){
-  int address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),	//calc all the addresses
+uchar max(uchar* i){
+  uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),	//calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
     poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],
       cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]),
@@ -138,7 +148,7 @@ unsigned char max(unsigned char* i){
       centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
 //    cout << address[6]+0 << "\n";
 	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
-  unsigned char values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
+  uchar values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
     readhalfbyte(*(corners+address[1]/2),address[1]&1),
     readhalfbyte(*(corners+address[2]/2),address[2]&1),
     readhalfbyte(*(corners+address[3]/2),address[3]&1), 
@@ -146,7 +156,7 @@ unsigned char max(unsigned char* i){
     readhalfbyte(*(centers+address[5]/2),address[5]&1),
     readhalfbyte(*(centers+address[6]/2),address[6]&1),
     readhalfbyte(*(centers+address[7]/2),address[7]&1)};
-  unsigned char tmp=values[0];
-  for(unsigned char i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
+  uchar tmp=values[0];
+  for(uchar i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
   return tmp;									//and return it
 }
