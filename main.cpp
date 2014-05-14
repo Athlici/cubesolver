@@ -37,7 +37,7 @@ t3.join();
 // Position einlesen
 uchar *position;
 position=(uchar*) malloc(55);solution=(uchar*) malloc(50);
-for(uchar i=0;i<7;i++)*(position+i)=i;		//just setting a solved edges/corners/centers set
+for(uchar i=0;i<7;i++)*(position+i)=3*i;		//just setting a solved edges/corners/centers set
 for(uchar i=0;i<24;i++){*(position+i+7)=i;*(position+i+31)=i;}
 
 //{22, 33, 11, 18, 15, 20, 19}
@@ -50,7 +50,7 @@ movecube(position,position,18);
 //movecube(position,position,8);
 
 uchar *i;i=position;
-
+/*
   uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
     poscorners(cornerturn[2][*(i+13)],cornerturn[2][*(i+14)],cornerturn[2][*(i+15)],cornerturn[2][*(i+16)],
@@ -67,9 +67,9 @@ uchar *i;i=position;
 
 cout << "edgedepth: " << readhalfbyte(*(edges+address[0]/2),address[0]&1)+0 << "; cornerdepths: " << readhalfbyte(*(corners+address[1]/2),address[1]&1)+0 << ";" << readhalfbyte(*(corners+address[2]/2),address[2]&1)+0 << ";" << readhalfbyte(*(corners+address[3]/2),address[3]&1)+0 << ";" << readhalfbyte(*(corners+address[4]/2),address[4]&1)+0 << "; centerdepths: " << readhalfbyte(*(centers+address[5]/2),address[5]&1)+0 << ";" << readhalfbyte(*(centers+address[6]/2),address[6]&1)+0 << ";" << readhalfbyte(*(centers+address[7]/2),address[7]&1)+0 << "\n";
 cout << "edgedepth: " << address[0]+0 << "; cornerdepths: " << address[1]+0 << ";" << address[2]+0 << ";" << address[3]+0 << ";" << address[4]+0 << "; centerdepths: " << address[5]+0 << ";" << address[6]+0 << ";" << address[7]+0 << "\n";
+*/
 
 
-/*
 uint address[24];
   address[0]=poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42));
   for(uint j=0;j<23;j++){
@@ -80,7 +80,7 @@ uint address[24];
   }
 cout << "centers: " << *(i+31)+0 << ";" << *(i+32)+0 << ";" << *(i+33)+0 << ";" << *(i+34)+0 << ";" << *(i+39)+0 << ";" << *(i+40)+0 << ";" << *(i+41)+0 << ";" << *(i+42)+0 << " → "<< address[0]+0 << " → " << readhalfbyte(*(centers+address[0]/2),address[0]%2)+0 << "\n";
 for(uint j=0;j<23;j++) cout << j+0 << ": " << centerturn[j][*(i+35)]+0 << ";" << centerturn[j][*(i+36)]+0 << ";" << centerturn[j][*(i+37)]+0 << ";" << centerturn[j][*(i+38)]+0 << ";" << centerturn[j][*(i+43)]+0 << ";" << centerturn[j][*(i+44)]+0 << ";" << centerturn[j][*(i+45)]+0 << ";" << centerturn[j][*(i+46)]+0 << " → " << address[j]+0 << " → " << readhalfbyte(*(centers+address[j]/2),address[j]%2)+0 << "\n";
-*/
+
 /*
 uchar searchspace=0;
 while(!solve(position,searchspace))			//Add in threads here to account for cubeturns.(better way???)
