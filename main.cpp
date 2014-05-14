@@ -20,7 +20,7 @@ const uint centersize = 25741485;			//and centers
 #include "solve2.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
-/*
+
 thread t1(getcenters);					//creation and looding of the tables
 thread t2(getedges);
 thread t3(getcorners); 
@@ -28,9 +28,9 @@ thread t3(getcorners);
 t1.join();
 t2.join();
 t3.join();
-*/
 
-getcenters();
+
+//getcenters();
 //getedges();
 //getcorners();
 
@@ -41,55 +41,45 @@ for(uchar i=0;i<7;i++)*(position+i)=i;		//just setting a solved edges/corners/ce
 for(uchar i=0;i<24;i++){*(position+i+7)=i;*(position+i+31)=i;}
 
 //{22, 33, 11, 18, 15, 20, 19}
-movecube(position,position,22);
-movecube(position,position,33);
-movecube(position,position,11);
+movecube(position,position,17);
 movecube(position,position,18);
-movecube(position,position,15);
-movecube(position,position,20);
-movecube(position,position,8);
+//movecube(position,position,11);
+//movecube(position,position,18);
+//movecube(position,position,15);
+//movecube(position,position,20);
+//movecube(position,position,8);
 
 uchar *i;i=position;
-/*uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),       //calc all the addresses
-  poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
-  poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],
-    cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]),
-  poscorners(cornerturn[*(i+19)][1],cornerturn[*(i+20)][1],cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],
-    cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]),
-  poscorners(cornerturn[*(i+25)][0],cornerturn[*(i+26)][0],cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],
-    cornerturn[*(i+29)][0],cornerturn[*(i+30)][0]),
-  poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
-  poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],centerturn[*(i+38)][3],
-    centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]),
-  poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
-    centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
-*/
 
+  uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
+    poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
+    poscorners(cornerturn[2][*(i+13)],cornerturn[2][*(i+14)],cornerturn[2][*(i+15)],cornerturn[2][*(i+16)],
+      cornerturn[2][*(i+17)],cornerturn[2][*(i+18)]),
+    poscorners(cornerturn[1][*(i+19)],cornerturn[1][*(i+20)],cornerturn[1][*(i+21)],cornerturn[1][*(i+22)],
+      cornerturn[1][*(i+23)],cornerturn[1][*(i+24)]),
+    poscorners(cornerturn[0][*(i+25)],cornerturn[0][*(i+26)],cornerturn[0][*(i+27)],cornerturn[0][*(i+28)],
+      cornerturn[0][*(i+29)],cornerturn[0][*(i+30)]),
+    poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
+    poscenters(centerturn[3][*(i+35)],centerturn[3][*(i+36)],centerturn[3][*(i+37)],centerturn[3][*(i+38)],
+      centerturn[3][*(i+43)],centerturn[3][*(i+44)],centerturn[3][*(i+45)],centerturn[3][*(i+46)]),
+    poscenters(centerturn[0][*(i+47)],centerturn[0][*(i+48)],centerturn[0][*(i+49)],centerturn[0][*(i+50)],
+      centerturn[0][*(i+51)],centerturn[0][*(i+52)],centerturn[0][*(i+53)],centerturn[0][*(i+54)])};
 
-uint address[3]={poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
-  poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],centerturn[*(i+38)][3],
-    centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]),
-  poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
-    centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
-
-cout << "centeradresses: " << address[0]+0 << ";" << address[1]+0 << ";" << address[2]+0 << "\n";
-cout << "centerdepths: " << readhalfbyte(*(centers+address[0]/2),address[0]%2)+0 << ";" << readhalfbyte(*(centers+address[1]/2),address[1]%2)+0 
-	<< ";" << readhalfbyte(*(centers+address[3]/2),address[3]%2)+0 << "\n";
-
-
-/*
 cout << "edgedepth: " << readhalfbyte(*(edges+address[0]/2),address[0]&1)+0 << "; cornerdepths: " << readhalfbyte(*(corners+address[1]/2),address[1]&1)+0 << ";" << readhalfbyte(*(corners+address[2]/2),address[2]&1)+0 << ";" << readhalfbyte(*(corners+address[3]/2),address[3]&1)+0 << ";" << readhalfbyte(*(corners+address[4]/2),address[4]&1)+0 << "; centerdepths: " << readhalfbyte(*(centers+address[5]/2),address[5]&1)+0 << ";" << readhalfbyte(*(centers+address[6]/2),address[6]&1)+0 << ";" << readhalfbyte(*(centers+address[7]/2),address[7]&1)+0 << "\n";
 cout << "edgedepth: " << address[0]+0 << "; cornerdepths: " << address[1]+0 << ";" << address[2]+0 << ";" << address[3]+0 << ";" << address[4]+0 << "; centerdepths: " << address[5]+0 << ";" << address[6]+0 << ";" << address[7]+0 << "\n";
-*/
+
 
 /*
-  centers = (uchar*) malloc(centersize);                        //allocate the memory for the array
-  for(uint i=0;i<centersize;i++) *(centers+i) = 255;                     //everything else is set to max depth
-*(centers+3025/2)=sethalfbyte(255,0,3025%2);
-*/
-/*
-uint address=poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42));
-cout << readhalfbyte(*(centers+address/2),address%2)+0 << "\n";
+uint address[24];
+  address[0]=poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42));
+  for(uint j=0;j<23;j++){
+    address[j+1]=poscenters(centerturn[j][*(i+35)],centerturn[j][*(i+36)],centerturn[j][*(i+37)],centerturn[j][*(i+38)],
+                          centerturn[j][*(i+43)],centerturn[j][*(i+44)],centerturn[j][*(i+45)],centerturn[j][*(i+46)]);
+//    address[j+24]=poscenters(centerturn[*(i+47)][j],centerturn[*(i+48)][j],centerturn[*(i+49)][j],centerturn[*(i+50)][j],
+//                             centerturn[*(i+51)][j],centerturn[*(i+52)][j],centerturn[*(i+53)][j],centerturn[*(i+54)][j]);
+  }
+cout << "centers: " << *(i+31)+0 << ";" << *(i+32)+0 << ";" << *(i+33)+0 << ";" << *(i+34)+0 << ";" << *(i+39)+0 << ";" << *(i+40)+0 << ";" << *(i+41)+0 << ";" << *(i+42)+0 << " → "<< address[0]+0 << " → " << readhalfbyte(*(centers+address[0]/2),address[0]%2)+0 << "\n";
+for(uint j=0;j<23;j++) cout << j+0 << ": " << centerturn[j][*(i+35)]+0 << ";" << centerturn[j][*(i+36)]+0 << ";" << centerturn[j][*(i+37)]+0 << ";" << centerturn[j][*(i+38)]+0 << ";" << centerturn[j][*(i+43)]+0 << ";" << centerturn[j][*(i+44)]+0 << ";" << centerturn[j][*(i+45)]+0 << ";" << centerturn[j][*(i+46)]+0 << " → " << address[j]+0 << " → " << readhalfbyte(*(centers+address[j]/2),address[j]%2)+0 << "\n";
 */
 /*
 uchar searchspace=0;

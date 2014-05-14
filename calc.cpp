@@ -135,17 +135,17 @@ uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h
 uchar max(uchar* i){
   uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),	//calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
-    poscorners(cornerturn[*(i+13)][2],cornerturn[*(i+14)][2],cornerturn[*(i+15)][2],cornerturn[*(i+16)][2],
-      cornerturn[*(i+17)][2],cornerturn[*(i+18)][2]),
-    poscorners(cornerturn[*(i+19)][1],cornerturn[*(i+20)][1],cornerturn[*(i+21)][1],cornerturn[*(i+22)][1],
-      cornerturn[*(i+23)][1],cornerturn[*(i+24)][1]),
-    poscorners(cornerturn[*(i+25)][0],cornerturn[*(i+26)][0],cornerturn[*(i+27)][0],cornerturn[*(i+28)][0],
-      cornerturn[*(i+29)][0],cornerturn[*(i+30)][0]),
+    poscorners(cornerturn[2][*(i+13)],cornerturn[2][*(i+14)],cornerturn[2][*(i+15)],cornerturn[2][*(i+16)],
+      cornerturn[2][*(i+17)],cornerturn[2][*(i+18)]),
+    poscorners(cornerturn[1][*(i+19)],cornerturn[1][*(i+20)],cornerturn[1][*(i+21)],cornerturn[1][*(i+22)],
+      cornerturn[1][*(i+23)],cornerturn[1][*(i+24)]),
+    poscorners(cornerturn[0][*(i+25)],cornerturn[0][*(i+26)],cornerturn[0][*(i+27)],cornerturn[0][*(i+28)],
+      cornerturn[0][*(i+29)],cornerturn[0][*(i+30)]),
     poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
-    poscenters(centerturn[*(i+35)][3],centerturn[*(i+36)][3],centerturn[*(i+37)][3],centerturn[*(i+38)][3],
-      centerturn[*(i+43)][3],centerturn[*(i+44)][3],centerturn[*(i+45)][3],centerturn[*(i+46)][3]),
-    poscenters(centerturn[*(i+47)][0],centerturn[*(i+48)][0],centerturn[*(i+49)][0],centerturn[*(i+50)][0],
-      centerturn[*(i+51)][0],centerturn[*(i+52)][0],centerturn[*(i+53)][0],centerturn[*(i+54)][0])};
+    poscenters(centerturn[3][*(i+35)],centerturn[3][*(i+36)],centerturn[3][*(i+37)],centerturn[3][*(i+38)],
+      centerturn[3][*(i+43)],centerturn[3][*(i+44)],centerturn[3][*(i+45)],centerturn[3][*(i+46)]),
+    poscenters(centerturn[0][*(i+47)],centerturn[0][*(i+48)],centerturn[0][*(i+49)],centerturn[0][*(i+50)],
+      centerturn[0][*(i+51)],centerturn[0][*(i+52)],centerturn[0][*(i+53)],centerturn[0][*(i+54)])};
 //    cout << address[6]+0 << "\n";
 	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
   uchar values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
