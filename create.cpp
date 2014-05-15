@@ -1,12 +1,16 @@
-//something is seriously wrong here regarding the starting Positions!!!
 void getcenters() {							//documentation just for one because they are very similiar
   centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
-  //FILE *centerfile;	centerfile=fopen("centertable8","r");		//File object for disk operations
-  //if(centerfile==NULL) {						//Load the array from disk or calculate it
-  //  cout<<"Couldn't find centertables on disk.\n";			
+
+  FILE* pFile;pFile=fopen("centers.bin","rb");
+  if(pFile!=0){
+    fread(centers,1,centersize,pFile);
+    fclose(pFile);
+    cout << "loaded center table from disk.\n";
+  }else{
+
     for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
     *(centers+3025/2)=sethalfbyte(255,0,3025%2);                        //The starting Position is set to have depth 0
-    cout << "initialized center memory.\n";				//little status update
+    cout << "generating center table.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(inaccurate estimate)
     unsigned char* tmptmp=tmpbegin+8;				//just temporary  ??
@@ -73,20 +77,27 @@ void getcenters() {							//documentation just for one because they are very sim
 	tmpend=tmpbegin-tmppos+tmpend;
       }
       cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";	//little status update
-    }/*
-    fclose(centerfile);fopen("centertable8","w");					//reopen file for writing
-    fwrite(centers,1,sizeof(centers),centerfile);fclose(centerfile);				//and write the array, close afterwards
-  }else{
-    cout<<"Found centertables on disk.\n";						//tell the user whats happening
-    fread(centers,1,centersize,centerfile);fclose(centerfile);				//read array and close afterwards.
-  }*/
+    }
+
+  FILE* pFile=fopen("centers.bin","wb");
+  if(pFile!=0){
+    fwrite(centers,1,centersize,pFile);
+    fclose(pFile);}
   cout << "center table created\n"; 
   free(tmpbegin);
+  }
 }
 
 void getedges() {
   edges   = (unsigned char*) malloc(edgesize);
-//  if(!LoadFile(edges,"edges",edgesize)) {
+
+  FILE* pFile;pFile=fopen("edges.bin","rb");
+  if(pFile!=0){
+    fread(edges,1,edgesize,pFile);
+    fclose(pFile);
+    cout << "loaded edge table from disk.\n";
+  }else{
+
     *edges=15;
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
     cout << "initiated edges memory\n";
@@ -148,15 +159,26 @@ void getedges() {
 	}
 	tmpend=tmpbegin-tmppos+tmpend;
       }
-//  }
       cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
   }
+  FILE* pFile=fopen("edges.bin","wb");
+  if(pFile!=0){
+    fwrite(edges,1,edgesize,pFile);
+    fclose(pFile);}
   free(tmpbegin);
+  }
 }
 
 void getcorners() {
  corners = (unsigned char*) malloc(cornersize);
-//  if(!LoadFile(corners,"corners",cornersize)) {
+
+  FILE* pFile;pFile=fopen("corners.bin","rb");
+  if(pFile!=0){
+    fread(corners,1,cornersize,pFile);
+    fclose(pFile);
+    cout << "loaded corner table from disk.\n";
+  }else{
+
     *corners=15;
     for(int i=1;i<cornersize;i++) *(corners+i) = 255;
     unsigned char depth=0;
@@ -219,6 +241,10 @@ void getcorners() {
       }
       cout << ((tmpend-tmpbegin)/6) << " positions after depth " << depth+0 << "\n";
     }
-//  }
+  FILE* pFile=fopen("corners.bin","wb");
+  if(pFile!=0){
+    fwrite(corners,1,cornersize,pFile);
+    fclose(pFile);}
   free(tmpbegin);
+  }
 }

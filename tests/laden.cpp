@@ -19,7 +19,7 @@ int WriteFile(char* mem, string filename, int size) {
 
 int main() {
 //	char buffer[256];
-	char* buffer;buffer=(char*) malloc(256);
+	unsigned char* buffer;buffer=(unsigned char*) malloc(256);
 	if(!ReadFile(buffer, "test.bin", 256)) {
 		for(int i = 0; i<256; i++) /*cout << buffer[i];*/ cout << *(buffer+i)+0;
 		cout << endl;
