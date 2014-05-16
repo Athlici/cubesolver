@@ -133,14 +133,14 @@ uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h
 }
 
 uchar max(uchar* i){
-  uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),	//calc all the addresses
+  uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
-    poscorners(cornerturn[2][*(i+13)],cornerturn[2][*(i+14)],cornerturn[2][*(i+15)],cornerturn[2][*(i+16)],
-      cornerturn[2][*(i+17)],cornerturn[2][*(i+18)]),
-    poscorners(cornerturn[1][*(i+19)],cornerturn[1][*(i+20)],cornerturn[1][*(i+21)],cornerturn[1][*(i+22)],
-      cornerturn[1][*(i+23)],cornerturn[1][*(i+24)]),
-    poscorners(cornerturn[0][*(i+25)],cornerturn[0][*(i+26)],cornerturn[0][*(i+27)],cornerturn[0][*(i+28)],
-      cornerturn[0][*(i+29)],cornerturn[0][*(i+30)]),
+    poscorners(cornerturn[0][*(i+24)],cornerturn[0][*(i+23)],cornerturn[0][*(i+14)],cornerturn[0][*(i+13)],
+      cornerturn[0][*(i+21)],cornerturn[0][*(i+22)]),
+    poscorners(cornerturn[1][*(i+18)],cornerturn[1][*(i+17)],cornerturn[1][*(i+28)],cornerturn[1][*(i+27)],
+      cornerturn[1][*(i+15)],cornerturn[1][*(i+16)]),
+    poscorners(cornerturn[2][*(i+25)],cornerturn[2][*(i+26)],cornerturn[2][*(i+30)],cornerturn[2][*(i+29)],
+      cornerturn[2][*(i+20)],cornerturn[2][*(i+19)]),
     poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
     poscenters(centerturn[3][*(i+35)],centerturn[3][*(i+36)],centerturn[3][*(i+37)],centerturn[3][*(i+38)],
       centerturn[3][*(i+43)],centerturn[3][*(i+44)],centerturn[3][*(i+45)],centerturn[3][*(i+46)]),

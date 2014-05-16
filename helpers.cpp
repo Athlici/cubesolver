@@ -128,7 +128,7 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 
 bool solved(unsigned char* Position){
-  for(unsigned char i=0;i<7;i++){if(*(Position+i)!=i)return false;}
+  for(unsigned char i=0;i<7;i++){if(*(Position+i)!=3*i)return false;}
   for(unsigned char i=0;i<24;i++){if(*(Position+i+7)!=i||*(Position+i+31)!=i)return false;}
   return true;
 }

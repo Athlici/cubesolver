@@ -13,7 +13,7 @@ void getcenters() {							//documentation just for one because they are very sim
     cout << "generating center table.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(inaccurate estimate)
-    unsigned char* tmptmp=tmpbegin+8;				//just temporary  ??
+    unsigned char* tmptmp=tmpbegin+8;					//just temporary  ??
     *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 	//adding starting position to the temporary memory
     *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;	//this are two solves opposite center-quads
     //*(tmpbegin+4)=4;*(tmpbegin+5)=5;*(tmpbegin+6)=6;*(tmpbegin+7)=7;	//tmp for testing
@@ -98,7 +98,7 @@ void getedges() {
     cout << "loaded edge table from disk.\n";
   }else{
 
-    *edges=15;
+    *edges=240;
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
     cout << "initiated edges memory\n";
     unsigned char depth=0;
@@ -179,7 +179,7 @@ void getcorners() {
     cout << "loaded corner table from disk.\n";
   }else{
 
-    *corners=15;
+    *corners=240;
     for(int i=1;i<cornersize;i++) *(corners+i) = 255;
     unsigned char depth=0;
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);

@@ -2,10 +2,14 @@
 #include <fstream>
 #include <cstdlib>
 
-#include "../arrays.cpp"
-#include "../helpers.cpp"
-
+typedef unsigned int uint;
+typedef unsigned char uchar;
+uchar *corners, *edges, *centers;
 using namespace std;
+
+#include "../arrays.cpp"
+#include "../calc.cpp"
+#include "../helpers.cpp"
 
 unsigned char size[6];
 unsigned char things[6];
