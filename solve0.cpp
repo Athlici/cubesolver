@@ -60,7 +60,7 @@ unsigned char* solve(unsigned char* Position){
   unsigned char *back; back=(unsigned char*) malloc(Depth*(Posend-Posbegin)/(Depth+55));	//RECHECK EVERYTHING HERE
   *back=Depth;
   for (int i=0;i<(Posend-Posbegin)/(Depth+55);i++){
-    for (int j=0;j<=Depth;j++)*(back+1+i*Depth+j)=*(Posbegin+i*(Depth+55)+j+55);
+    for (int j=0;j<=Depth;j++)/**(back+1+i*Depth+j)=*(Posbegin+i*(Depth+55)+j+55)*/cout << *(Posbegin+i*(Depth+55)+j+55)+0 << ";";
   }
   return back;		//this should be it, hopefully.
 }

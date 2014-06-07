@@ -17,7 +17,7 @@ const uint centersize = 25741485;			//and centers
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
-#include "solve2.cpp"					//solves a given cube position optimal
+#include "solve1.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
 
@@ -36,7 +36,7 @@ t3.join();
 
 // Position einlesen
 uchar *position;
-position=(uchar*) malloc(55);solution=(uchar*) malloc(50);
+position=(uchar*) malloc(55);//solution=(uchar*) malloc(50);
 for(uchar i=0;i<7;i++)*(position+i)=3*i;		//just setting a solved edges/corners/centers set
 for(uchar i=0;i<24;i++){*(position+i+7)=i;*(position+i+31)=i;}
 
@@ -70,21 +70,8 @@ cout << "edgeadress: " << address[0]+0 << "; corneradresss: " << address[1]+0 <<
 */
 //{{0,1,2,3,4,5},{17,16,7,6,14,15},{11,10,21,20,8,9},{18,19,23,22,13,12}}
 //{{7,8,9,10,11,12},{24,23,14,13,21,22},{18,17,28,27,15,16},{25,26,30,29,20,19}}
-/*uint address[24];
-//  address[0]=poscorners(*(i+24),*(i+23),*(i+14),*(i+13),*(i+21),*(i+22));
-  for(uint j=0;j<23;j++){
-      address[j+1]=poscorners(cornerturn[j][*(i+25)],cornerturn[j][*(i+26)],cornerturn[j][*(i+30)],cornerturn[j][*(i+29)],
-                              cornerturn[j][*(i+20)],cornerturn[j][*(i+19)]);
-//    address[j+1]=poscenters(centerturn[j][*(i+35)],centerturn[j][*(i+36)],centerturn[j][*(i+37)],centerturn[j][*(i+38)],
-//                          centerturn[j][*(i+43)],centerturn[j][*(i+44)],centerturn[j][*(i+45)],centerturn[j][*(i+46)]);
-//    address[j+24]=poscenters(centerturn[*(i+47)][j],centerturn[*(i+48)][j],centerturn[*(i+49)][j],centerturn[*(i+50)][j],
-//                             centerturn[*(i+51)][j],centerturn[*(i+52)][j],centerturn[*(i+53)][j],centerturn[*(i+54)][j]);
-  }
-//cout << "corners: " << *(i+24)+0 << ";" << *(i+23)+0 << ";" << *(i+14)+0 << ";" << *(i+13)+0 << ";" << *(i+21)+0 << ";" << *(i+22)+0 << " → "<< address[0]+0 << " → " << readhalfbyte(*(corners+address[0]/2),address[0]%2)+0 << "\n";
-for(uint j=0;j<23;j++) cout << j+0 << ": " << cornerturn[j][*(i+25)]+0 << ";" << cornerturn[j][*(i+26)]+0 << ";" << cornerturn[j][*(i+30)]+0 << ";" << cornerturn[j][*(i+29)]+0 << ";" << cornerturn[j][*(i+20)]+0 << ";" << cornerturn[j][*(i+19)]+0 << " → " << address[j+1]+0 << " → " << readhalfbyte(*(corners+address[j+1]/2),address[j+1]%2)+0 << "\n";
-*/
 
-
+/*
 uchar searchspace=0;
 while(!solve(position,searchspace))			//Add in threads here to account for cubeturns.(better way???)
 {cout << "finished search at Depth: " << searchspace+0 << "\n";searchspace++;}
@@ -92,6 +79,9 @@ while(!solve(position,searchspace))			//Add in threads here to account for cubet
 cout << "solution found with " << searchspace+0 << " moves.\n" ;
 for(uint j=0;j<searchspace;j++) cout << *(solution+j)+0 << ";" ;
 cout << "\n";
+*/
+
+solve(position);
 
 // Position lösen
 

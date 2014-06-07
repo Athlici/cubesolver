@@ -132,3 +132,13 @@ bool solved(unsigned char* Position){
   for(unsigned char i=0;i<24;i++){if(*(Position+i+7)!=i||*(Position+i+31)!=i)return false;}
   return true;
 }
+
+void printcube(unsigned char* Position){
+  cout << "edges: " ;
+  for(int i=0;i<7;i++)cout << *(Position+i)+0 << ";";
+  cout << " corners: ";
+  for(int i=7;i<31;i++)cout << *(Position+i)+0 << ";";
+  cout << " centers: ";
+  for(int i=31;i<55;i++)cout << *(Position+i)+0 << ";";
+  cout << "\n" ;
+}

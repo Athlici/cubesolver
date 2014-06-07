@@ -1,4 +1,4 @@
-unsigned char* solve(unsigned char* Input){			//maybe implement a depth first search later?
+/*unsigned char**/ void solve(unsigned char* Input){			//maybe implement a depth first search later?
   unsigned char* Position;Position=(unsigned char*) malloc(2147483648);	//2Gigs, really necessary?
   unsigned char* Posbegin=Position;
   unsigned char* Postmp=Position;
@@ -26,6 +26,7 @@ unsigned char* solve(unsigned char* Input){			//maybe implement a depth first se
   //      if(i>1)tmp=*(((Postmp+55+Depth)/3)*3);else tmp=36;	//truncate to a number divisible by 3	//optimization to be done later
         for(unsigned char i=0;i<36;i++){
   	  movecube(Postmp,Posend,i);
+  printcube(Posend);
   	  if(max(Posend)+tmp<=Depth){			//if it satisfies the heuristic write to the end of memory;
   	    Posend+=55;Postmp+=55;			//there might be one move missing.
             for (unsigned char j=0;j<tmp;j++) *(Posend+j)=*(Postmp+j);	//Don't forget to copy the moves as well.
@@ -45,8 +46,8 @@ unsigned char* solve(unsigned char* Input){			//maybe implement a depth first se
 
   unsigned char* back;back=(unsigned char*) malloc(1+Depth*(Posend-Posbegin)/(Depth+55));*back=Depth;
   for (int i=0;i<(Posend-Posbegin)/(Depth+55);i++){
-    for (int j=0;j<=Depth;j++)*(back+1+i*Depth+j)=*(Posbegin+i*(Depth+55)+j+55);
+    for (int j=0;j<=Depth;j++)/**(back+1+i*Depth+j)=*(Posbegin+i*(Depth+55)+j+55);*/ cout << *(Posbegin+i*(Depth+55)+j+55)+0 << ";";
   }
   free(Position);	//cleanup; number of solutions*length of solutions.
-  return back;
+  return /*back*/;
 }
