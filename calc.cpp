@@ -16,31 +16,46 @@ inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper ha
 //  return c ? a>>4 : a&15;
 //}
 
-uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
- uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
+inline ulong setchar(ulong input,uchar shift,uchar change){
+  shift*=8;
+/*  asm ( "rol %1,%0    \n\t"
+        "mov %2,%%al  \n\t"
+        "ror %1,%0    \n\t"
+        : "+a" (input) : "r" (shift), "r" (change) );*/
+  input=(input<<(64-shift))^(input>>shift);
+asm ("mov %1,%%al" : "+a" (input) : "r" (change) );
+  return (input<<shift)^(input>>(64-shift));
+}
 
- if (a<B) b-=3;
- if (a<C) c-=3;
- if (B<C) c-=3;
- if (a<D) d-=3;
- if (B<D) d-=3; 
- if (C<D) d-=3;
- if (a<E) e-=3;
- if (B<E) e-=3;
- if (C<E) e-=3;
- if (D<E) e-=3;
- if (a<F) f-=3;
- if (B<F) f-=3;
- if (C<F) f-=3;
- if (D<F) f-=3;
- if (E<F) f-=3;
- if (a<G) g-=3;
- if (B<G) g-=3;
- if (C<G) g-=3;
- if (D<G) g-=3;
- if (E<G) g-=3;
- if (F<G) g-=3;
-return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
+inline uchar getchar(ulong input,uchar shift){
+  return (input>>(8*shift))&255;
+}
+
+uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
+  uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
+ 
+  if (a<B) b-=3;
+  if (a<C) c-=3;
+  if (B<C) c-=3;
+  if (a<D) d-=3;
+  if (B<D) d-=3; 
+  if (C<D) d-=3;
+  if (a<E) e-=3;
+  if (B<E) e-=3;
+  if (C<E) e-=3;
+  if (D<E) e-=3;
+  if (a<F) f-=3;
+  if (B<F) f-=3;
+  if (C<F) f-=3;
+  if (D<F) f-=3;
+  if (E<F) f-=3;
+  if (a<G) g-=3;
+  if (B<G) g-=3;
+  if (C<G) g-=3;
+  if (D<G) g-=3;
+  if (E<G) g-=3;
+  if (F<G) g-=3;
+  return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
 }
 
 uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){

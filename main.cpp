@@ -2,11 +2,13 @@
 #include <fstream>
 #include <cstdlib>
 #include <thread>
+#include <stdint.h>
 
 using namespace std;
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
+typedef uint64_t ulong;
 
 uchar *corners, *edges, *centers, *solution;
 const uint cornersize = 48454560;			//Size of the array for cornerdepthlookups in Bytes
