@@ -18,13 +18,14 @@ void sort(unsigned char amount){
   for (unsigned char tmp=0; tmp<=amount; tmp++) size[tmp]=things[tmp];
   for (char i=0; i<amount; i++){
     for (unsigned char j=amount--; j>=0; j--){
-      /*if (things[j]>things[j++]){
+      if (things[j]>things[j+1])/*{
         unsigned char tmp=things[j];
-        things[j]=things[j++];
-        things[j++]=tmp;}*/
-      unsigned char tmp=things[j]^((things[j]^things[j++]) & -(things[j]<things[j++]));
+        things[j]=things[j+1];
+        things[j+1]=tmp;}*/
+	swap(things[j],things[j+1]);
+      /*unsigned char tmp=things[j]^((things[j]^things[j++]) & -(things[j]<things[j++]));
       things[j]+=things[j++]-tmp;
-      things[j++]=tmp;
+      things[j++]=tmp;*/
     }
   }
 }
@@ -34,6 +35,7 @@ int main() {
 int tmp=0;
 
 for (things[0];things[0]<24;things[0]++){
+  cout << "checking positions with first edge: " << things[0]+0 << "\n";
   size[0]=things[0];
   for (unsigned char B=0;B<23;B++){
     things[1]=B;
@@ -82,7 +84,7 @@ for (things[0];things[0]<24;things[0]++){
     }
   }
 }
-
+/* I have no memory of how this code is supposed to work.
 tmp=0;
 
 for (things[0];things[0]<24;things[0]++){
@@ -145,5 +147,5 @@ for (things[0];things[0]<24;things[0]++){
     }
   }
 }
-
+*/
 }

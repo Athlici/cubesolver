@@ -17,8 +17,8 @@ for(int k=0;k<3;k++){
       done=false;
       for(int j=0;j<24;j++){
         switch(k){
-	  case 0:pos[j]=edgeturn[i][pos[j]];
-	  case 1:pos[j]=cornerturn[i][pos[j]];
+	  case 0:pos[j]=edgeturn[i][pos[j]];break;
+	  case 1:pos[j]=cornerturn[i][pos[j]];break;
 	  case 2:pos[j]=centerturn[i][pos[j]];
 	}
         if(pos[j]!=j)done=true;
