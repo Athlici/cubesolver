@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     for (int j=0;j<24;j++){
       if (full[centerturn[i][j]]) cout << "DoubLL Numb3r in line " << i+0 << "\n";
       else full[centerturn[i][j]]=true;
-    if (centerturn[i][centerturn[i][centerturn[i][centerturn[i][j]]]]!=j) cout << "Logic centerturn mistake in line " << i+0 << " char " << j+0 << "\n";
+//    if (centerturn[i][centerturn[i][centerturn[i][centerturn[i][j]]]]!=j) cout << "Logic centerturn mistake in line " << i+0 << " char " << j+0 << "\n";
     }
   }
 
@@ -49,7 +49,16 @@ int main(int argc, char** argv) {
     for (int j=0;j<24;j++){
       if (full[cornerturn[i][j]]) cout << "DoubLL Numb3r in line " << i+0 << "\n";
       else full[cornerturn[i][j]]=true;
-    if (cornerturn[i][cornerturn[i][cornerturn[i][cornerturn[i][j]]]]!=j) cout << "Logic cornerturn mistake in line " << i+0 << " char " << j+0 << "\n";
+//    if (cornerturn[i][cornerturn[i][cornerturn[i][cornerturn[i][j]]]]!=j) cout << "Logic cornerturn mistake in line " << i+0 << " char " << j+0 << "\n";
+    }
+  }
+
+  for (int i=0;i<23;i++){
+    for (int j=0;j<24;j++) full[j]=false;
+    for (int j=0;j<24;j++){
+      if (full[edgeturn[i][j]]) cout << "DoubLL Numb3r in line " << i+0 << "\n";
+      else full[edgeturn[i][j]]=true;
+//    if (cornerturn[i][cornerturn[i][cornerturn[i][cornerturn[i][j]]]]!=j) cout << "Logic cornerturn mistake in line " << i+0 << " char " << j+0 << "\n";
     }
   }
 
