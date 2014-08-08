@@ -6,18 +6,18 @@
   *(Position+55)=36;                                    //add a "zero" move to starting position
   unsigned char* Posend=Position+56;		
   unsigned char Depth=max(Position),tmp;                //set Depth to first minimum.	//correct function call?
-  for (unsigned char i=0;i<23;i++){                     //add the 23 remaining symmetric positions (cuberturns)
-    turncube(Postmp,Posend,i);				//this code would be more compact with a zero(36) move in turncube
-    *(Posend+55)=37+i;
-    unsigned char tmp=max(Posend);if(Depth>tmp)Depth=tmp;	//and now select the global minimum
-    Posend+=56;}
+//  for (unsigned char i=0;i<23;i++){                     //add the 23 remaining symmetric positions (cuberturns)
+//    turncube(Postmp,Posend,i);				//this code would be more compact with a zero(36) move in turncube
+//    *(Posend+55)=37+i;
+//    unsigned char tmp=max(Posend);if(Depth>tmp)Depth=tmp;	//and now select the global minimum
+//    Posend+=56;}
   cout << "initialization done! \n";
 
   do{							//set the tmp-var to the beginning and the pointers
     for(unsigned char i=0;i<55;i++)*(Position+i)=*(Input+i);	//and the origininal position again
     Posend=Position+56;*(Position+55)=36;
-    for(unsigned char i=0;i<23;i++){
-      turncube(Position,Posend,i);*(Posend+55)=37+i;Posend+=56;}
+//    for(unsigned char i=0;i<23;i++){
+//      turncube(Position,Posend,i);*(Posend+55)=37+i;Posend+=56;}
     Posbegin=Posend;					//for the boundaries of the new depth "empty".
     cout<< "Starting search at Depth: " << Depth+0 << "\n";
     for(tmp=1;tmp<=Depth;tmp++){					//go trough all the moves one by one
