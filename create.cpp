@@ -102,7 +102,7 @@ void getedges() {
     for(int i=1;i<edgesize;i++) *(edges+i) = 255;
     cout << "initiated edges memory\n";
     unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);
+    unsigned char* tmpbegin=(unsigned char*) malloc(1024*1024*1024);
     unsigned char* tmptmp=tmpbegin;
     for(unsigned char i=0;i<7;i++) {*tmptmp= 3*i; tmptmp++;}
     unsigned char* tmpend=tmptmp;
@@ -170,7 +170,7 @@ void getedges() {
 }
 
 void getcorners() {
- for(int i=0;i<10;i++)corners[i] = (unsigned char*) malloc(cornersize/10);
+ for(int i=0;i<32;i++)corners[i] = (unsigned char*) calloc(cornersize/32,1);
 /*
   FILE* pFile;pFile=fopen("corners.bin","rb");
   if(pFile!=0){
@@ -179,10 +179,9 @@ void getcorners() {
     cout << "loaded corner table from disk.\n";
   }else{
 */
-    *corners[0]=240;
-    for(int i=1;i<cornersize;i++) *(corners[i%10]+i/10) = 255;
+    *corners[0]=255-240;
     unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);
+    unsigned char* tmpbegin=(unsigned char*) malloc(1024*1024*1024);
     unsigned char* tmptmp=tmpbegin;
     for(unsigned char i=0;i<8;i++) { *tmptmp=i; tmptmp++;}
     unsigned char* tmpend=tmptmp;
@@ -201,20 +200,20 @@ void getcorners() {
           unsigned char f=cornermove[i][*(tmptmp+5)];
           unsigned char g=cornermove[i][*(tmptmp+6)];
           unsigned char h=cornermove[i][*(tmptmp+7)];
-	  int j=poscorners(a,b,c,d,e,f,g,h);
+	  ulong j=poscorners(a,b,c,d,e,f,g,h);
 	  if (j>cornersize*2)
 	    cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << ";" << g+0 << ";" << h+0 << "\n";
 	  else{
-	  if (depth<readhalfbyte(*(corners[(j>>1)%10]+(j>>1)/10),j&1)){
-	    *(corners[(j>>1)%10]+(j>>1)/10)=sethalfbyte(*(corners[(j>>1)%10]+(j>>1)/10),depth,j&1);
+	  if (depth<readhalfbyte(255-*(corners[(j>>1)%32]+(j>>1)/32),j&1)){
+	    *(corners[(j>>1)%32]+(j>>1)/32)=255-sethalfbyte(255-*(corners[(j>>1)%32]+(j>>1)/32),depth,j&1);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
             *(tmpend+3)=d;
             *(tmpend+4)=e;
             *(tmpend+5)=f;
-            *(tmpend+6)=e;
-            *(tmpend+7)=f;
+            *(tmpend+6)=g;
+            *(tmpend+7)=h;
 	    tmpend+=8;
 	  }
 	  }
