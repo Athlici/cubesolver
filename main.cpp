@@ -10,16 +10,16 @@ typedef unsigned int uint;
 typedef unsigned char uchar;
 typedef uint64_t ulong;
 
-uchar *corners, *edges, *centers, *solution;
-const uint cornersize = 48454560;			//Size of the array for cornerdepthlookups in Bytes
-const uint edgesize = 44089920;				//same for edges
-const uint centersize = 25741485;			//and centers
+uchar *corners[10], *edges, *centers, *solution;
+const ulong cornersize = 14827095360;			//Size of the array for cornerdepthlookups in Bytes
+const uint edgesize    = 44089920;				//same for edges
+const uint centersize  = 25741485;			//and centers
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
-#include "solve1.cpp"					//solves a given cube position optimal
+//#include "solve1.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
 

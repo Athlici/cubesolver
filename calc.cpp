@@ -55,11 +55,11 @@ uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
   if (D<G) g-=3;
   if (E<G) g-=3;
   if (F<G) g-=3;
-  return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
+  return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
-uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
- uchar B=b,C=c,D=d,E=e,F=f;			//the same for the corners
+uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g,uchar h){
+ uchar B=b,C=c,D=d,E=e,F=f,G=g,H=h;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
  if (a<C) c--;
@@ -76,7 +76,21 @@ uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
  if (C<F) f--;
  if (D<F) f--;
  if (E<F) f--;
-return (4037880*a+175560*b+7980*c+380*d+19*e+f);
+ if (a<G) g--;
+ if (B<G) g--;
+ if (C<G) g--;
+ if (D<G) g--;
+ if (E<G) g--;
+ if (F<G) g--;
+ if (a<H) h--;
+ if (B<H) h--;
+ if (C<H) h--;
+ if (D<H) h--;
+ if (E<H) h--;
+ if (F<H) h--;
+ if (G<H) h--;
+
+return (h+17*(g+18*(f+19*(e+20*(d+21*(c+22*(b+23*a)))))));
 }
 
 uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){
@@ -146,7 +160,7 @@ uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h
    (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
 // This is the Horner-Form of the commented Formula, hopefully faster to calculate
 }
-
+/*
 uchar max(uchar* i){
   uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
@@ -174,4 +188,4 @@ uchar max(uchar* i){
   uchar tmp=values[0];
   for(uchar i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
   return tmp;									//and return it
-}
+}*/

@@ -170,21 +170,21 @@ void getedges() {
 }
 
 void getcorners() {
- corners = (unsigned char*) malloc(cornersize);
-
+ for(int i=0;i<10;i++)corners[i] = (unsigned char*) malloc(cornersize/10);
+/*
   FILE* pFile;pFile=fopen("corners.bin","rb");
   if(pFile!=0){
     fread(corners,1,cornersize,pFile);
     fclose(pFile);
     cout << "loaded corner table from disk.\n";
   }else{
-
-    *corners=240;
-    for(int i=1;i<cornersize;i++) *(corners+i) = 255;
+*/
+    *corners[0]=240;
+    for(int i=1;i<cornersize;i++) *(corners[i%10]+i/10) = 255;
     unsigned char depth=0;
     unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);
     unsigned char* tmptmp=tmpbegin;
-    for(unsigned char i=0;i<6;i++) { *tmptmp=i; tmptmp++;}
+    for(unsigned char i=0;i<8;i++) { *tmptmp=i; tmptmp++;}
     unsigned char* tmpend=tmptmp;
     unsigned char* tmppos=tmptmp;
     while (tmpend>tmpbegin){
@@ -199,52 +199,62 @@ void getcorners() {
           unsigned char d=cornermove[i][*(tmptmp+3)];
           unsigned char e=cornermove[i][*(tmptmp+4)];
           unsigned char f=cornermove[i][*(tmptmp+5)];
-	  int g=poscorners(a,b,c,d,e,f);
-	  if (g>cornersize*2)
-	    cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << "\n";
+          unsigned char g=cornermove[i][*(tmptmp+6)];
+          unsigned char h=cornermove[i][*(tmptmp+7)];
+	  int j=poscorners(a,b,c,d,e,f,g,h);
+	  if (j>cornersize*2)
+	    cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << ";" << g+0 << ";" << h+0 << "\n";
 	  else{
-	  if (depth<readhalfbyte(*(corners+(g>>1)),g&1)){
-	    *(corners+(g>>1))=sethalfbyte(*(corners+(g>>1)),depth,g&1);
+	  if (depth<readhalfbyte(*(corners[(j>>1)%10]+(j>>1)/10),j&1)){
+	    *(corners[(j>>1)%10]+(j>>1)/10)=sethalfbyte(*(corners[(j>>1)%10]+(j>>1)/10),depth,j&1);
 	    *tmpend=a;
 	    *(tmpend+1)=b;
             *(tmpend+2)=c;
             *(tmpend+3)=d;
             *(tmpend+4)=e;
             *(tmpend+5)=f;
-	    tmpend+=6;
+            *(tmpend+6)=e;
+            *(tmpend+7)=f;
+	    tmpend+=8;
 	  }
 	  }
 	}
-        tmptmp+=6;
+        tmptmp+=8;
       }
       if (tmpend-tmppos>tmppos-tmpbegin){
-	for (int i=tmppos-tmpbegin;i>4;i-=6){
+	for (int i=tmppos-tmpbegin;i>4;i-=8){
 	  *(tmppos-i)=*(tmpend-i);
 	  *(tmppos-i+1)=*(tmpend-i+1);
           *(tmppos-i+2)=*(tmpend-i+2);
           *(tmppos-i+3)=*(tmpend-i+3);
           *(tmppos-i+4)=*(tmpend-i+4);
           *(tmppos-i+5)=*(tmpend-i+5);
+          *(tmppos-i+6)=*(tmpend-i+6);
+          *(tmppos-i+7)=*(tmpend-i+7);
 	}
 	tmpend=tmpend-tmppos+tmpbegin;
       }
       else{
-	for (int i=tmpend-tmppos;i>4;i-=6){
+	for (int i=tmpend-tmppos;i>4;i-=8){
 	  *(tmpbegin+i)=*(tmppos+i);
 	  *(tmpbegin+i-1)=*(tmppos+i-1);
           *(tmpbegin+i-2)=*(tmppos+i-2);
           *(tmpbegin+i-3)=*(tmppos+i-3);
           *(tmpbegin+i-4)=*(tmppos+i-4);
           *(tmpbegin+i-5)=*(tmppos+i-5);
+          *(tmpbegin+i-6)=*(tmppos+i-6);
+          *(tmpbegin+i-7)=*(tmppos+i-7);
 	}
 	tmpend=tmpbegin-tmppos+tmpend;
       }
-      cout << ((tmpend-tmpbegin)/6) << " positions after depth " << depth+0 << "\n";
+      cout << ((tmpend-tmpbegin)/8) << " positions after depth " << depth+0 << "\n";
     }
+/*
   FILE* pFile=fopen("corners.bin","wb");
   if(pFile!=0){
     fwrite(corners,1,cornersize,pFile);
     fclose(pFile);}
   free(tmpbegin);
   }
+*/
 }
