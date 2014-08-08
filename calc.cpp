@@ -58,7 +58,8 @@ uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
   return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
-ulong poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g,uchar h){
+//ulong poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g,uchar h){
+ulong poscorners(ulong a,ulong b,ulong c,ulong d,ulong e,ulong f,ulong g,ulong h){
  uchar B=b,C=c,D=d,E=e,F=f,G=g,H=h;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
@@ -89,10 +90,8 @@ ulong poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g,uchar h
  if (E<H) h--;
  if (F<H) h--;
  if (G<H) h--;
-//10,1,2,3,4,0,6,7
-cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << ";" << g+0 << ";" << h+0 << "\n";
-//10;1;1;1;1;0;1;1
-return (h+17*(g+18*(f+19*(e+20*(d+21*(c+22*(b+23*a)))))));
+
+ return (h+17*(g+18*(f+19*(e+20*(d+21*(c+22*(b+23*a)))))));
 }
 
 uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){

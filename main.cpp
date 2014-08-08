@@ -23,15 +23,13 @@ const uint centersize  = 25741485;			//and centers
 
 int main(int argc, char** argv) {
 
-cout << poscorners(10,1,2,3,4,0,6,7)+0 << "\n";
-
 //thread t1(getcenters);					//creation and looding of the tables
 //thread t2(getedges);
-//thread t3(getcorners); 
+thread t3(getcorners); 
 
 //t1.join();
 //t2.join();
-//t3.join();
+t3.join();
 
 
 //getcenters();
