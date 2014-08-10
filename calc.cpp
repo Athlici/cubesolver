@@ -31,6 +31,10 @@ inline uchar getchar(ulong input,uchar shift){
   return (input>>(8*shift))&255;
 }
 
+//The unnecessary amount of comparisons can be made n*log(n) by using binary trees:
+//inserting the nth value und subtracting from it the amount of nodes on the left
+//of the element delivers the result.
+
 uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
   uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
  
@@ -55,7 +59,7 @@ uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
   if (D<G) g-=3;
   if (E<G) g-=3;
   if (F<G) g-=3;
-  return (3674160*a+174960*b+9720*c+648*d+54*e+6*f+g);
+  return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
 uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
@@ -76,27 +80,13 @@ uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
  if (C<F) f--;
  if (D<F) f--;
  if (E<F) f--;
-return (4037880*a+175560*b+7980*c+380*d+19*e+f);
+return (f+19*(e+20*(d+21*(c+22*(b+23*a)))));
 }
 
 uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
-/*
-  if (a>b){uchar tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
-  if (b>c){uchar tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
-  if (c>d){uchar tmp=d;d=c;c=tmp;}
-  if (a>b){uchar tmp=b;b=a;a=tmp;}
-  if (b>c){uchar tmp=c;c=b;b=tmp;}
-  if (a>b){uchar tmp=b;b=a;a=tmp;}
 
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-  if (f>g){uchar tmp=g;g=f;f=tmp;}
-  if (g>h){uchar tmp=h;h=g;g=tmp;}
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-  if (f>g){uchar tmp=g;g=f;f=tmp;}
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-*/
   if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
   if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
   if (a>c)swap(a,c);
