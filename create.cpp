@@ -248,12 +248,11 @@ void getcorners() {
       }
       cout << ((tmpend-tmpbegin)/8) << " positions after depth " << depth+0 << "\n";
     }
-/*
-  FILE* pFile=fopen("corners.bin","wb");
-  if(pFile!=0){
-    fwrite(corners,1,cornersize,pFile);
-    fclose(pFile);}
+/*  for(int i=0;i<32;i++){  //I could try to have the filename as a char array and set the number respectively
+    FILE* pFile=fopen("corners"++i++".bin","wb");
+    if(pFile!=0){
+      fwrite(corners[i],1,cornersize/32,pFile);
+      fclose(pFile);}
+  }*/
   free(tmpbegin);
-  }
-*/
 }
