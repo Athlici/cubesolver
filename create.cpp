@@ -1,11 +1,40 @@
-void getcenters() {							//documentation just for one because they are very similiar
-  centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
+void gentable(uint8_t kind) {						//generalized table creation 0→edges, 1→centers, 2→corners
 
-  FILE* pFile;pFile=fopen("centers.bin","rb");
-  if(pFile!=0){
-    fread(centers,1,centersize,pFile);
+//table[kind] = (unsigned char*) malloc(tablesize[kinf]);
+//FILE* file  = fopen(tablepath[kind],"rb");
+  switch(kind){								//allocate the memory for the array and open the file
+    case 0:
+      edges = (unsigned char*) malloc(edgesize);
+      FILE* file = fopen("edges.bin","rb");
+      break;
+    case 1:
+      centers = (unsigned char*) malloc(centersize);
+      FILE* file = fopen("centers.bin","rb");
+      break;
+    case 2:
+      corners = (unsigned char*) malloc(cornersize);
+      FILE* file = fopen("corners.bin","rb");
+      break;
+  }
+
+  if(file!=0){
+    //fread(table[kind],1,tablesize[kind],file);
+    //cout << "loaded " << tablepath[kind] << " from disk.\n";
+    switch(kind){
+      case 0:
+	fread(edges,1,edgesize,file);
+        cout << "loaded edge table from disk.\n";
+	break;
+      case 1:
+        fread(centers,1,centersize,file);
+        cout << "loaded center table from disk.\n";
+        break;
+      case 2:
+        fread(corners,1,cornersize,file);
+        cout << "loaded corner table from disk.\n";
+        break;
+    }
     fclose(pFile);
-    cout << "loaded center table from disk.\n";
   }else{
 
     for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
@@ -24,7 +53,7 @@ void getcenters() {							//documentation just for one because they are very sim
       tmppos=tmpend;							//set to the last position of the current depth
       depth++;								//increase the depth(too early but works better here)
       while (tmptmp<tmppos){						//do moves as long as you are in the current depth
-	for (int i=0;i<36;i++) {					//do all possible moves on it PROTIP: 3 are actually senseless
+	for (int i=0;i<36;i++) {					//do all possible moves on it PROTIP: 3 are actually pointless
 	  unsigned char a=centermove[i][*tmptmp];
 	  unsigned char b=centermove[i][*(tmptmp+1)];
           unsigned char c=centermove[i][*(tmptmp+2)];

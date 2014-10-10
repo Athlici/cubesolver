@@ -1,43 +1,55 @@
-inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
   return (b<<4*c)|(a&(240-225*c));			//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
-inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
   return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
-//inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+//inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
 ////  if(c)return (b<<4)|(a&15); else return b|(a&240);
 //  return c ? (b<<4)|(a&15) : b|(a&240);
 //}
 //
-//inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+//inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
 ////  if(c)return a>>4; else return a&15
 //  return c ? a>>4 : a&15;
 //}
 
-inline ulong setchar(ulong input,uchar shift,uchar change){
+/*  functions to maybe use when switching to uint64_t
+inline uint64_t setchar(uint64_t input,uint8_t shift,uint8_t change){
   shift*=8;
-/*  asm ( "rol %1,%0    \n\t"
-        "mov %2,%%al  \n\t"
-        "ror %1,%0    \n\t"
-        : "+a" (input) : "r" (shift), "r" (change) );*/
+//  asm ( "rol %1,%0    \n\t"
+//        "mov %2,%%al  \n\t"
+//        "ror %1,%0    \n\t"
+//        : "+a" (input) : "r" (shift), "r" (change) );
   input=(input<<(64-shift))^(input>>shift);
 asm ("mov %1,%%al" : "+a" (input) : "r" (change) );
   return (input<<shift)^(input>>(64-shift));
 }
 
-inline uchar getchar(ulong input,uchar shift){
+inline uint8_t getchar(uint64_t input,uint8_t shift){
   return (input>>(8*shift))&255;
 }
 
-//The unnecessary amount of comparisons can be made n*log(n) by using binary trees:
+uint64_t touint64(uint8_t val[]){
+  uint64_t result=0;
+  for (uint8_t i=0,i<8,i++)result+=val[i]*(1<<(8*i));
+  return result;
+  //return val[0]+256*(val[1]+256*(val[2]+256*(val[3]+...)))
+}
+
+uint8_t (*touint8(uint64_t val))[8]{}
+*/
+
+//The amount of comparisons can be reduced from n^2 to n*log(n) by using binary trees:
 //inserting the nth value und subtracting from it the amount of nodes on the left
 //of the element delivers the result.
+//Rewriting the routines in assembler to only use registers could furthermore improve speed.
 
-uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
-  uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
- 
+uint posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
+  uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
+
   if (a<B) b-=3;
   if (a<C) c-=3;
   if (B<C) c-=3;
@@ -62,8 +74,8 @@ uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
   return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
-uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
- uchar B=b,C=c,D=d,E=e,F=f;			//the same for the corners
+uint poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
+ uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
  if (a<C) c--;
@@ -83,7 +95,7 @@ uint poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f){
 return (f+19*(e+20*(d+21*(c+22*(b+23*a)))));
 }
 
-uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){
+uint poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 
@@ -137,7 +149,8 @@ uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h
 // This is the Horner-Form of the commented Formula, hopefully faster to calculate
 }
 
-uchar max(uchar* i){
+//TODO:rewrite for cube-structure
+uint8_t max(uint8_t* i){
   uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
     poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
     poscorners(cornerturn[0][*(i+24)],cornerturn[0][*(i+23)],cornerturn[0][*(i+14)],cornerturn[0][*(i+13)],
@@ -151,9 +164,10 @@ uchar max(uchar* i){
       centerturn[3][*(i+43)],centerturn[3][*(i+44)],centerturn[3][*(i+45)],centerturn[3][*(i+46)]),
     poscenters(centerturn[0][*(i+47)],centerturn[0][*(i+48)],centerturn[0][*(i+49)],centerturn[0][*(i+50)],
       centerturn[0][*(i+51)],centerturn[0][*(i+52)],centerturn[0][*(i+53)],centerturn[0][*(i+54)])};
-//    cout << address[6]+0 << "\n";
-	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
-  uchar values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
+  //cout << address[6]+0 << "\n";
+  //The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
+  uint8_t values[8]={ //lookup the associated depth values	//TODO:Rewrite without temporary array
+    readhalfbyte(*(edges+address[0]/2),address[0]&1),
     readhalfbyte(*(corners+address[1]/2),address[1]&1),
     readhalfbyte(*(corners+address[2]/2),address[2]&1),
     readhalfbyte(*(corners+address[3]/2),address[3]&1), 
@@ -161,7 +175,7 @@ uchar max(uchar* i){
     readhalfbyte(*(centers+address[5]/2),address[5]&1),
     readhalfbyte(*(centers+address[6]/2),address[6]&1),
     readhalfbyte(*(centers+address[7]/2),address[7]&1)};
-  uchar tmp=values[0];
-  for(uchar i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
+  uint8_t tmp=values[0];
+  for(uint8_t i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		        //select the maximum
   return tmp;									//and return it
 }

@@ -10,7 +10,7 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 }
 */
 
-/*inline*/ void turncube (unsigned char* CubePos,unsigned char* WritePos,unsigned char Move){
+/*inline*/ cube turncube (cube Cube,uint8_t Move){
  *WritePos=edgeturn[Move][*CubePos];
  *(WritePos+1)=edgeturn[Move][*(CubePos+1)];
  *(WritePos+2)=edgeturn[Move][*(CubePos+2)];
@@ -127,10 +127,10 @@ int WriteFile(unsigned char* mem, string filename, int size) {
  *(WritePos+54)=centermove[Move][*(CubePos+54)];
 }
 
-bool solved(unsigned char* Position){
-  for(unsigned char i=0;i<7;i++){if(*(Position+i)!=3*i)return false;}
-  for(unsigned char i=0;i<24;i++){if(*(Position+i+7)!=i||*(Position+i+31)!=i)return false;}
-  return true;
+bool solved(cube Cube){
+  return Cube.edge==..&&
+    Cube.center[0]==..&&Cube.center[1]==..&&Cube.center[2]==..&&
+    Cube.corner[0]==..&&Cube.corner[1]==..&&Cube.corner[2]==..;
 }
 
 void printcube(unsigned char* Position){
