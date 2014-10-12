@@ -11,11 +11,17 @@ typedef struct cube {
   uint8_t center[24];
   uint8_t corner[24];
 };
-
+/*
 uint8_t *corners, *edges, *centers, *solution;
 const uint64_t edgesize   = 44089920;                   //Size of the array for cornerdepthlookups in Bytes
 const uint64_t centersize = 25741485;
 const uint64_t cornersize = 48454560;                   //maybe ifdev for different versions
+*/
+
+uint8_t *table[3];
+uint64_t tablesize[3] = {44089920,25741485,48454560};
+string   tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
+string   tablename[3] = {"edge","center","corner"};
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking

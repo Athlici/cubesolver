@@ -1,8 +1,8 @@
 void gentable(uint8_t kind) {						//generalized table creation 0→edges, 1→centers, 2→corners
 
-//table[kind] = (unsigned char*) malloc(tablesize[kinf]);
-//FILE* file  = fopen(tablepath[kind],"rb");
-  switch(kind){								//allocate the memory for the array and open the file
+  table[kind] = (unsigned char*) malloc(tablesize[kind]);
+  FILE* file  = fopen(tablepath[kind],"rb");
+  /*switch(kind){								//allocate the memory for the array and open the file
     case 0:
       edges = (unsigned char*) malloc(edgesize);
       FILE* file = fopen("edges.bin","rb");
@@ -15,12 +15,12 @@ void gentable(uint8_t kind) {						//generalized table creation 0→edges, 1→c
       corners = (unsigned char*) malloc(cornersize);
       FILE* file = fopen("corners.bin","rb");
       break;
-  }
+  }*/
 
   if(file!=0){
-    //fread(table[kind],1,tablesize[kind],file);
-    //cout << "loaded " << tablepath[kind] << " from disk.\n";
-    switch(kind){
+    fread(table[kind],1,tablesize[kind],file);
+    cout << "loaded " << tablename[kind] << " table from disk.\n";
+    /*switch(kind){
       case 0:
 	fread(edges,1,edgesize,file);
         cout << "loaded edge table from disk.\n";
@@ -33,11 +33,11 @@ void gentable(uint8_t kind) {						//generalized table creation 0→edges, 1→c
         fread(corners,1,cornersize,file);
         cout << "loaded corner table from disk.\n";
         break;
-    }
+    }*/
     fclose(pFile);
   }else{
 
-    for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
+    for(int i=0;i<tablesize[kind];i++) table[kind][i] = 255;		//everything else is set to max depth TODO:merge calloc change
     *(centers+3025/2)=sethalfbyte(255,0,3025%2);                        //The starting Position is set to have depth 0
     cout << "generating center table.\n";				//little status update
     unsigned char depth=0;						//setting of the depth counter

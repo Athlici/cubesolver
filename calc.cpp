@@ -149,6 +149,11 @@ uint poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint
 // This is the Horner-Form of the commented Formula, hopefully faster to calculate
 }
 
+uint8_t minDepth(cube Cube){
+  uint8_t res = posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]);
+  res = max(res,...);
+}
+
 //TODO:rewrite for cube-structure
 uint8_t max(uint8_t* i){
   uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
