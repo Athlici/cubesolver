@@ -12,20 +12,20 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 
 cube turncube (cube Cube,uint8_t move){
   for(int i=0;i<8;i++)
-    cube.edge[i]=edgeturn[move][cube.edge[i]];
+    Cube.edge[i]=edgeturn[move][Cube.edge[i]];
   for(int i=0;i<24;i++){
-    cube.center[i]=centerturn[move][cube.center[i]];
-    cube.corner[i]=cornerturn[move][cube.corner[i]];
+    Cube.center[i]=centerturn[move][Cube.center[i]];
+    Cube.corner[i]=cornerturn[move][Cube.corner[i]];
   }
   return Cube;
 }
 
 cube movecube (cube Cube,uint8_t move){
   for(int i=0;i<8;i++)
-    cube.edge[i]=edgemove[move][cube.edge[i]];
+    Cube.edge[i]=edgemove[move][Cube.edge[i]];
   for(int i=0;i<24;i++){
-    cube.center[i]=centermove[move][cube.center[i]];
-    cube.corner[i]=cornermove[move][cube.corner[i]];
+    Cube.center[i]=centermove[move][Cube.center[i]];
+    Cube.corner[i]=cornermove[move][Cube.corner[i]];
   }
   return Cube;
 }
@@ -40,6 +40,17 @@ bool solved(cube Cube){
     if(Cube.center[i]!=i && Cube.corner[i]!=i) return false;
   
   return true;
+}
+
+cube goal(void){
+  cube Cube;
+  for(int i=0;i<8;i++)
+    Cube.edge[i]=i;
+  for(int i=0;i<24;i++){
+    Cube.center[i]=i;
+    Cube.corner[i]=i;
+  }
+  return Cube;
 }
 
 void printcube(cube Cube){
