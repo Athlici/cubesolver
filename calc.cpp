@@ -47,7 +47,7 @@ uint8_t (*touint8(uint64_t val))[8]{}
 //of the element delivers the result.
 //Rewriting the routines in assembler to only use registers could furthermore improve speed.
 
-uint8_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
+uint64_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
   if (a<B) b-=3;
@@ -74,7 +74,7 @@ uint8_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uin
   return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
-uint8_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
+uint64_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
  uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
@@ -95,7 +95,7 @@ uint8_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
 return (f+19*(e+20*(d+21*(c+22*(b+23*a)))));
 }
 
-uint8_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
+uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 
@@ -151,7 +151,7 @@ uint8_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,u
 
 uint8_t minDepth(cube Cube){
 
-  uint8_t address[8]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+  uint64_t address[8]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
     poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[2],Cube.corner[3],Cube.corner[4],Cube.corner[5]),
     poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[7]],cornerturn[0][Cube.corner[6]],
       cornerturn[0][Cube.corner[14]],cornerturn[0][Cube.corner[15]]),
@@ -165,17 +165,24 @@ uint8_t minDepth(cube Cube){
     poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
       centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]])};
 
-  uint8_t values[8]={ //lookup the associated depth values      //TODO:Rewrite without temporary array
-    readhalfbyte(*(edges+address[0]/2),address[0]%2),
-    readhalfbyte(*(corners+address[1]/2),address[1]%2),
-    readhalfbyte(*(corners+address[2]/2),address[2]%2),
-    readhalfbyte(*(corners+address[3]/2),address[3]%2),
-    readhalfbyte(*(corners+address[4]/2),address[4]%2),
-    readhalfbyte(*(centers+address[5]/2),address[5]%2),
-    readhalfbyte(*(centers+address[6]/2),address[6]%2),
-    readhalfbyte(*(centers+address[7]/2),address[7]%2)};
+  uint8_t max=255;
+  for(uint8_t i=0;i<8;i++){
+    uint8_t tmp=readhalfbyte(table[(i+3)/4][address[i]/2],address[0]%2);
+    if(max<tmp) max=tmp;}
+  
+  return max;
+/* 
+  uint8_t values[8]={                                                           //lookup the associated depth values
+    readhalfbyte(table[0][address[0]/2],address[0]%2),
+    readhalfbyte(table[1][address[1]/2],address[1]%2),
+    readhalfbyte(table[1][address[2]/2],address[2]%2),
+    readhalfbyte(table[1][address[3]/2],address[3]%2),
+    readhalfbyte(table[1][address[4]/2],address[4]%2),
+    readhalfbyte(table[2][address[5]/2],address[5]%2),
+    readhalfbyte(table[2][address[6]/2],address[6]%2),
+    readhalfbyte(table[2][address[7]/2],address[7]%2)};
   uint8_t tmp=values[0];
   for(uint8_t i=1;i<8;i++) if(tmp<values[i])tmp=values[i];                      //select the maximum
   return tmp; 
-
+*/
 }

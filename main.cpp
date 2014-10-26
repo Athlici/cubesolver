@@ -12,10 +12,10 @@ typedef struct {
   uint8_t corner[24];
 } cube ;
 
-uint8_t *corners, *edges, *centers, *solution;
-const uint64_t edgesize   = 44089920;                   //Size of the array for cornerdepthlookups in Bytes
-const uint64_t centersize = 25741485;
-const uint64_t cornersize = 48454560;                   //maybe ifdev for different versions
+//uint8_t *corners, *edges, *centers, *solution;
+//const uint64_t edgesize   = 44089920;                   //Size of the array for cornerdepthlookups in Bytes
+//const uint64_t centersize = 25741485;
+//const uint64_t cornersize = 48454560;                   //maybe ifdev for different versions
 
 
 uint8_t *table[3];
