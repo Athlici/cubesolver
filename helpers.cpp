@@ -11,7 +11,7 @@ int WriteFile(unsigned char* mem, string filename, int size) {
 */
 
 cube turncube (cube Cube,uint8_t move){
-  for(int i=0;i<8;i++)
+  for(int i=0;i<7;i++)
     Cube.edge[i]=edgeturn[move][Cube.edge[i]];
   for(int i=0;i<24;i++){
     Cube.center[i]=centerturn[move][Cube.center[i]];
@@ -21,7 +21,7 @@ cube turncube (cube Cube,uint8_t move){
 }
 
 cube movecube (cube Cube,uint8_t move){
-  for(int i=0;i<8;i++)
+  for(int i=0;i<7;i++)
     Cube.edge[i]=edgemove[move][Cube.edge[i]];
   for(int i=0;i<24;i++){
     Cube.center[i]=centermove[move][Cube.center[i]];
@@ -34,7 +34,7 @@ bool solved(cube Cube){
 /*  return Cube.edge==..&&
     Cube.center[0]==..&&Cube.center[1]==..&&Cube.center[2]==..&&
     Cube.corner[0]==..&&Cube.corner[1]==..&&Cube.corner[2]==..;*/
-  for(int i=0;i<8;i++)
+  for(int i=0;i<7;i++)
     if(Cube.edge[i]!=i) return false;
   for(int i=0;i<24;i++)
     if(Cube.center[i]!=i && Cube.corner[i]!=i) return false;
@@ -44,7 +44,7 @@ bool solved(cube Cube){
 
 cube goal(void){
   cube Cube;
-  for(int i=0;i<8;i++)
+  for(int i=0;i<7;i++)
     Cube.edge[i]=i;
   for(int i=0;i<24;i++){
     Cube.center[i]=i;
@@ -55,7 +55,7 @@ cube goal(void){
 
 void printcube(cube Cube){
   cout << "edges: " ;
-  for(int i=0;i<8;i++)cout << Cube.edge[i]+0 << ";";
+  for(int i=0;i<7;i++)cout << Cube.edge[i]+0 << ";";
   cout << "\ncenters: ";
   for(int i=0;i<24;i++)cout << Cube.center[i]+0 << ";";
   cout << "\ncorners: ";
