@@ -17,8 +17,8 @@ uint8_t *table[3];
 const uint64_t tablesize[3] = {44089920,25741485,48454560};
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
-uint64_t elemsize [3] = {7,6,8};
-const uint8_t  elemsol[3][8]= {{0,1,2,3,4,5,6,0},{0,1,2,3,4,5,0,0},{0,1,2,3,8,9,10,11}};
+const uint8_t  elemsize [3] = {7,8,6};
+const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
@@ -28,20 +28,16 @@ const uint8_t  elemsol[3][8]= {{0,1,2,3,4,5,6,0},{0,1,2,3,4,5,0,0},{0,1,2,3,8,9,
 
 int main(int argc, char** argv) {
 
-//thread t1(getcenters);					//parallel creation and loading of the tables
-//thread t2(getedges);
-//thread t3(getcorners); 
-//
+//thread t1(gentable[0]);					//parallel creation and loading of the tables
+//thread t2(gentable[1]);
+//thread t3(gentable[2]); 
 //t1.join();
 //t2.join();
 //t3.join();
 
-
-//getcenters();						//sequencial version
-//getedges();
-//getcorners();
-
-gentable(1);
+gentable(0);
+//gentable(1);
+//gentable(2);
 
 //{22, 33, 11, 18, 15, 20, 19}
 //movecube(position,position,22);

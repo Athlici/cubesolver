@@ -45,7 +45,7 @@ bool solved(cube Cube){
 cube goal(void){
   cube Cube;
   for(int i=0;i<7;i++)
-    Cube.edge[i]=i;
+    Cube.edge[i]=3*i;
   for(int i=0;i<24;i++){
     Cube.center[i]=i;
     Cube.corner[i]=i;
