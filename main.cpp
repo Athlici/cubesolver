@@ -42,19 +42,22 @@ gentable(1);
 gentable(2);
 
 cube Cube=goal();
-//{22, 33, 11, 18, 15, 20, 19}
-Cube=movecube(Cube,22);
-Cube=movecube(Cube,33);
-//Cube=movecube(Cube,11);
-//Cube=movecube(Cube,18);
-//Cube=movecube(Cube,15);
-//Cube=movecube(Cube,20);
-//Cube=movecube(Cube,8);
+//{2, 29, 3, 34, 1, 2, 25, 11, 12, 31}
+Cube=movecube(Cube,2);
+Cube=movecube(Cube,29);
+Cube=movecube(Cube,3);
+Cube=movecube(Cube,34);
+Cube=movecube(Cube,1);
+Cube=movecube(Cube,2);
+Cube=movecube(Cube,25);
+Cube=movecube(Cube,11);
+Cube=movecube(Cube,12);
+Cube=movecube(Cube,31);
 printcube(Cube);
 
-//bool sol;
-//for(uint8_t i=0;i<3&&(!sol);i++)sol=solve(Cube,i);
-solve(Cube,2);
+bool sol;
+for(uint8_t i=0;i<10&&(!sol);i++)sol=solve(Cube,i);
+//solve(Cube,7);
 for(uint8_t i=10;i>0;i--)cout << solution[i]+0 << ";"; cout << "\n";
 
 //printcube(goal());

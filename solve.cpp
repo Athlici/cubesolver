@@ -1,6 +1,5 @@
 bool solve(cube Cube, uint8_t rdepth){
   if(rdepth>0){
-cout << "minDepth:" << minDepth(Cube)+0 << "\n";
     if(rdepth>=minDepth(Cube)){
       for(uint8_t move=0;move<36;move++){
         cube nCube=movecube(Cube,move);
@@ -9,7 +8,8 @@ cout << "minDepth:" << minDepth(Cube)+0 << "\n";
 	  return true;
 	}
       }
-    }
+    } else
+      return false;
   }else
     return solved(Cube);
 }

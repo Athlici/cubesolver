@@ -171,18 +171,4 @@ uint8_t minDepth(cube Cube){
     if(max>tmp) max=tmp;}
   
   return max;
-/* 
-  uint8_t values[8]={                                                           //lookup the associated depth values
-    readhalfbyte(table[0][address[0]/2],address[0]%2),
-    readhalfbyte(table[1][address[1]/2],address[1]%2),
-    readhalfbyte(table[1][address[2]/2],address[2]%2),
-    readhalfbyte(table[1][address[3]/2],address[3]%2),
-    readhalfbyte(table[1][address[4]/2],address[4]%2),
-    readhalfbyte(table[2][address[5]/2],address[5]%2),
-    readhalfbyte(table[2][address[6]/2],address[6]%2),
-    readhalfbyte(table[2][address[7]/2],address[7]%2)};
-  uint8_t tmp=values[0];
-  for(uint8_t i=1;i<8;i++) if(tmp<values[i])tmp=values[i];                      //select the maximum
-  return tmp; 
-*/
 }
