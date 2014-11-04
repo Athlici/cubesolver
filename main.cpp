@@ -20,11 +20,13 @@ const char*    tablename[3] = {"edge","center","corner"};
 const uint8_t  elemsize [3] = {7,8,6};
 const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
+uint8_t solution[10]={0};
+
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
-//#include "solve1.cpp"					//solves a given cube position optimal
+#include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
 
@@ -36,22 +38,28 @@ int main(int argc, char** argv) {
 //t3.join();
 
 gentable(0);
-//gentable(1);
-//gentable(2);
+gentable(1);
+gentable(2);
 
+cube Cube=goal();
 //{22, 33, 11, 18, 15, 20, 19}
-//movecube(position,position,22);
-//movecube(position,position,33);
-//movecube(position,position,11);
-//movecube(position,position,18);
-//movecube(position,position,15);
-//movecube(position,position,20);
-//movecube(position,position,8);
-//printcube(position);
+Cube=movecube(Cube,22);
+Cube=movecube(Cube,33);
+//Cube=movecube(Cube,11);
+//Cube=movecube(Cube,18);
+//Cube=movecube(Cube,15);
+//Cube=movecube(Cube,20);
+//Cube=movecube(Cube,8);
+printcube(Cube);
 
-printcube(goal());
+//bool sol;
+//for(uint8_t i=0;i<3&&(!sol);i++)sol=solve(Cube,i);
+solve(Cube,2);
+for(uint8_t i=10;i>0;i--)cout << solution[i]+0 << ";"; cout << "\n";
 
-  uint foo = 0;						//temporary too make the programm last longer on screen
-  cin >> foo;
+//printcube(goal());
+
+//  uint8_t foo = 0;						//temporary too make the programm last longer on screen
+//  cin >> foo;
 
 }

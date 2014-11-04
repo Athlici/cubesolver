@@ -22,7 +22,7 @@ cube turncube (cube Cube,uint8_t move){
 
 cube movecube (cube Cube,uint8_t move){
   for(int i=0;i<7;i++)
-    Cube.edge[i]=edgemove[move][Cube.edge[i]];
+    Cube.edge[i]=edgemove[edgemap[move]][Cube.edge[i]];
   for(int i=0;i<24;i++){
     Cube.center[i]=centermove[move][Cube.center[i]];
     Cube.corner[i]=cornermove[move][Cube.corner[i]];
@@ -35,7 +35,7 @@ bool solved(cube Cube){
     Cube.center[0]==..&&Cube.center[1]==..&&Cube.center[2]==..&&
     Cube.corner[0]==..&&Cube.corner[1]==..&&Cube.corner[2]==..;*/
   for(int i=0;i<7;i++)
-    if(Cube.edge[i]!=i) return false;
+    if(Cube.edge[i]!=3*i) return false;
   for(int i=0;i<24;i++)
     if(Cube.center[i]!=i && Cube.corner[i]!=i) return false;
   
