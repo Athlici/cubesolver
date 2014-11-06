@@ -1,39 +1,55 @@
-inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
   return (b<<4*c)|(a&(240-225*c));			//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
-inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
   return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
-//inline uchar sethalfbyte(uchar a/*Eingangsbyte*/,uchar b/*Modifikation*/,uchar c/*lower(0) or upper half(1)*/){
+//inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
 ////  if(c)return (b<<4)|(a&15); else return b|(a&240);
 //  return c ? (b<<4)|(a&15) : b|(a&240);
 //}
 //
-//inline uchar readhalfbyte(uchar a/*Eingangsbyte*/, uchar c/*lower(0) or upper half(1)*/){
+//inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
 ////  if(c)return a>>4; else return a&15
 //  return c ? a>>4 : a&15;
 //}
 
-inline ulong setchar(ulong input,uchar shift,uchar change){
+/*  functions to maybe use when switching to uint64_t
+inline uint64_t setchar(uint64_t input,uint8_t shift,uint8_t change){
   shift*=8;
-/*  asm ( "rol %1,%0    \n\t"
-        "mov %2,%%al  \n\t"
-        "ror %1,%0    \n\t"
-        : "+a" (input) : "r" (shift), "r" (change) );*/
+//  asm ( "rol %1,%0    \n\t"
+//        "mov %2,%%al  \n\t"
+//        "ror %1,%0    \n\t"
+//        : "+a" (input) : "r" (shift), "r" (change) );
   input=(input<<(64-shift))^(input>>shift);
 asm ("mov %1,%%al" : "+a" (input) : "r" (change) );
   return (input<<shift)^(input>>(64-shift));
 }
 
-inline uchar getchar(ulong input,uchar shift){
+inline uint8_t getchar(uint64_t input,uint8_t shift){
   return (input>>(8*shift))&255;
 }
 
-uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
-  uchar B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
- 
+uint64_t touint64(uint8_t val[]){
+  uint64_t result=0;
+  for (uint8_t i=0,i<8,i++)result+=val[i]*(1<<(8*i));
+  return result;
+  //return val[0]+256*(val[1]+256*(val[2]+256*(val[3]+...)))
+}
+
+uint8_t (*touint8(uint64_t val))[8]{}
+*/
+
+//The amount of comparisons can be reduced from n^2 to n*log(n) by using binary trees:
+//inserting the nth value und subtracting from it the amount of nodes on the left
+//of the element delivers the result.
+//Rewriting the routines in assembler to only use registers could furthermore improve speed.
+
+uint64_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
+  uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
+
   if (a<B) b-=3;
   if (a<C) c-=3;
   if (B<C) c-=3;
@@ -59,8 +75,8 @@ uint posedges(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g){
 }
 
 //ulong poscorners(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g,uchar h){
-ulong poscorners(ulong a,ulong b,ulong c,ulong d,ulong e,ulong f,ulong g,ulong h){
- uchar B=b,C=c,D=d,E=e,F=f,G=g,H=h;			//the same for the corners
+uint64_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g,uint8_t h){
+ uint8_t B=b,C=c,D=d,E=e,F=f,G=g,H=h;			//the same for the corners
 
  if (a<B) b--;		//the order might be changed by using <= signs
  if (a<C) c--;
@@ -94,24 +110,10 @@ ulong poscorners(ulong a,ulong b,ulong c,ulong d,ulong e,ulong f,ulong g,ulong h
  return (h+17*(g+18*(f+19*(e+20*(d+21*(c+22*(b+23*a)))))));
 }
 
-uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h){
+uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
-/*
-  if (a>b){uchar tmp=b;b=a;a=tmp;}		//the values are sorted by size, each group of 4 elements on its own,
-  if (b>c){uchar tmp=c;c=b;b=tmp;}		//with increasing size from a-d;e-h
-  if (c>d){uchar tmp=d;d=c;c=tmp;}
-  if (a>b){uchar tmp=b;b=a;a=tmp;}
-  if (b>c){uchar tmp=c;c=b;b=tmp;}
-  if (a>b){uchar tmp=b;b=a;a=tmp;}
 
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-  if (f>g){uchar tmp=g;g=f;f=tmp;}
-  if (g>h){uchar tmp=h;h=g;g=tmp;}
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-  if (f>g){uchar tmp=g;g=f;f=tmp;}
-  if (e>f){uchar tmp=f;f=e;e=tmp;}
-*/
   if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
   if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
   if (a>c)swap(a,c);
@@ -161,32 +163,34 @@ uint poscenters(uchar a,uchar b,uchar c,uchar d,uchar e,uchar f,uchar g, uchar h
    (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
 // This is the Horner-Form of the commented Formula, hopefully faster to calculate
 }
-/*
-uchar max(uchar* i){
-  uint address[8]={posedges(*i,*(i+1),*(i+2),*(i+3),*(i+4),*(i+5),*(i+6)),      //calc all the addresses
-    poscorners(*(i+7),*(i+8),*(i+9),*(i+10),*(i+11),*(i+12)),
-    poscorners(cornerturn[0][*(i+24)],cornerturn[0][*(i+23)],cornerturn[0][*(i+14)],cornerturn[0][*(i+13)],
-      cornerturn[0][*(i+21)],cornerturn[0][*(i+22)]),
-    poscorners(cornerturn[1][*(i+18)],cornerturn[1][*(i+17)],cornerturn[1][*(i+28)],cornerturn[1][*(i+27)],
-      cornerturn[1][*(i+15)],cornerturn[1][*(i+16)]),
-    poscorners(cornerturn[2][*(i+25)],cornerturn[2][*(i+26)],cornerturn[2][*(i+30)],cornerturn[2][*(i+29)],
-      cornerturn[2][*(i+20)],cornerturn[2][*(i+19)]),
-    poscenters(*(i+31),*(i+32),*(i+33),*(i+34),*(i+39),*(i+40),*(i+41),*(i+42)),
-    poscenters(centerturn[3][*(i+35)],centerturn[3][*(i+36)],centerturn[3][*(i+37)],centerturn[3][*(i+38)],
-      centerturn[3][*(i+43)],centerturn[3][*(i+44)],centerturn[3][*(i+45)],centerturn[3][*(i+46)]),
-    poscenters(centerturn[0][*(i+47)],centerturn[0][*(i+48)],centerturn[0][*(i+49)],centerturn[0][*(i+50)],
-      centerturn[0][*(i+51)],centerturn[0][*(i+52)],centerturn[0][*(i+53)],centerturn[0][*(i+54)])};
-//    cout << address[6]+0 << "\n";
-	//The cubeturns are beeing made to map the different final places of the pieces to the table-pieces.
-  uchar values[8]={readhalfbyte(*(edges+address[0]/2),address[0]&1),	//lookup the associated depth values
-    readhalfbyte(*(corners+address[1]/2),address[1]&1),
-    readhalfbyte(*(corners+address[2]/2),address[2]&1),
-    readhalfbyte(*(corners+address[3]/2),address[3]&1), 
-    readhalfbyte(*(corners+address[4]/2),address[4]&1),
-    readhalfbyte(*(centers+address[5]/2),address[5]&1),
-    readhalfbyte(*(centers+address[6]/2),address[6]&1),
-    readhalfbyte(*(centers+address[7]/2),address[7]&1)};
-  uchar tmp=values[0];
-  for(uchar i=1;i<8;i++) if(tmp<values[i])tmp=values[i];		//select the maximum
-  return tmp;									//and return it
-}*/
+
+uint8_t minDepth(cube Cube){
+
+  uint64_t address[7]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+    poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[5],Cube.corner[4],Cube.corner[8],Cube.corner[9],Cube.corner[10],Cube.corner[11]),
+    poscorners(cornerturn[15][Cube.corner[2]],cornerturn[15][Cube.corner[3]],cornerturn[15][Cube.corner[7]],cornerturn[15][Cube.corner[6]],
+      cornerturn[15][Cube.corner[21]],cornerturn[15][Cube.corner[20]],cornerturn[15][Cube.corner[23]],cornerturn[15][Cube.corner[22]]),
+    poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[15]],cornerturn[0][Cube.corner[14]],
+      cornerturn[0][Cube.corner[13]],cornerturn[0][Cube.corner[12]],cornerturn[0][Cube.corner[19]],cornerturn[0][Cube.corner[18]]),
+    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
+    poscenters(centerturn[3][Cube.center[4]],centerturn[3][Cube.center[5]],centerturn[3][Cube.center[6]],centerturn[3][Cube.center[7]],
+      centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]]),
+    poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
+      centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]])};
+
+  uint8_t max=255;
+  for(uint8_t i=0;i<7;i++){
+    uint8_t tmp=readhalfbyte(~table[(i+2)/3][address[i]/2],address[0]%2);
+    if(max>tmp) max=tmp;}
+  
+  return max;
+}
+
+//cout << Cube.corner[0]+0 << ";" << Cube.corner[1]+0 << ";" << Cube.corner[5]+0 << ";" << Cube.corner[4]+0 << ";"
+//     << Cube.corner[8]+0 << ";" << Cube.corner[9]+0 << ";" << Cube.corner[10]+0 << ";" << Cube.corner[11]+0 << "\n";
+//for(uint8_t i=0;i<23;i++)
+//  cout << i+0 << ":" << cornerturn[i][Cube.corner[2]]+0 << ";" << cornerturn[i][Cube.corner[3]]+0 << ";" << cornerturn[i][Cube.corner[7]]+0 << ";" << cornerturn[i][Cube.corner[6]]+0 << ";"
+//       << cornerturn[i][Cube.corner[21]]+0 << ";" << cornerturn[i][Cube.corner[20]]+0 << ";" << cornerturn[i][Cube.corner[23]]+0 << ";" << cornerturn[i][Cube.corner[22]]+0 << "\n";
+//for(uint8_t i=0;i<23;i++)
+//  cout << i+0 << ":" << cornerturn[i][Cube.corner[17]]+0 << ";" << cornerturn[i][Cube.corner[16]]+0 << ";" << cornerturn[i][Cube.corner[15]]+0 << ";" << cornerturn[i][Cube.corner[14]]+0 << ";"
+//       << cornerturn[i][Cube.corner[13]]+0 << ";" << cornerturn[i][Cube.corner[12]]+0 << ";" << cornerturn[i][Cube.corner[19]]+0 << ";" << cornerturn[i][Cube.corner[18]]+0 << "\n";

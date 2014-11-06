@@ -1,258 +1,98 @@
-void getcenters() {							//documentation just for one because they are very similiar
-  centers = (unsigned char*) malloc(centersize);			//allocate the memory for the array
+void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
 
-  FILE* pFile;pFile=fopen("centers.bin","rb");
-  if(pFile!=0){
-    fread(centers,1,centersize,pFile);
-    fclose(pFile);
-    cout << "loaded center table from disk.\n";
+  table[k] = (uint8_t*) calloc(tablesize[k],1);
+  FILE* file  = fopen(tablepath[k],"rb");
+
+  if(file!=0){
+    fread(table[k],1,tablesize[k],file);
+    cout << "loaded " << tablename[k] << " table from disk.\n";
+    fclose(file);
   }else{
+    uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
+			    poscenters(0,1,2,3,8,9,10,11),
+			    poscorners(0,1,5,4,8,9,10,11)};
+    table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);                        //The starting Position is set to have depth 0
 
-    for(int i=0;i<centersize;i++) *(centers+i) = 255;			//everything else is set to max depth
-    *(centers+3025/2)=sethalfbyte(255,0,3025%2);                        //The starting Position is set to have depth 0
-    cout << "generating center table.\n";				//little status update
-    unsigned char depth=0;						//setting of the depth counter
-    unsigned char* tmpbegin=(unsigned char*) malloc(2147483648);	//allocating the space for the temporary positions(inaccurate estimate)
-    unsigned char* tmptmp=tmpbegin+8;					//just temporary  ??
-    *tmpbegin=0;*(tmpbegin+1)=1;*(tmpbegin+2)=2;*(tmpbegin+3)=3; 	//adding starting position to the temporary memory
-    *(tmpbegin+4)=8;*(tmpbegin+5)=9;*(tmpbegin+6)=10;*(tmpbegin+7)=11;	//this are two solves opposite center-quads
-    //*(tmpbegin+4)=4;*(tmpbegin+5)=5;*(tmpbegin+6)=6;*(tmpbegin+7)=7;	//tmp for testing
-    unsigned char* tmpend=tmptmp;					//setting the end of the meaningfull content of the array
-    unsigned char* tmppos=tmptmp;
-    while (tmpend>tmpbegin){						//continue as long as there are Positions left(while might be wrong)
-      tmptmp=tmpbegin;							//set tmp-variable to beginning to let it run through
-      tmppos=tmpend;							//set to the last position of the current depth
-      depth++;								//increase the depth(too early but works better here)
-      while (tmptmp<tmppos){						//do moves as long as you are in the current depth
-	for (int i=0;i<36;i++) {					//do all possible moves on it PROTIP: 3 are actually senseless
-	  unsigned char a=centermove[i][*tmptmp];
-	  unsigned char b=centermove[i][*(tmptmp+1)];
-          unsigned char c=centermove[i][*(tmptmp+2)];
-          unsigned char d=centermove[i][*(tmptmp+3)];
-          unsigned char e=centermove[i][*(tmptmp+4)];
-          unsigned char f=centermove[i][*(tmptmp+5)];
-          unsigned char g=centermove[i][*(tmptmp+6)];
-	  unsigned char h=centermove[i][*(tmptmp+7)];
-  //cout <<a+0<<";"<<b+0<<";"<<c+0<<";"<<d+0<<";"<<e+0<<";"<<f+0<<";"<<g+0<<";"<<h+0<<"\n";
-	  int j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
-	  if (depth<readhalfbyte(*(centers+j/2),j%2)){			//and look it up int the table + compare
-	    *(centers+j/2)=sethalfbyte(*(centers+j/2),depth,j%2);	//when it is smaller keep it in the next round.
-	    *tmpend=a;
-	    *(tmpend+1)=b;
-            *(tmpend+2)=c;
-            *(tmpend+3)=d;
-            *(tmpend+4)=e;
-            *(tmpend+5)=f;
-            *(tmpend+6)=g;
-	    *(tmpend+7)=h;
-	    tmpend+=8;
-	  }
+    cout << "generating " << tablename[k] <<" table.\n";		//little status update
+
+    uint8_t  depth  = 0;						//setting of the depth counter
+    uint8_t *start  = (uint8_t*) malloc(2147483648);	                //allocating the space for the temporary positions(inaccurate estimate)
+    uint8_t *posend = start + elemsize[k];
+    for(uint8_t i=0;i<elemsize[k];i++)start[i]=elemsol[k][i];
+    uint8_t *mover,*depthend;
+    
+    while (posend>start){
+      mover=start;
+      depthend=posend;
+      depth++;
+      while (mover<depthend){						//apply moves to all positions in the current depth
+//  for(int i=0;i<elemsize[k];i++)cout << mover[i]+0 << ";"; cout << "\n";
+        switch(k){
+	  case 0:
+            for (uint8_t i=0;i<18;i++) {
+              uint8_t  a=edgemove[i][mover[0]],b=edgemove[i][mover[1]];
+              uint8_t  c=edgemove[i][mover[2]],d=edgemove[i][mover[3]];
+              uint8_t  e=edgemove[i][mover[4]],f=edgemove[i][mover[5]];
+              uint8_t  g=edgemove[i][mover[6]];
+              uint64_t j=posedges(a,b,c,d,e,f,g);
+              if (depth<readhalfbyte(~table[k][j/2],j%2)){
+                table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);
+                posend[0]=a;posend[1]=b;
+                posend[2]=c;posend[3]=d;
+                posend[4]=e;posend[5]=f;
+                posend[6]=g;
+                posend+=elemsize[k];
+              }
+            }
+            break;
+	  case 1:
+            for (uint8_t i=0;i<36;i++){						//PROTIP: at least 3 are actually redundant
+	      uint8_t  a=centermove[i][mover[0]],b=centermove[i][mover[1]];
+              uint8_t  c=centermove[i][mover[2]],d=centermove[i][mover[3]];
+              uint8_t  e=centermove[i][mover[4]],f=centermove[i][mover[5]];
+              uint8_t  g=centermove[i][mover[6]],h=centermove[i][mover[7]];
+	      uint64_t j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
+	      if (depth<readhalfbyte(~table[k][j/2],j%2)){			//and look it up int the table + compare
+	        table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);	//when it is smaller keep it in the next round.
+	        posend[0]=a;posend[1]=b;
+                posend[2]=c;posend[3]=d;
+                posend[4]=e;posend[5]=f;
+                posend[6]=g;posend[7]=h;
+	        posend+=elemsize[k];
+	      }
+	    }
+	    break;
+	  case 2:
+            for (uint8_t i=0;i<36;i++) {
+              uint8_t  a=cornermove[i][mover[0]],b=cornermove[i][mover[1]];
+              uint8_t  c=cornermove[i][mover[2]],d=cornermove[i][mover[3]];
+              uint8_t  e=cornermove[i][mover[4]],f=cornermove[i][mover[5]];
+              uint8_t  g=cornermove[i][mover[6]],h=cornermove[i][mover[7]];
+              uint64_t j=poscorners(a,b,c,d,e,f,g,h);
+              if (depth<readhalfbyte(~table[k][j/2],j%2)){
+                table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);
+                posend[0]=a;posend[1]=b;
+                posend[2]=c;posend[3]=d;
+                posend[4]=e;posend[5]=f;
+                posend[6]=g;posend[7]=h;
+                posend+=elemsize[k];
+	      }
+            }
+	    break;
 	}
-	tmptmp+=8;
+	mover+=elemsize[k];  //go to next Position
       }
-      if (tmpend-tmppos>tmppos-tmpbegin){				//copying functions; 2 cases		(might be replaced by memmove)
-	for (int i=tmppos-tmpbegin;i>6;i-=8){				//not everything has to be copied when final area is bigger than given space
-	  *(tmppos-i)=*(tmpend-i);
-	  *(tmppos-i+1)=*(tmpend-i+1);
-          *(tmppos-i+2)=*(tmpend-i+2);
-          *(tmppos-i+3)=*(tmpend-i+3);
-          *(tmppos-i+4)=*(tmpend-i+4);
-          *(tmppos-i+5)=*(tmpend-i+5);
-          *(tmppos-i+6)=*(tmpend-i+6);
-	  *(tmppos-i+7)=*(tmpend-i+7);
-	}
-	tmpend=tmpend-tmppos+tmpbegin;
-      }
-      else{
-	for (int i=tmpend-tmppos;i>6;i-=8){
-	  *(tmpbegin+i)=*(tmppos+i);
-	  *(tmpbegin+i-1)=*(tmppos+i-1);
-          *(tmpbegin+i-2)=*(tmppos+i-2);
-          *(tmpbegin+i-3)=*(tmppos+i-3);
-          *(tmpbegin+i-4)=*(tmppos+i-4);
-          *(tmpbegin+i-5)=*(tmppos+i-5);
-          *(tmpbegin+i-6)=*(tmppos+i-6);
-	  *(tmpbegin+i-7)=*(tmppos+i-7);
-	}
-	tmpend=tmpbegin-tmppos+tmpend;
-      }
-      cout << ((tmpend-tmpbegin)>>3) << " positions after depth " << depth+0 << "\n";	//little status update
+      memmove(start,depthend,posend-depthend);
+      posend=start+(posend-depthend);
+      cout << (posend-start)/elemsize[k] << " positions after depth " << depth+0 << "\n";	//little status update
     }
 
-  FILE* pFile=fopen("centers.bin","wb");
-  if(pFile!=0){
-    fwrite(centers,1,centersize,pFile);
-    fclose(pFile);}
-  cout << "center table created\n"; 
-  free(tmpbegin);
+  FILE* file=fopen(tablepath[k],"wb");
+  if(file!=0){
+    fwrite(table[k],1,tablesize[k],file);
+    fclose(file);
   }
-}
-
-void getedges() {
-  edges   = (unsigned char*) malloc(edgesize);
-
-  FILE* pFile;pFile=fopen("edges.bin","rb");
-  if(pFile!=0){
-    fread(edges,1,edgesize,pFile);
-    fclose(pFile);
-    cout << "loaded edge table from disk.\n";
-  }else{
-
-    *edges=240;
-    for(int i=1;i<edgesize;i++) *(edges+i) = 255;
-    cout << "initiated edges memory\n";
-    unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(1024*1024*1024);
-    unsigned char* tmptmp=tmpbegin;
-    for(unsigned char i=0;i<7;i++) {*tmptmp= 3*i; tmptmp++;}
-    unsigned char* tmpend=tmptmp;
-    unsigned char* tmppos=tmptmp;
-    while (tmpend>tmpbegin){
-      tmptmp=tmpbegin;
-      tmppos=tmpend;
-      depth++;
-      while (tmptmp<tmppos){
-	for (int i=0;i<18;i++) {
-	  unsigned char a=edgemove[i][*tmptmp];
-	  unsigned char b=edgemove[i][*(tmptmp+1)];
-          unsigned char c=edgemove[i][*(tmptmp+2)];
-          unsigned char d=edgemove[i][*(tmptmp+3)];
-          unsigned char e=edgemove[i][*(tmptmp+4)];
-          unsigned char f=edgemove[i][*(tmptmp+5)];
-          unsigned char g=edgemove[i][*(tmptmp+6)];
-	  int h=posedges(a,b,c,d,e,f,g);
-	  if (depth<readhalfbyte(*(edges+(h>>1)),h&1)){
-	    *(edges+(h>>1))=sethalfbyte(*(edges+(h>>1)),depth,h&1);
-	    *tmpend=a;
-	    *(tmpend+1)=b;
-            *(tmpend+2)=c;
-            *(tmpend+3)=d;
-            *(tmpend+4)=e;
-            *(tmpend+5)=f;
-            *(tmpend+6)=g;
-	    tmpend+=7;
-	  }
-	}
-        tmptmp+=7;
-      }
-      if (tmpend-tmppos>tmppos-tmpbegin){
-	for (int i=tmppos-tmpbegin;i>5;i-=7){
-	  *(tmppos-i)=*(tmpend-i);
-	  *(tmppos-i+1)=*(tmpend-i+1);
-          *(tmppos-i+2)=*(tmpend-i+2);
-          *(tmppos-i+3)=*(tmpend-i+3);
-          *(tmppos-i+4)=*(tmpend-i+4);
-          *(tmppos-i+5)=*(tmpend-i+5);
-          *(tmppos-i+6)=*(tmpend-i+6);
-	}
-	tmpend=tmpend-tmppos+tmpbegin;
-      }
-      else{
-	for (int i=tmpend-tmppos;i>5;i-=7){
-	  *(tmpbegin+i)=*(tmppos+i);
-	  *(tmpbegin+i-1)=*(tmppos+i-1);
-          *(tmpbegin+i-2)=*(tmppos+i-2);
-          *(tmpbegin+i-3)=*(tmppos+i-3);
-          *(tmpbegin+i-4)=*(tmppos+i-4);
-          *(tmpbegin+i-5)=*(tmppos+i-5);
-          *(tmpbegin+i-6)=*(tmppos+i-6);
-	}
-	tmpend=tmpbegin-tmppos+tmpend;
-      }
-      cout << ((tmpend-tmpbegin)/7) << " positions after depth " << depth+0 << "\n";
+  cout << tablename[k] << " table created\n"; 
+  free(start);
   }
-  FILE* pFile=fopen("edges.bin","wb");
-  if(pFile!=0){
-    fwrite(edges,1,edgesize,pFile);
-    fclose(pFile);}
-  free(tmpbegin);
-  }
-}
-
-void getcorners() {
- for(int i=0;i<32;i++)corners[i] = (unsigned char*) calloc(cornersize/32,1);
-/*
-  FILE* pFile;pFile=fopen("corners.bin","rb");
-  if(pFile!=0){
-    fread(corners,1,cornersize,pFile);
-    fclose(pFile);
-    cout << "loaded corner table from disk.\n";
-  }else{
-*/
-    *corners[0]=255-240;
-    unsigned char depth=0;
-    unsigned char* tmpbegin=(unsigned char*) malloc(1024*1024*1024);
-    unsigned char* tmptmp=tmpbegin;
-    for(unsigned char i=0;i<8;i++) { *tmptmp=i; tmptmp++;}
-    unsigned char* tmpend=tmptmp;
-    unsigned char* tmppos=tmptmp;
-    while (tmpend>tmpbegin){
-      tmptmp=tmpbegin;
-      tmppos=tmpend;
-      depth++;
-      while (tmptmp<tmppos){
-	for (int i=0;i<36;i++) {
-	  unsigned char a=cornermove[i][*tmptmp];
-	  unsigned char b=cornermove[i][*(tmptmp+1)];
-          unsigned char c=cornermove[i][*(tmptmp+2)];
-          unsigned char d=cornermove[i][*(tmptmp+3)];
-          unsigned char e=cornermove[i][*(tmptmp+4)];
-          unsigned char f=cornermove[i][*(tmptmp+5)];
-          unsigned char g=cornermove[i][*(tmptmp+6)];
-          unsigned char h=cornermove[i][*(tmptmp+7)];
-	  ulong j=poscorners(a,b,c,d,e,f,g,h);
-	  if (j>cornersize*2)
-	    cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << ";" << g+0 << ";" << h+0 << "\n";
-	  else{
-	  if (depth<readhalfbyte(255-*(corners[(j>>1)%32]+(j>>1)/32),j&1)){
-	    *(corners[(j>>1)%32]+(j>>1)/32)=255-sethalfbyte(255-*(corners[(j>>1)%32]+(j>>1)/32),depth,j&1);
-	    *tmpend=a;
-	    *(tmpend+1)=b;
-            *(tmpend+2)=c;
-            *(tmpend+3)=d;
-            *(tmpend+4)=e;
-            *(tmpend+5)=f;
-            *(tmpend+6)=g;
-            *(tmpend+7)=h;
-	    tmpend+=8;
-	  }
-	  }
-	}
-        tmptmp+=8;
-      }
-      if (tmpend-tmppos>tmppos-tmpbegin){
-	for (int i=tmppos-tmpbegin;i>4;i-=8){
-	  *(tmppos-i)=*(tmpend-i);
-	  *(tmppos-i+1)=*(tmpend-i+1);
-          *(tmppos-i+2)=*(tmpend-i+2);
-          *(tmppos-i+3)=*(tmpend-i+3);
-          *(tmppos-i+4)=*(tmpend-i+4);
-          *(tmppos-i+5)=*(tmpend-i+5);
-          *(tmppos-i+6)=*(tmpend-i+6);
-          *(tmppos-i+7)=*(tmpend-i+7);
-	}
-	tmpend=tmpend-tmppos+tmpbegin;
-      }
-      else{
-	for (int i=tmpend-tmppos;i>4;i-=8){
-	  *(tmpbegin+i)=*(tmppos+i);
-	  *(tmpbegin+i-1)=*(tmppos+i-1);
-          *(tmpbegin+i-2)=*(tmppos+i-2);
-          *(tmpbegin+i-3)=*(tmppos+i-3);
-          *(tmpbegin+i-4)=*(tmppos+i-4);
-          *(tmpbegin+i-5)=*(tmppos+i-5);
-          *(tmpbegin+i-6)=*(tmppos+i-6);
-          *(tmpbegin+i-7)=*(tmppos+i-7);
-	}
-	tmpend=tmpbegin-tmppos+tmpend;
-      }
-      cout << ((tmpend-tmpbegin)/8) << " positions after depth " << depth+0 << "\n";
-    }
-/*  for(int i=0;i<32;i++){  //I could try to have the filename as a char array and set the number respectively
-    FILE* pFile=fopen("corners"++i++".bin","wb");
-    if(pFile!=0){
-      fwrite(corners[i],1,cornersize/32,pFile);
-      fclose(pFile);}
-  }*/
-  free(tmpbegin);
 }
