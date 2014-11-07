@@ -11,79 +11,67 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
 			    poscenters(0,1,2,3,8,9,10,11),
 			    poscorners(0,1,2,3,4,5)};
-    table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);                        //The starting Position is set to have depth 0
+    table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
 
     uint8_t  depth  = 0;						//setting of the depth counter
-    uint8_t *start  = (uint8_t*) malloc(2147483648);	                //allocating the space for the temporary positions(inaccurate estimate)
-    uint8_t *posend = start + elemsize[k];
-    for(uint8_t i=0;i<elemsize[k];i++)start[i]=elemsol[k][i];
-    uint8_t *mover,*depthend;
-    
-    while (posend>start){
-      mover=start;
-      depthend=posend;
-      depth++;
-      while (mover<depthend){						//apply moves to all positions in the current depth
-//  for(int i=0;i<elemsize[k];i++)cout << mover[i]+0 << ";"; cout << "\n";
+    uint8_t *stack  = (uint8_t*) calloc(16*(elemsize[k]+1),1);	        //allocating the space for the temporary positions(inaccurate estimate)
+    for(uint8_t i=0;i<elemsize[k];i++)stack[i+1]=elemsol[k][i];
+    uint64_t counter = 0;
+ 
+    do{
+      if(stack[depth*(elemsize[k]+1)]<36){
+//        for(uint8_t i=1;i<=elemsize[k];i++)
+//          stack[(depth+1)*(elemsize[k]+1)+i]=move[k][stack[depth*(elemsize[k]+1)]][stack[depth*(elemsize[k]+1)+i]]
+
+	uint8_t om=depth*(elemsize[k]+1),nm=(depth+1)*(elemsize[k]+1);
+	uint64_t pos;
         switch(k){
 	  case 0:
-            for (uint8_t i=0;i<18;i++) {
-              uint8_t  a=edgemove[i][mover[0]],b=edgemove[i][mover[1]];
-              uint8_t  c=edgemove[i][mover[2]],d=edgemove[i][mover[3]];
-              uint8_t  e=edgemove[i][mover[4]],f=edgemove[i][mover[5]];
-              uint8_t  g=edgemove[i][mover[6]];
-              uint64_t j=posedges(a,b,c,d,e,f,g);
-              if (depth<readhalfbyte(~table[k][j/2],j%2)){
-                table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);
-                posend[0]=a;posend[1]=b;
-                posend[2]=c;posend[3]=d;
-                posend[4]=e;posend[5]=f;
-                posend[6]=g;
-                posend+=elemsize[k];
-              }
-            }
+            stack[nm+1]=edgemove[stack[om]][stack[om+1]];
+            stack[nm+2]=edgemove[stack[om]][stack[om+2]];
+            stack[nm+3]=edgemove[stack[om]][stack[om+3]];
+            stack[nm+4]=edgemove[stack[om]][stack[om+4]];
+            stack[nm+5]=edgemove[stack[om]][stack[om+5]];
+            stack[nm+6]=edgemove[stack[om]][stack[om+6]];
+            stack[nm+7]=edgemove[stack[om]][stack[om+7]];
+            pos=posedges(stack[nm+1],stack[nm+2],stack[nm+3],stack[nm+4],stack[nm+5],stack[nm+6],stack[nm+7]);
+cout << depth+0 << ":" << stack[nm+1]+0 << "," << stack[nm+2]+0 << ","  << stack[nm+3]+0 << ","  << stack[nm+4]+0 << ","  << stack[nm+5]+0 << ","  << stack[nm+6]+0 << ","  << stack[nm+7]+0 << ";" << pos+0 << "\n";
             break;
 	  case 1:
-            for (uint8_t i=0;i<36;i++){						//PROTIP: at least 3 are actually redundant
-	      uint8_t  a=centermove[i][mover[0]],b=centermove[i][mover[1]];
-              uint8_t  c=centermove[i][mover[2]],d=centermove[i][mover[3]];
-              uint8_t  e=centermove[i][mover[4]],f=centermove[i][mover[5]];
-              uint8_t  g=centermove[i][mover[6]],h=centermove[i][mover[7]];
-	      uint64_t j=poscenters(a,b,c,d,e,f,g,h);				//calculate the depth of the resulting positions
-	      if (depth<readhalfbyte(~table[k][j/2],j%2)){			//and look it up int the table + compare
-	        table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);	//when it is smaller keep it in the next round.
-	        posend[0]=a;posend[1]=b;
-                posend[2]=c;posend[3]=d;
-                posend[4]=e;posend[5]=f;
-                posend[6]=g;posend[7]=h;
-	        posend+=elemsize[k];
-	      }
-	    }
+	    stack[nm+1]=centermove[stack[om]][stack[om+1]];
+            stack[nm+2]=centermove[stack[om]][stack[om+2]];
+            stack[nm+3]=centermove[stack[om]][stack[om+3]];
+            stack[nm+4]=centermove[stack[om]][stack[om+4]];
+            stack[nm+5]=centermove[stack[om]][stack[om+5]];
+            stack[nm+6]=centermove[stack[om]][stack[om+6]];
+            stack[nm+7]=centermove[stack[om]][stack[om+7]];
+            stack[nm+8]=centermove[stack[om]][stack[om+8]];
+	    pos=poscenters(stack[nm+1],stack[nm+2],stack[nm+3],stack[nm+4],stack[nm+5],stack[nm+6],stack[nm+7],stack[nm+8]);
 	    break;
 	  case 2:
-            for (uint8_t i=0;i<36;i++) {
-              uint8_t  a=cornermove[i][mover[0]],b=cornermove[i][mover[1]];
-              uint8_t  c=cornermove[i][mover[2]],d=cornermove[i][mover[3]];
-              uint8_t  e=cornermove[i][mover[4]],f=cornermove[i][mover[5]];
-              uint64_t j=poscorners(a,b,c,d,e,f);
-              if (depth<readhalfbyte(~table[k][j/2],j%2)){
-                table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);
-                posend[0]=a;posend[1]=b;
-                posend[2]=c;posend[3]=d;
-                posend[4]=e;posend[5]=f;
-                posend+=elemsize[k];
-	      }
-            }
+            stack[nm+1]=cornermove[stack[om]][stack[om+1]];
+            stack[nm+2]=cornermove[stack[om]][stack[om+2]];
+            stack[nm+3]=cornermove[stack[om]][stack[om+3]];
+            stack[nm+4]=cornermove[stack[om]][stack[om+4]];
+            stack[nm+5]=cornermove[stack[om]][stack[om+5]];
+            stack[nm+6]=cornermove[stack[om]][stack[om+6]];
+            pos=poscorners(stack[nm+1],stack[nm+2],stack[nm+3],stack[nm+4],stack[nm+5],stack[nm+6]);
 	    break;
 	}
-	mover+=elemsize[k];  //go to next Position
-      }
-      memmove(start,depthend,posend-depthend);
-      posend=start+(posend-depthend);
-      cout << (posend-start)/elemsize[k] << " positions after depth " << depth+0 << "\n";	//little status update
-    }
+
+	stack[depth*(elemsize[k]+1)]++;
+	stack[(depth+1)*(elemsize[k]+1)]=0;
+        if(depth+1<readhalfbyte(~table[k][pos/2],pos%2)){
+          depth++;
+          table[k][pos/2]=~sethalfbyte(~table[k][pos/2],depth,pos%2);
+        }
+      } else
+	depth--;
+      counter++;
+      if(counter%1000000==0)cout << counter/1000000 << ":" << depth+0 << "\n";
+    }while(stack[0]<36);
 
   FILE* file=fopen(tablepath[k],"wb");
   if(file!=0){
@@ -91,6 +79,6 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     fclose(file);
   }
   cout << tablename[k] << " table created\n"; 
-  free(start);
+  free(stack);
   }
 }
