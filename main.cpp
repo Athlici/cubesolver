@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-//gentable(0);
+gentable(0);
 gentable(1);
 gentable(2);
 
