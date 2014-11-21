@@ -64,9 +64,10 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 
         stack[depth*(elemsize[k]+1)]++;
         stack[(depth+1)*(elemsize[k]+1)]=0;
-        if(depth<maxdepth[k]&&depth<readhalfbyte(~table[k][pos/2],pos%2)){
+        if(depth<readhalfbyte(~table[k][pos/2],pos%2)){
           depth++;
           table[k][pos/2]=~sethalfbyte(~table[k][pos/2],depth,pos%2);
+	  if(depth==maxdepth[k])depth--;
         }
       } else
         depth--;
