@@ -1,4 +1,8 @@
 Notebook[{
+
+Cell[CellGroupData[{
+Cell["Centerpos", "Title"],
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"l", "[", 
@@ -794,8 +798,9 @@ Cell[BoxData[
 
 Cell[BoxData["1770"], "Output"]
 }, Open  ]]
+}, Open  ]]
 },
-WindowSize->{2560, 1508},
+WindowSize->{2560, 1513},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 Magnification->1.5,

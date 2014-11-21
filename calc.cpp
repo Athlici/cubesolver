@@ -74,6 +74,40 @@ uint64_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,ui
   return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
 }
 
+uint64_t adredges(uint64_t x){
+  uint64_t g = x % 6; x /= 6;
+  uint64_t f = x % 9; x /= 9;
+  uint64_t e = x % 12; x /= 12;
+  uint64_t d = x % 15; x /= 15;
+  uint64_t c = x % 18; x /= 18;
+  uint64_t b = x % 21; x /= 21;
+  uint64_t a = x;
+
+  if(f<=g) g+=3;
+  if(e<=g) g+=3;
+  if(d<=g) g+=3;
+  if(c<=g) g+=3;
+  if(b<=g) g+=3;
+  if(a<=g) g+=3;
+  if(e<=f) f+=3;
+  if(d<=f) f+=3;
+  if(c<=f) f+=3;
+  if(b<=f) f+=3;
+  if(a<=f) f+=3;
+  if(d<=e) e+=3;
+  if(c<=e) e+=3;
+  if(b<=e) e+=3;
+  if(a<=e) e+=3;
+  if(c<=d) d+=3;
+  if(b<=d) d+=3;
+  if(a<=d) d+=3;
+  if(b<=c) c+=3;
+  if(a<=c) c+=3;
+  if(a<=b) b+=3;
+
+  return (g+256*(f+256*(e+256*(d+256*(c+256*(b+256*a))))));
+}
+
 uint64_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
  uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
 
@@ -93,6 +127,34 @@ uint64_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f)
  if (D<F) f--;
  if (E<F) f--;
 return (f+19*(e+20*(d+21*(c+22*(b+23*a)))));
+}
+
+uint64_t adrcorners(uint64_t x){
+  uint64_t f = x % 19; x /= 19;                         //Do a simple base conversion, could be done in a loop, but that would need an array
+  uint64_t e = x % 20; x /= 20;
+  uint64_t d = x % 21; x /= 21;
+  uint64_t c = x % 22; x /= 22;
+  uint64_t b = x % 23; x /= 23;
+  uint64_t a = x;
+  
+  if(e<=f) f++;
+  if(d<=f) f++;
+  if(c<=f) f++;
+  if(b<=f) f++;
+  if(a<=f) f++;
+  if(d<=e) e++;
+  if(c<=e) e++;
+  if(b<=e) e++;
+  if(a<=e) e++;
+  if(c<=d) d++;
+  if(b<=d) d++;
+  if(a<=d) d++;
+  if(b<=c) c++;
+  if(a<=c) c++;
+  if(a<=b) b++;
+
+  return (f+256*(e+256*(d+256*(c+256*(b+256*a)))));
+
 }
 
 uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
