@@ -2835,41 +2835,43 @@ Cell[BoxData[
     RowBox[{"129", "-", 
      RowBox[{"6", " ", "a"}], "-", 
      RowBox[{"6", " ", "b"}], "-", 
-     RowBox[{
-      SqrtBox["3"], " ", 
-      SqrtBox[
-       RowBox[{"HornerForm", "[", 
-        RowBox[{"5547", "-", 
-         RowBox[{"a", " ", 
-          RowBox[{"(", 
-           RowBox[{
-            RowBox[{"-", "44934"}], "+", 
-            RowBox[{"a", " ", 
-             RowBox[{"(", 
-              RowBox[{"3023", "+", 
-               RowBox[{
-                RowBox[{"(", 
-                 RowBox[{
-                  RowBox[{"-", "90"}], "+", "a"}], ")"}], " ", "a"}]}], 
-              ")"}]}]}], ")"}]}], "+", 
-         RowBox[{"5288", " ", "b"}], "+", 
-         RowBox[{"12", " ", 
-          RowBox[{"(", 
-           RowBox[{
-            RowBox[{"-", "42"}], "+", "a"}], ")"}], " ", "a", " ", "b"}], "+", 
-         RowBox[{"12", " ", 
-          RowBox[{"(", 
-           RowBox[{
-            RowBox[{"-", "21"}], "+", "a"}], ")"}], " ", 
-          SuperscriptBox["b", "2"]}], "+", 
-         RowBox[{"4", " ", 
-          SuperscriptBox["b", "3"]}], "-", 
-         RowBox[{"24", " ", "x"}]}], "]"}]]}]}], ")"}]}], "]"}]], "Input"],
+     SqrtBox[
+      RowBox[{"HornerForm", "[", 
+       RowBox[{"3", 
+        RowBox[{"(", 
+         RowBox[{"5547", "-", 
+          RowBox[{"a", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "44934"}], "+", 
+             RowBox[{"a", " ", 
+              RowBox[{"(", 
+               RowBox[{"3023", "+", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"-", "90"}], "+", "a"}], ")"}], " ", "a"}]}], 
+               ")"}]}]}], ")"}]}], "+", 
+          RowBox[{"5288", " ", "b"}], "+", 
+          RowBox[{"12", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "42"}], "+", "a"}], ")"}], " ", "a", " ", "b"}], 
+          "+", 
+          RowBox[{"12", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "21"}], "+", "a"}], ")"}], " ", 
+           SuperscriptBox["b", "2"]}], "+", 
+          RowBox[{"4", " ", 
+           SuperscriptBox["b", "3"]}], "-", 
+          RowBox[{"24", " ", "x"}]}], ")"}]}], "]"}]]}], ")"}]}], 
+  "]"}]], "Input"],
 
 Cell["\<\
-(129 - 6*a - 6*b - Sqrt(3)*Sqrt(5547 + b*(5288 + b*(-252 + 4*b)) + 
-        a*(44934 + b*(-504 + 12*b) + a*(-3023 + (90 - a)*a + 12*b)) - \
-24*x))/6.\
+(129 - 6*a - 6*b - Sqrt(16641 + b*(15864 + b*(-756 + 12*b)) + 
+       a*(134802 + b*(-1512 + 36*b) + a*(-9069 + (270 - 3*a)*a + 36*b)) - \
+72*x))/6.\
 \>", "Output"]
 }, Open  ]],
 
@@ -2883,6 +2885,124 @@ Cell[BoxData[
     "0"}], "]"}], "/", "4845"}]], "Input"],
 
 Cell[BoxData["6345"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FullSimplify", "[", 
+  RowBox[{
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"l", "[", 
+        RowBox[{
+        "a", ",", "b", ",", "c", ",", "d", ",", "0", ",", "0", ",", "0", ",", 
+         "0"}], "]"}], "/", "4845"}], "\[Equal]", "x"}], ",", "d"}], "]"}], 
+   ",", 
+   RowBox[{"ComplexityFunction", "\[Rule]", "computationCost"}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"d", "\[Rule]", 
+    RowBox[{
+     FractionBox["1", "24"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "90"}], " ", 
+        SuperscriptBox["a", "3"]}], "+", 
+       SuperscriptBox["a", "4"], "+", 
+       RowBox[{
+        SuperscriptBox["a", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{"3035", "-", 
+          RowBox[{"12", " ", "b"}]}], ")"}]}], "+", 
+       RowBox[{"a", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "45450"}], "-", 
+          RowBox[{"12", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"-", "44"}], "+", "b"}], ")"}], " ", "b"}], "+", 
+          RowBox[{"24", " ", "c"}]}], ")"}]}], "-", 
+       RowBox[{"4", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"b", " ", 
+           RowBox[{"(", 
+            RowBox[{"1451", "+", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"-", "66"}], "+", "b"}], ")"}], " ", "b"}]}], ")"}]}],
+           "+", 
+          RowBox[{"129", " ", "c"}], "-", 
+          RowBox[{"6", " ", "b", " ", "c"}], "-", 
+          RowBox[{"3", " ", 
+           SuperscriptBox["c", "2"]}], "-", 
+          RowBox[{"6", " ", "x"}]}], ")"}]}]}], ")"}]}]}], "}"}], 
+  "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"computationCost", "[", "%", "]"}]], "Input"],
+
+Cell[BoxData["578"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"computationCost", "[", 
+  RowBox[{
+   RowBox[{"HornerForm", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "90"}], " ", 
+      SuperscriptBox["a", "3"]}], "+", 
+     SuperscriptBox["a", "4"], "+", 
+     RowBox[{
+      SuperscriptBox["a", "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{"3035", "-", 
+        RowBox[{"12", " ", "b"}]}], ")"}]}], "+", 
+     RowBox[{"a", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "45450"}], "-", 
+        RowBox[{"12", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "44"}], "+", "b"}], ")"}], " ", "b"}], "+", 
+        RowBox[{"24", " ", "c"}]}], ")"}]}], "-", 
+     RowBox[{"4", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"b", " ", 
+         RowBox[{"(", 
+          RowBox[{"1451", "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"-", "66"}], "+", "b"}], ")"}], " ", "b"}]}], ")"}]}], 
+        "+", 
+        RowBox[{"129", " ", "c"}], "-", 
+        RowBox[{"6", " ", "b", " ", "c"}], "-", 
+        RowBox[{"3", " ", 
+         SuperscriptBox["c", "2"]}], "-", 
+        RowBox[{"6", " ", "x"}]}], ")"}]}]}], "]"}], "/", "24"}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"8", ",", "15", ",", "0"}], "}"}]], "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3036,7 +3156,7 @@ Cell[BoxData[
   RowBox[{"opCost", "[", 
    RowBox[{"HoldPattern", "[", 
     RowBox[{"Power", "[", "l__", "]"}], "]"}], "]"}], ":=", 
-  RowBox[{"10", 
+  RowBox[{"100", 
    RowBox[{"(", 
     RowBox[{
      RowBox[{"Length", "[", 
@@ -3044,7 +3164,33 @@ Cell[BoxData[
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"opCost", "[", "__", "]"}], ":=", "0"}]], "Input"],
+  RowBox[{"opCost", "[", 
+   RowBox[{"HoldPattern", "[", 
+    RowBox[{"Plus", "[", "l__", "]"}], "]"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", "0", ",", "0"}], "}"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opCost", "[", 
+   RowBox[{"HoldPattern", "[", 
+    RowBox[{"Times", "[", "l__", "]"}], "]"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"0", ",", "1", ",", "0"}], "}"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opCost", "[", 
+   RowBox[{"HoldPattern", "[", 
+    RowBox[{"Power", "[", "l__", "]"}], "]"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"opCost", "[", "__", "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"0", ",", "0", ",", "0"}], "}"}]}]], "Input"],
 
 Cell[BoxData[
  RowBox[{
@@ -3052,7 +3198,9 @@ Cell[BoxData[
   RowBox[{"Module", "[", 
    RowBox[{
     RowBox[{"{", 
-     RowBox[{"accum", "=", "0"}], "}"}], ",", 
+     RowBox[{"accum", "=", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0"}], "}"}]}], "}"}], ",", 
     RowBox[{
      RowBox[{"Scan", "[", 
       RowBox[{
