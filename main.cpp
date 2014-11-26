@@ -38,9 +38,9 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-gentable(0);
+//gentable(0);
 gentable(1);
-gentable(2);
+//gentable(2);
 
 cube Cube=goal();
 uint8_t moves[10]={12, 18, 28, 9, 11, 14, 3, 33, 15, 1};
