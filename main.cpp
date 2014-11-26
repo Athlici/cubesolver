@@ -4,6 +4,7 @@
 #include <thread>
 #include <stdint.h>
 #include <string.h>
+#include <math.h>
 
 using namespace std;
 

@@ -3,14 +3,22 @@
 #include <cstdlib>
 using namespace std;
 
-int ReadFile(char* mem, string filename, int size) {
-	fstream File(filename.c_str(), ios::in | ios::binary);
-	if(!File.read(mem, size)) {File.clear(); return 1;} else return 0;
+bool ReadFile(unsigned char* mem, int size) {
+  FILE* pFile=fopen("test.bin","rb");
+  if(pFile!=0){
+    int tmp=fread(mem,1,size,pFile);
+    fclose(pFile);
+    return !tmp;
+  } else return true;
 }
 
-int WriteFile(char* mem, string filename, int size) {
-	fstream File(filename.c_str(), ios::out | ios::binary);
-	if(!File.write(mem, size)) {File.clear(); return 1;} else return 0;
+bool WriteFile(unsigned char* mem, int size) {
+  FILE* pFile=fopen("test.bin","wb");
+  if(pFile!=0){
+    int tmp=fwrite(mem,1,size,pFile);
+    fclose(pFile);
+    return !tmp;
+  } else return true;
 }
 
 /**
@@ -18,14 +26,13 @@ int WriteFile(char* mem, string filename, int size) {
  */
 
 int main() {
-//	char buffer[256];
-	unsigned char* buffer;buffer=(unsigned char*) malloc(256);
-	if(!ReadFile(buffer, "test.bin", 256)) {
-		for(int i = 0; i<256; i++) /*cout << buffer[i];*/ cout << *(buffer+i)+0;
-		cout << endl;
-	}
+  unsigned char* buffer;buffer=(unsigned char*) malloc(256);
+//  if(!ReadFile(buffer, 256)) {
+//    for(int i=0; i<256; i++) /*cout << buffer[i];*/ cout << *(buffer+i)+0;
+//    cout << endl;
+//  }
 
-	for(int i = 0; i<256; i++) buffer[i] = i;
-	cout << WriteFile(buffer, "test.bin", 256) << endl;
+  for(int i=0; i<256; i++)*(buffer+i)=i;
+  cout << WriteFile(buffer, 256) << endl;
 }
 

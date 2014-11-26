@@ -4,10 +4,7 @@
 
 using namespace std;
 
-typedef unsigned char uchar;
-typedef uint64_t ulong;
-
-ulong setchar(ulong input,uchar shift,uchar change){
+uint64_t setchar(uint64_t input,uint8_t shift,uint8_t change){
   shift*=8;
 /*  asm ( "rol %1,%0    \n\t"
         "mov %2,%%al  \n\t"
@@ -18,14 +15,14 @@ asm ("mov %1,%%al" : "+a" (input) : "r" (change) );
   return (input<<shift)^(input>>(64-shift));
 }
 
-uchar getchar(ulong input,uchar shift){
+uint8_t getchar(uint64_t input,uint8_t shift){
   return (input>>(8*shift))&255;
 }
 
 
 int main(void){
 
-ulong tmp=setchar(0,0,0);
+uint64_t tmp=setchar(0,0,0);
 tmp=setchar(tmp,1,1);
 tmp=setchar(tmp,2,2);
 tmp=setchar(tmp,3,3);
