@@ -31,6 +31,8 @@ uint8_t solution[10]={0};
 
 int main(int argc, char** argv) {
 
+//adrcenters(27430592);
+
 //uint64_t adr=adrcenters(32703738);
 //cout << ((adr>>56)&255)+0 << ";" << ((adr>>48)&255)+0 << ";" << ((adr>>40)&255)+0 << ";" << ((adr>>32)&255)+0 << ";" << ((adr>>24)&255)+0 << ";" << ((adr>>16)&255)+0 << ";" << ((adr>>8)&255)+0 << ";" << (adr&255)+0 << "\n";
 
@@ -41,9 +43,9 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-//gentable(0);
+gentable(0);
 //gentable(1);
-gentable(2);
+//gentable(2);
 
 //cube Cube=goal();
 //uint8_t moves[10]={12, 18, 28, 9, 11, 14, 3, 33, 15, 1};
