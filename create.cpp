@@ -33,7 +33,6 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 	    	    edgemove[i][(adr>>24)&255],edgemove[i][(adr>>16)&255],edgemove[i][(adr>>8)&255],edgemove[i][adr&255]);
                   if (depth<readhalfbyte(~table[k][j/2],j%2))
                     table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);
-//cout << "written\n";
                 }
                 break;
 	      case 1:
