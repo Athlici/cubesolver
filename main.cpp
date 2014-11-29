@@ -42,15 +42,15 @@ gentable(0);
 gentable(1);
 gentable(2);
 
-cube Cube=goal();
-uint8_t moves[10]={12, 18, 28, 9, 11, 14, 3, 33, 15, 1};
-for(uint8_t i=0;i<10;i++) Cube=movecube(Cube,moves[i]);
-printcube(Cube);
-
-bool sol;
-for(uint8_t i=0;i<10&&(!sol);i++)sol=solve(Cube,i);
-//solve(Cube,7);
-for(uint8_t i=10;i>0;i--)cout << solution[i]+0 << ";"; cout << "\n";
+//cube Cube=goal();
+//uint8_t moves[10]={12, 18, 28, 9, 11, 14, 3, 33, 15, 1};
+//for(uint8_t i=0;i<10;i++) Cube=movecube(Cube,moves[i]);
+//printcube(Cube);
+//
+//bool sol;
+//for(uint8_t i=0;i<10&&(!sol);i++)sol=solve(Cube,i);
+////solve(Cube,7);
+//for(uint8_t i=10;i>0;i--)cout << solution[i]+0 << ";"; cout << "\n";
 
 //printcube(goal());
 
