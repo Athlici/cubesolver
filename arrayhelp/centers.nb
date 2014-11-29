@@ -2754,6 +2754,164 @@ r/(2.*Power(3,0.6666666666666666))\
 Cell[CellGroupData[{
 
 Cell[BoxData[
+ RowBox[{"FullSimplify", "[", 
+  RowBox[{"l", "[", 
+   RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", "e", ",", 
+    RowBox[{"f", "+", "1"}], ",", "0", ",", "0"}], "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "24"], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"74", " ", 
+     SuperscriptBox["e", "3"]}], "-", 
+    SuperscriptBox["e", "4"], "+", 
+    RowBox[{
+     SuperscriptBox["e", "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "2039"}], "+", 
+       RowBox[{"12", " ", "f"}]}], ")"}]}], "+", 
+    RowBox[{"4", " ", 
+     RowBox[{"(", 
+      RowBox[{"1", "+", "f"}], ")"}], " ", 
+     RowBox[{"(", 
+      RowBox[{"918", "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "52"}], "+", "f"}], ")"}], " ", "f"}]}], ")"}]}], "+", 
+    
+    RowBox[{"2", " ", "e", " ", 
+     RowBox[{"(", 
+      RowBox[{"12407", "+", 
+       RowBox[{"6", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "34"}], "+", "f"}], ")"}], " ", "f"}]}], ")"}]}]}], 
+   ")"}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CForm", "[", 
+  RowBox[{
+   RowBox[{"HornerForm", "[", 
+    RowBox[{
+     RowBox[{"74", " ", 
+      SuperscriptBox["e", "3"]}], "-", 
+     SuperscriptBox["e", "4"], "+", 
+     RowBox[{
+      SuperscriptBox["e", "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "2039"}], "+", 
+        RowBox[{"12", " ", "f"}]}], ")"}]}], "+", 
+     RowBox[{"4", " ", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", "f"}], ")"}], " ", 
+      RowBox[{"(", 
+       RowBox[{"918", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "52"}], "+", "f"}], ")"}], " ", "f"}]}], ")"}]}], "+", 
+     RowBox[{"2", " ", "e", " ", 
+      RowBox[{"(", 
+       RowBox[{"12407", "+", 
+        RowBox[{"6", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "34"}], "+", "f"}], ")"}], " ", "f"}]}], ")"}]}]}], 
+    "]"}], "/", "24"}], "]"}]], "Input"],
+
+Cell["\<\
+(3672 + f*(3464 + f*(-204 + 4*f)) + e*(24814 + f*(-408 + 12*f) + e*(-2039 + \
+(74 - e)*e + 12*f)))/24.\
+\>", "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"l", "[", 
+    RowBox[{"a", ",", 
+     RowBox[{"b", "+", "1"}], ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0", ",", "0"}], "]"}], "/", "4845"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "24"], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"90", " ", 
+     SuperscriptBox["a", "3"]}], "-", 
+    SuperscriptBox["a", "4"], "+", 
+    RowBox[{
+     SuperscriptBox["a", "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "3023"}], "+", 
+       RowBox[{"12", " ", "b"}]}], ")"}]}], "+", 
+    RowBox[{"6", " ", "a", " ", 
+     RowBox[{"(", 
+      RowBox[{"7489", "-", 
+       RowBox[{"84", " ", "b"}], "+", 
+       RowBox[{"2", " ", 
+        SuperscriptBox["b", "2"]}]}], ")"}]}], "+", 
+    RowBox[{"4", " ", 
+     RowBox[{"(", 
+      RowBox[{"1386", "+", 
+       RowBox[{"1322", " ", "b"}], "-", 
+       RowBox[{"63", " ", 
+        SuperscriptBox["b", "2"]}], "+", 
+       SuperscriptBox["b", "3"]}], ")"}]}]}], ")"}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CForm", "[", 
+  RowBox[{
+   RowBox[{"HornerForm", "[", 
+    RowBox[{
+     RowBox[{"90", " ", 
+      SuperscriptBox["a", "3"]}], "-", 
+     SuperscriptBox["a", "4"], "+", 
+     RowBox[{
+      SuperscriptBox["a", "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "3023"}], "+", 
+        RowBox[{"12", " ", "b"}]}], ")"}]}], "+", 
+     RowBox[{"6", " ", "a", " ", 
+      RowBox[{"(", 
+       RowBox[{"7489", "-", 
+        RowBox[{"84", " ", "b"}], "+", 
+        RowBox[{"2", " ", 
+         SuperscriptBox["b", "2"]}]}], ")"}]}], "+", 
+     RowBox[{"4", " ", 
+      RowBox[{"(", 
+       RowBox[{"1386", "+", 
+        RowBox[{"1322", " ", "b"}], "-", 
+        RowBox[{"63", " ", 
+         SuperscriptBox["b", "2"]}], "+", 
+        SuperscriptBox["b", "3"]}], ")"}]}]}], "]"}], "/", "24"}], 
+  "]"}]], "Input"],
+
+Cell["\<\
+(5544 + b*(5288 + b*(-252 + 4*b)) + a*(44934 + b*(-504 + 12*b) + a*(-3023 + \
+(90 - a)*a + 12*b)))/24.\
+\>", "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
  RowBox[{
   RowBox[{"l", "[", 
    RowBox[{
