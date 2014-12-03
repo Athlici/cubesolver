@@ -14,8 +14,7 @@ typedef struct {
   uint8_t corner[24];
 } cube ;
 
-uint8_t *(table[3][16]);
-const uint8_t  adrcount[3]  = {1,1,16};
+uint8_t *table[2],*ctable[16];
 const uint64_t tablesize[3] = {44089920,25741485,14827095360};
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
@@ -39,9 +38,9 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-//gentable(0);
-//gentable(1);
-gentable(2);
+gentable(0);
+gentable(1);
+//gentable(2);
 
 //cube Cube=goal();
 //uint8_t moves[10]={12, 18, 28, 9, 11, 14, 3, 33, 15, 1};

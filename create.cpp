@@ -1,19 +1,28 @@
 void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
 
-  for(uint8_t i=0;i<adrcount[k];i++)
-    table[k][i] = (uint8_t*) calloc(tablesize[k]/adrcount[k],1);
+  if(k==2)
+    for(uint8_t i=0;i<16;i++)
+      ctable[i] = (uint8_t*) calloc(tablesize[k]/16,1);
+  else
+      table[k] = (uint8_t*) calloc(tablesize[k],1)
 
   FILE* file  = fopen(tablepath[k],"rb");
   if(file!=0){
-    for(uint8_t i=0;i<adrcount[k];i++)
-      fread(table[k][i],1,tablesize[k]/adrcount[k],file);
+    if(k==2)
+      for(uint8_t i=0;i<adrcount[k];i++)
+        fread(ctable[i],1,tablesize[k]/16,file);
+    else
+	fread(table[k],1,tablesize[k],file);	
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
   }else{
     uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
 			    poscenters(0,1,2,3,8,9,10,11),
 			    poscorners(0,1,5,4,8,9,10,11)};
-    table[k][zeroaddr[k]%adrcount[k]][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);                 //The starting Position is set to have depth 0
+    if(k==2)
+      ctable[16*zeroaddr[k]/tablesize[k]][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);             //The starting Position is set to have depth 0
+    else
+      table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
 
@@ -22,7 +31,10 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       count=0;
       for(uint64_t mover=0;mover<2*tablesize[k];mover++){						//apply moves to all positions in the current depth
 //	uint64_t mem=~table[k][mover];
-	uint8_t mem = readhalfbyte(~table[k][mover%adrcount[k]][mover/(2*adrcount[k])],mover%2);
+	if(k==2)
+	  uint8_t mem = readhalfbyte(~ctable[16*mover/tablesize[k]][mover/32],mover%2);
+	else
+          uint8_t mem = readhalfbyte(~table[k][mover/2],mover%2);
 /*	for(uint64_t add=0;add<16;add++){*/
 	  if(depth==1+mem/*(mem>>4*add&15)*/){
 	    count++;
