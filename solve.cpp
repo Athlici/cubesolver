@@ -4,12 +4,12 @@ bool solve(cube Cube, uint8_t rdepth){
       for(uint8_t move=0;move<36;move++){
         cube nCube=movecube(Cube,move);
 	if(solve(nCube,rdepth-1)){
-	  solution[rdepth]=move;
+	  solution[rdepth-1]=move;
 	  return true;
 	}
       }
-    } else
-      return false;
+    }
+    return false;
   }else
     return solved(Cube);
 }
