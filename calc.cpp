@@ -202,34 +202,148 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
   if (e>g)swap(e,g);
   if (f>h)swap(f,h);
   if (f>g)swap(f,g);
+  
+if(d<h){ 						//decrease some values of the secondary positions, if these are already taken
+  if(d<g){
+    if(d<f){
+      if(d<e){e-=4;} else {
+        if(c<e){e-=3;} else {
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+        }
+      }
+      f-=4;} else {
+      if(c<f){
+        if(c<e){e-=3;} else {
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+        }
+        f-=3;} else {
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} f-=1;} 
+        }
+      }
+    }
+    g-=4;} else {
+    if(c<g){
+      if(c<f){
+        if(c<e){e-=3;} else {
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+        }
+        f-=3;} else {
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        }
+      }
+      g-=3;} else {
+      if(b<g){
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        }
+        g-=2;} else {
+        if(a<g){
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        g-=1;} 
+      }
+    }
+  }
+  h-=4;} else {
+  if(c<h){
+    if(c<g){
+      if(c<f){
+        if(c<e){e-=3;} else {
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+        }
+        f-=3;} else {
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        }
+      }
+      g-=3;} else {
+      if(b<g){
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        }
+        g-=2;} else {
+        if(a<g){
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        g-=1;} 
+      }
+    }
+    h-=3;} else {
+    if(b<h){
+      if(b<g){
+        if(b<f){
+          if(b<e){e-=2;} else {
+            if(a<e){e-=1;} 
+          }
+          f-=2;} else {
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        }g-=2;} else {
+        if(a<g){
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        g-=1;} 
+      }
+      h-=2;} else {
+      if(a<h){
+        if(a<g){
+          if(a<f){
+            if(a<e){e-=1;} 
+          f-=1;} 
+        g-=1;} 
+      h-=1;} 
+    }
+  }
+}
 
-  if (h>d) h--;						//decrease some values of the secondary positions, if these are already taken
-  if (h>c) h--;
-  if (h>b) h--;
-  if (h>a) h--;
-  if (g>d) g--;
-  if (g>c) g--;
-  if (g>b) g--;
-  if (g>a) g--;
-  if (f>d) f--;
-  if (f>c) f--;
-  if (f>b) f--;
-  if (f>a) f--;
-  if (e>d) e--;
-  if (e>c) e--;
-  if (e>b) e--;
-  if (e>a) e--;
-
-  h-=g+1;							//decrease every value so that the magic formula can be applied
-  d-=c+1;
-  g-=f+1;
-  c-=b+1;
-  f-=e+1;
-  b-=a+1;
-
-  return (b*(28120380+b*(19380*b-1279080)-116280*c)+a*(220205250+b*(58140*b-2558160)+a*((436050-4845*a)*a+58140*b-14704575)-116280*c)+
-   (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
-// This is the Horner-Form of the commented Formula, hopefully faster to calculate
+//  h-=g+1;d-=c+1;g-=f+1;c-=b+1;f-=e+1;b-=a+1;
+//  return (b*(28120380+b*(19380*b-1279080)-116280*c)+a*(220205250+b*(58140*b-2558160)+a*((436050-4845*a)*a+58140*b-14704575)-116280*c)+
+//   (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
+  return (a*(192084870+a*(-13425495+(416670-4845*a)*a))+b*(28120380+b*(-1279080+19380*b))+(2616300-58140*c)*c+
+   116280*d+e*(21350+e*(-1835+(70-e)*e))+f*(3884+f*(-216+4*f))+(444-12*g)*g+24*h-32214144)/24;
 }
 
 uint64_t adrcenters(uint64_t x){

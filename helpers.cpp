@@ -37,7 +37,7 @@ bool solved(cube Cube){
   for(int i=0;i<7;i++)
     if(Cube.edge[i]!=3*i) return false;
   for(int i=0;i<24;i++)
-    if(Cube.center[i]!=i && Cube.corner[i]!=i) return false;
+    if(Cube.center[i]!=i || Cube.corner[i]!=i) return false;
   
   return true;
 }
