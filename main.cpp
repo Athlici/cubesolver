@@ -53,11 +53,4 @@ for(uint8_t i=0;i<10&&(!solve(Cube,i));i++);
 //solve(Cube,7);
 for(uint8_t i=0;i<10;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
-for(uint8_t i=n;i>0;i--) Cube=movecube(Cube,solution[i]);
-
-//printcube(goal());
-
-//  uint8_t foo = 0;						//temporary too make the programm last longer on screen
-//  cin >> foo;
-
 }
