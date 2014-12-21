@@ -367,23 +367,22 @@ uint64_t adrcenters(uint64_t x){
 }
 
 uint8_t minDepth(cube Cube){
-
-  uint64_t address[8]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
-    poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[2],Cube.corner[3],Cube.corner[4],Cube.corner[5]),
-    poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[7]],cornerturn[0][Cube.corner[6]],
-      cornerturn[0][Cube.corner[14]],cornerturn[0][Cube.corner[15]]),
-    poscorners(cornerturn[1][Cube.corner[11]],cornerturn[1][Cube.corner[10]],cornerturn[1][Cube.corner[21]],cornerturn[1][Cube.corner[20]],
-      cornerturn[1][Cube.corner[8]],cornerturn[1][Cube.corner[9]]),
-    poscorners(cornerturn[2][Cube.corner[18]],cornerturn[2][Cube.corner[19]],cornerturn[2][Cube.corner[23]],cornerturn[2][Cube.corner[22]],
-      cornerturn[2][Cube.corner[13]],cornerturn[2][Cube.corner[12]]),
-    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
-    poscenters(centerturn[3][Cube.center[4]],centerturn[3][Cube.center[5]],centerturn[3][Cube.center[6]],centerturn[3][Cube.center[7]],
-      centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]]),
-    poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
-      centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]])};
+  uint64_t address[8];
+  uint8_t tmp[24];
+//  for(uint_8 i=0;i<7;i++)tmp[Cube.edge[i]/3]=i;
+//  address[0]=posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]);
+  for(uint8_t i=0;i<24;i++) tmp[Cube.corner[i]]=i;
+  address[1]=poscorners(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]);
+  address[2]=poscorners(cornerturn[0][tmp[17]],cornerturn[0][tmp[16]],cornerturn[0][tmp[7]],cornerturn[0][tmp[6]],cornerturn[0][tmp[14]],cornerturn[0][tmp[15]]);
+  address[3]=poscorners(cornerturn[1][tmp[11]],cornerturn[1][tmp[10]],cornerturn[1][tmp[21]],cornerturn[1][tmp[20]],cornerturn[1][tmp[8]],cornerturn[1][tmp[9]]);
+  address[4]=poscorners(cornerturn[2][tmp[18]],cornerturn[2][tmp[19]],cornerturn[2][tmp[23]],cornerturn[2][tmp[22]],cornerturn[2][tmp[13]],cornerturn[2][tmp[12]]);
+  for(uint8_t i=0;i<24;i++) tmp[Cube.center[i]]=i;
+  address[5]=poscenters(tmp[0],tmp[1],tmp[2],tmp[3],tmp[8],tmp[9],tmp[10],tmp[11]);
+  address[6]=poscenters(centerturn[3][tmp[4]],centerturn[3][tmp[5]],centerturn[3][tmp[6]],centerturn[3][tmp[7]],centerturn[3][tmp[12]],centerturn[3][tmp[13]],centerturn[3][tmp[14]],centerturn[3][tmp[15]]);
+  address[7]=poscenters(centerturn[0][tmp[16]],centerturn[0][tmp[17]],centerturn[0][tmp[18]],centerturn[0][tmp[19]],centerturn[0][tmp[20]],centerturn[0][tmp[21]],centerturn[0][tmp[22]],centerturn[0][tmp[23]]);
 
   uint8_t max=255;
-  for(uint8_t i=0;i<8;i++){
+  for(uint8_t i=1;i<8;i++){
     uint8_t tmp=readhalfbyte(~table[(i+3)/4][address[i]/2],address[i]%2);
     if(max>tmp) max=tmp;}
   

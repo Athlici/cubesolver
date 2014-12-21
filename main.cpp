@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 //t1.join();
 //t2.join();
 //t3.join();
-/*
+
 gentable(0);
 gentable(1);
 gentable(2);
@@ -53,14 +53,5 @@ for(uint8_t i=minDepth(Cube);i<10&&(!solve(Cube,i));i++)
   cout << "Searching Depth " << i+0 << "\n";
 //solve(Cube,7);
 for(uint8_t i=0;i<10;i++)cout << solution[i]+0 << ";"; cout << "\n";
-*/
 
-//for(uint8_t i=0;i<36;i++){
-//  printcube(movecube0(goal(),i));
-//  printcube(movecube(goal(),i));
-//}
-
-for(uint8_t i=0;i<36;i++)
-  if(solved(movecube(movecube0(goal(),0),i)))
-    cout << i+0 << "\n";
 }
