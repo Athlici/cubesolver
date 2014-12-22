@@ -11,6 +11,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
 			    poscenters(0,1,2,3,8,9,10,11),
 			    poscorners(0,1,2,3,4,5)};
+    cout << zeroaddr[0]+0 << ";" << zeroaddr[1]+0 << ";" << zeroaddr[2]+0 << "\n";
     table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);                        //The starting Position is set to have depth 0
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
