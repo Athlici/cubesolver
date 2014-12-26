@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 gentable(0);
 gentable(1);
 gentable(2);
-/*
+
 uint8_t n = 12;
 
 cube Cube=goal();
@@ -59,5 +59,5 @@ for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
   cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
 for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
-*/
+
 }
