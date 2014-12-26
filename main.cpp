@@ -42,8 +42,6 @@ gentable(0);
 gentable(1);
 gentable(2);
 
-
-
 uint8_t n = 12;
 
 cube Cube=goal();
