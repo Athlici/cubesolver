@@ -40,8 +40,6 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
                 for (uint8_t i=0;i<36;i++){						//PROTIP: at least 3 are actually redundant
 	          uint64_t j=poscenters(centermove[i][(adr>>56)&255],centermove[i][(adr>>48)&255],centermove[i][(adr>>40)&255],centermove[i][(adr>>32)&255],
 	    	    centermove[i][(adr>>24)&255],centermove[i][(adr>>16)&255],centermove[i][(adr>>8)&255],centermove[i][adr&255]);
-if(j>2*tablesize[k])
-  cout << mover+0 << "->" << adr+0 << "->" << j+0 << ":" << ((adr>>56)&255)+0 << ";" << ((adr>>48)&255)+0 << ";" << ((adr>>40)&255)+0 << ";" << ((adr>>32)&255)+0 << ";" << ((adr>>24)&255)+0 << ";" << ((adr>>16)&255)+0 << ";" << ((adr>>8)&255)+0 << ";" << (adr&255)+0 << " --> " << centermove[i][(adr>>56)&255]+0 << ";" << centermove[i][(adr>>48)&255]+0 << ";" << centermove[i][(adr>>40)&255]+0 << ";" << centermove[i][(adr>>32)&255]+0 << ";" << centermove[i][(adr>>24)&255]+0 << ";" << centermove[i][(adr>>16)&255]+0 << ";" << centermove[i][(adr>>8)&255]+0 << ";" << centermove[i][adr&255]+0 << "\n";
 	          if (depth<readhalfbyte(~table[k][j/2],j%2))				//and look it up int the table + compare
 	            table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);	        //when it is smaller keep it in the next round.
 	        }
