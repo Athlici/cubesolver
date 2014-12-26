@@ -215,9 +215,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"binsert", "[", 
     RowBox[{
-     RowBox[{"a_", "/;", 
-      RowBox[{"a", "==", 
-       RowBox[{"{", "}"}]}]}], ",", "b_"}], "]"}], ":=", 
+     RowBox[{"{", "}"}], ",", "b_"}], "]"}], ":=", 
    RowBox[{"{", 
     RowBox[{"1", ",", 
      RowBox[{"{", "b", "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
@@ -329,192 +327,114 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"binsert", "[", 
+    RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+   RowBox[{"FixedPoint", "[", 
     RowBox[{
-     RowBox[{"a_", "/;", 
-      RowBox[{"a", "==", 
-       RowBox[{"{", "}"}]}]}], ",", "b_"}], "]"}], ":=", 
-   RowBox[{"{", "b", "}"}]}], ";"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Map", "[", 
+       RowBox[{"Evaluate", ",", "#", ",", "Infinity"}], "]"}], "&"}], ",", 
+     RowBox[{"binsert", "[", 
+      RowBox[{"a", ",", "b", ",", 
+       RowBox[{"{", "}"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"binsert", "[", 
-    RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "b_", ",", "s_", ",", "e_"}], "]"}], ":=", 
+   RowBox[{"Join", "[", 
+    RowBox[{"s", ",", 
+     RowBox[{"{", "b", "}"}], ",", "e"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"binsert", "[", 
+    RowBox[{"a_", ",", "b_", ",", "s_", ",", "e_"}], "]"}], ":=", 
    RowBox[{
-    RowBox[{"Function", "[", 
-     RowBox[{"x", ",", 
-      RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
        RowBox[{
+        RowBox[{"a", "[", 
+         RowBox[{"[", "#", "]"}], "]"}], "<", "b"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"binsert", "[", 
         RowBox[{
-         RowBox[{"a", "[", 
-          RowBox[{"[", "x", "]"}], "]"}], "<", "b"}], ",", 
-        "\[IndentingNewLine]", 
+         RowBox[{"Drop", "[", 
+          RowBox[{"a", ",", "#"}], "]"}], ",", "b", ",", 
+         RowBox[{"Join", "[", 
+          RowBox[{"s", ",", 
+           RowBox[{"Take", "[", 
+            RowBox[{"a", ",", "#"}], "]"}]}], "]"}], ",", "e"}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"binsert", "[", 
         RowBox[{
-         RowBox[{
-          RowBox[{
-           RowBox[{"Hold", "[", "Join", "]"}], "[", 
-           RowBox[{
-            RowBox[{"Take", "[", 
-             RowBox[{"a", ",", "x"}], "]"}], ",", "#"}], "]"}], "&"}], "@", 
-         RowBox[{"binsert", "[", 
+         RowBox[{"Take", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{"#", "-", "1"}]}], "]"}], ",", "b", ",", "s", ",", 
+         RowBox[{"Join", "[", 
           RowBox[{
            RowBox[{"Drop", "[", 
-            RowBox[{"a", ",", "x"}], "]"}], ",", "b"}], "]"}]}], ",", 
-        "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{
-          RowBox[{
-           RowBox[{"Hold", "[", "Join", "]"}], "[", 
-           RowBox[{"#", ",", 
-            RowBox[{"Drop", "[", 
-             RowBox[{"a", ",", 
-              RowBox[{"x", "-", "1"}]}], "]"}]}], "]"}], "&"}], "@", 
-         RowBox[{"binsert", "[", 
-          RowBox[{
-           RowBox[{"Take", "[", 
             RowBox[{"a", ",", 
-             RowBox[{"x", "-", "1"}]}], "]"}], ",", "b"}], "]"}]}]}], "]"}]}],
-      "]"}], "@", "\[IndentingNewLine]", 
+             RowBox[{"#", "-", "1"}]}], "]"}], ",", "e"}], "]"}]}], "]"}]}], 
+      "]"}], "&"}], "@", "\[IndentingNewLine]", 
     RowBox[{"Quotient", "[", 
      RowBox[{
       RowBox[{
        RowBox[{"Length", "[", "a", "]"}], "+", "1"}], ",", "2"}], "]"}]}]}], 
   ";"}]}], "Input"],
 
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"binsert", "[", 
+Cell[BoxData[{
+ RowBox[{
   RowBox[{
-   RowBox[{"{", 
-    RowBox[{"a", ",", "b"}], "}"}], ",", "c"}], "]"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{"If", "[", 
+   RowBox[{"torep", "[", 
+    RowBox[{"{", "x_", "}"}], "]"}], ":=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"torep", "[", "a_", "]"}], ":=", 
   RowBox[{
-   RowBox[{"a", "<", "c"}], ",", 
    RowBox[{
-    RowBox[{"(", 
+    RowBox[{"Join", "[", 
      RowBox[{
-      RowBox[{
-       RowBox[{"Hold", "[", "Join", "]"}], "[", 
-       RowBox[{
-        RowBox[{"Take", "[", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{"a", ",", "b"}], "}"}], ",", "1"}], "]"}], ",", "#1"}], 
-       "]"}], "&"}], ")"}], "[", 
-    RowBox[{"binsert", "[", 
-     RowBox[{
-      RowBox[{"Drop", "[", 
-       RowBox[{
-        RowBox[{"{", 
-         RowBox[{"a", ",", "b"}], "}"}], ",", "1"}], "]"}], ",", "c"}], "]"}],
-     "]"}], ",", 
-   RowBox[{
-    RowBox[{"(", 
-     RowBox[{
-      RowBox[{
-       RowBox[{"Hold", "[", "Join", "]"}], "[", 
-       RowBox[{"#1", ",", 
-        RowBox[{"Drop", "[", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{"a", ",", "b"}], "}"}], ",", 
-          RowBox[{"1", "-", "1"}]}], "]"}]}], "]"}], "&"}], ")"}], "[", 
-    RowBox[{"binsert", "[", 
-     RowBox[{
-      RowBox[{"Take", "[", 
-       RowBox[{
-        RowBox[{"{", 
-         RowBox[{"a", ",", "b"}], "}"}], ",", 
-        RowBox[{"1", "-", "1"}]}], "]"}], ",", "c"}], "]"}], "]"}]}], 
-  "]"}]], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
+      RowBox[{"torep", "[", 
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{"a", ",", "#"}], "]"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"#", "-=", 
+        RowBox[{"LengthWhile", "[", 
+         RowBox[{"a", ",", 
+          RowBox[{"Function", "[", 
+           RowBox[{"x", ",", 
+            RowBox[{"x", "=!=", "#"}]}], "]"}]}], "]"}]}], "}"}]}], "]"}], 
+    "&"}], "@", 
+   RowBox[{"Last", "@", 
+    RowBox[{"Sort", "[", "a", "]"}]}]}]}]}], "Input"],
 
 Cell[BoxData[
  RowBox[{"Map", "[", 
   RowBox[{"Evaluate", ",", 
-   RowBox[{"ReleaseHold", "@", 
-    RowBox[{"FixedPoint", "[", 
+   RowBox[{
+    RowBox[{"Fold", "[", 
      RowBox[{
       RowBox[{
        RowBox[{"Map", "[", 
-        RowBox[{"Evaluate", ",", "#", ",", "Infinity"}], "]"}], "&"}], ",", 
-      RowBox[{"binsert", "[", 
-       RowBox[{
-        RowBox[{"{", 
-         RowBox[{"a", ",", "b"}], "}"}], ",", "c"}], "]"}]}], "]"}]}], ",", 
-   "Infinity"}], "]"}]], "Input"],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Join", "::", "heads"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Heads \[NoBreak]\\!\\(List\\)\[NoBreak] and \
-\[NoBreak]\\!\\(If\\)\[NoBreak] at positions \[NoBreak]\\!\\(1\\)\[NoBreak] \
-and \[NoBreak]\\!\\(2\\)\[NoBreak] are expected to be the same. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/heads\\\", \
-ButtonNote -> \\\"Join::heads\\\"]\\)\"\>"}]], "Message", "MSG"],
-
-Cell[BoxData[
- RowBox[{"If", "[", 
-  RowBox[{
-   RowBox[{"a", "<", "c"}], ",", 
-   RowBox[{"Join", "[", 
-    RowBox[{
-     RowBox[{"{", "a", "}"}], ",", 
-     RowBox[{"If", "[", 
-      RowBox[{
-       RowBox[{"b", "<", "c"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"b", ",", "c"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"c", ",", "b"}], "}"}]}], "]"}]}], "]"}], ",", 
-   RowBox[{"{", 
-    RowBox[{"c", ",", "a", ",", "b"}], "}"}]}], "]"}]], "Output"]
-}, Open  ]],
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{
-   RowBox[{"bar", "[", 
-    RowBox[{"_", ",", 
-     RowBox[{"b_", "/;", 
-      RowBox[{"b", "\[Equal]", 
-       RowBox[{"{", "}"}]}]}]}], "]"}], ":=", 
-   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"bar", "[", 
-    RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"b", "[", 
-          RowBox[{"[", "1", "]"}], "]"}], ",", "#"}], "}"}], ",", 
-       RowBox[{"bar", "[", 
-        RowBox[{"#2", ",", 
-         RowBox[{"Rest", "[", "b", "]"}]}], "]"}]}], "}"}], "&"}], "@@", 
-    "\[IndentingNewLine]", 
-    RowBox[{"Map", "[", 
-     RowBox[{"Evaluate", ",", 
-      RowBox[{"ReleaseHold", "@", 
-       RowBox[{"FixedPoint", "[", 
-        RowBox[{
-         RowBox[{
-          RowBox[{"Map", "[", 
-           RowBox[{"Evaluate", ",", "#", ",", "Infinity"}], "]"}], "&"}], ",", 
-         RowBox[{"binsert", "[", 
-          RowBox[{"a", ",", 
-           RowBox[{"b", "[", 
-            RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], "]"}]}], ",", 
-      "Infinity"}], "]"}]}]}], ";"}]}], "Input"]
+        RowBox[{"Evaluate", ",", 
+         RowBox[{"#", "/.", 
+          RowBox[{"x_", ":>", 
+           RowBox[{
+            RowBox[{"binsert", "[", 
+             RowBox[{"x", ",", "#2"}], "]"}], "/;", 
+            RowBox[{"ListQ", "[", "x", "]"}]}]}]}], ",", "Infinity"}], "]"}], 
+       "&"}], ",", 
+      RowBox[{"{", "a", "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "c", ",", "d", ",", "e", ",", "f"}], "}"}]}], "]"}], 
+    "/.", 
+    RowBox[{"x_", "\[RuleDelayed]", 
+     RowBox[{
+      RowBox[{"torep", "[", "x", "]"}], "/;", 
+      RowBox[{"ListQ", "[", "x", "]"}]}]}]}], ",", "Infinity"}], 
+  "]"}]], "Input"]
 },
 WindowSize->{2560, 1513},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
