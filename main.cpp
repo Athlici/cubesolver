@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <thread>
+#include <future>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
@@ -20,6 +21,7 @@ const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
 const uint8_t  elemsize [3] = {7,8,8};
 const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,5,4,8,9,10,11}};
+const uint8_t  corecount    = 4;
 
 uint8_t solution[10];
 
@@ -45,8 +47,11 @@ gentable(2);
 uint8_t n = 15;
 
 cube Cube=goal();
-uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
-for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
+Cube.corner[4]=5;
+Cube.corner[5]=4;
+
+//uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
+//for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 
 cout << minDepth(Cube)+0 << "\n";
