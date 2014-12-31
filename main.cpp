@@ -23,7 +23,7 @@ const uint8_t  elemsize [3] = {7,8,8};
 const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,5,4,8,9,10,11}};
 const uint8_t  corecount    = 4;
 
-uint8_t solution[10];
+uint8_t solution[36][20];
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
@@ -33,9 +33,9 @@ uint8_t solution[10];
 
 int main(int argc, char** argv) {
 
-//thread t1(gentable[0]);					//parallel creation and loading of the tables
-//thread t2(gentable[1]);
-//thread t3(gentable[2]); 
+//thread t1(gentable,0);					//parallel creation and loading of the tables
+//thread t2(gentable,1);
+//thread t3(gentable,2); 
 //t1.join();
 //t2.join();
 //t3.join();
@@ -56,9 +56,8 @@ Cube.corner[5]=4;
 
 cout << minDepth(Cube)+0 << "\n";
 
-for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
+for(uint8_t i=minDepth(Cube);i<=n&&(!solvepar(Cube,i));i++)
   cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
-for(uint8_t i=0;i<10;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
 }

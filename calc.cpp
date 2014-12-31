@@ -412,8 +412,8 @@ uint8_t minDepth(cube Cube){
   uint8_t max=0;
   for(uint8_t i=0;i<7;i++){
     uint8_t tmp=readhalfbyte(~table[(i+2)/3][address[i]/2],address[i]%2);
-    if(max<tmp) max=tmp;}
-  
+    if(max<tmp) max=tmp;
+  }
   return max;
 }
 
