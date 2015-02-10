@@ -202,148 +202,18 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
   if (e>g)swap(e,g);
   if (f>h)swap(f,h);
   if (f>g)swap(f,g);
-  
-if(d<h){ 						//decrease some values of the secondary positions, if these are already taken
-  if(d<g){
-    if(d<f){
-      if(d<e){e-=4;} else {
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-      }
-      f-=4;} else {
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} f-=1;} 
-        }
-      }
-    }
-    g-=4;} else {
-    if(c<g){
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-      }
-      g-=3;} else {
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-        g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-    }
-  }
-  h-=4;} else {
-  if(c<h){
-    if(c<g){
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-      }
-      g-=3;} else {
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-        g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-    }
-    h-=3;} else {
-    if(b<h){
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-      h-=2;} else {
-      if(a<h){
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      h-=1;} 
-    }
-  }
-}
 
-//  h-=g+1;d-=c+1;g-=f+1;c-=b+1;f-=e+1;b-=a+1;
-//  return (b*(28120380+b*(19380*b-1279080)-116280*c)+a*(220205250+b*(58140*b-2558160)+a*((436050-4845*a)*a+58140*b-14704575)-116280*c)+
-//   (2500020-58140*c)*c+116280*d+f*(3884+f*(4*f-216)-24*g)+e*(25234+f*(12*f-432)+e*((74-e)*e+12*f-2051)-24*g)+(420-12*g)*g+24*h)/24;
-  return (a*(192084870+a*(-13425495+(416670-4845*a)*a))+b*(28120380+b*(-1279080+19380*b))+(2616300-58140*c)*c+
-   116280*d+e*(21350+e*(-1835+(70-e)*e))+f*(3884+f*(-216+4*f))+(444-12*g)*g+24*h-32214144)/24;
+  if (i>j)swap(i,j);
+  if (k>l)swap(k,l);
+  if (i>k)swap(i,k);
+  if (j>l)swap(j,l);
+  if (j>k)swap(j,k);
+
+
+
+  return (a*(349594463400+a*((758339400-8817900*a)*a-24434400900))+b*(51179091600+b*(35271600*b-2327925600))+(4761666000-105814800*c)*c+211629600*d+e*(38857000+e*((127400-1820*e)*e-3339700))
+    +f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
+
 }
 
 uint64_t adrcenters(uint64_t x){
