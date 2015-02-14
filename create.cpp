@@ -18,8 +18,9 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
           case 1:
             adr=adrcenters(mover);
             for (uint8_t i=0;i<36;i++){						//PROTIP: at least 3 are actually redundant
-    	  uint64_t j=poscenters(centermove[i][(adr>>56)&255],centermove[i][(adr>>48)&255],centermove[i][(adr>>40)&255],centermove[i][(adr>>32)&255],
-    	    centermove[i][(adr>>24)&255],centermove[i][(adr>>16)&255],centermove[i][(adr>>8)&255],centermove[i][adr&255]);
+    	  uint64_t j=poscenters(centermove[i][(adr>>55)&31],centermove[i][(adr>>50)&31],centermove[i][(adr>>45)&31],centermove[i][(adr>>40)&31],
+	    centermove[i][(adr>>35)&31],centermove[i][(adr>>30)&31],centermove[i][(adr>>25)&31],centermove[i][(adr>>20)&31],
+    	    centermove[i][(adr>>15)&31],centermove[i][(adr>>10)&31],centermove[i][(adr>>5)&31],centermove[i][adr&31]);
     	  if (depth<readhalfbyte(~table[k][j/2],j%2))				//and look it up int the table + compare
     	    table[k][j/2]=~sethalfbyte(~table[k][j/2],depth,j%2);		//when it is smaller keep it in the next round.
     	}
@@ -50,7 +51,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     fclose(file);
   }else{
     uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
-			    poscenters(0,1,2,3,8,9,10,11),
+			    poscenters(0,1,2,3,4,5,6,7,8,9,10,11),
 			    poscorners(0,1,5,4,8,9,10,11)};
     table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);                        //The starting Position is set to have depth 0
 

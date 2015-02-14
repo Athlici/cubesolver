@@ -16,17 +16,18 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const uint64_t tablesize[3] = {44089920,25741485,14827095360};
+const uint64_t tablesize[3] = {44089920,46849502700,14827095360};
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
-const uint8_t  elemsize [3] = {7,8,8};
-const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,5,4,8,9,10,11}};
+const uint8_t  elemsize [3] = {7,12,8};
+const uint8_t  elemsol[3][12]= {{0,3,6,9,12,15,18,0,0,0,0,0},{0,1,2,3,4,5,6,7,8,9,10,11},{0,1,5,4,8,9,10,11,0,0,0,0}};
 const uint8_t  corecount    = 4;
 
 uint8_t solution[36][20];
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
+#include "ifshit.cpp"                                   //long nested ifs for centerpos
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
 #include "solve.cpp"					//solves a given cube position optimal
@@ -40,24 +41,24 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-gentable(0);
+//gentable(0);
 gentable(1);
-gentable(2);
+//gentable(2);
 
-uint8_t n = 15;
+//uint8_t n = 15;
 
-cube Cube=goal();
-Cube.corner[4]=5;
-Cube.corner[5]=4;
+//cube Cube=goal();
+//Cube.corner[4]=5;
+//Cube.corner[5]=4;
 
 //uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
 //for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 
-cout << minDepth(Cube)+0 << "\n";
+//cout << minDepth(Cube)+0 << "\n";
 
-for(uint8_t i=minDepth(Cube);i<=n&&(!solvepar(Cube,i));i++)
-  cout << "finished depth " << i+0 << "\n";
+//for(uint8_t i=minDepth(Cube);i<=n&&(!solvepar(Cube,i));i++)
+//  cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
 
 }

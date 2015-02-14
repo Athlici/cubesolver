@@ -187,12 +187,12 @@ uint64_t adrcorners(uint64_t x){
 
 }
 
-uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
+uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g,uint8_t h,uint8_t i,uint8_t j,uint8_t k,uint8_t l){
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
-//but therefore the memory usage is also reduced by a factor of 24^2.
+//but therefore the memory usage is also reduced by a factor of 24^3
 
   if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
-  if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
+  if (c>d)swap(c,d);              			//with increasing size from a-d;e-h;i-l
   if (a>c)swap(a,c);
   if (b>d)swap(b,d);
   if (b>c)swap(b,c);
@@ -209,7 +209,7 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
   if (j>l)swap(j,l);
   if (j>k)swap(j,k);
 
-
+  decdependently(a,b,c,d,e,f,g,h,i,j,k,l);		//do all the combinatorical magic in an ugly function.
 
   return (a*(349594463400+a*((758339400-8817900*a)*a-24434400900))+b*(51179091600+b*(35271600*b-2327925600))+(4761666000-105814800*c)*c+211629600*d+e*(38857000+e*((127400-1820*e)*e-3339700))
     +f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
@@ -217,32 +217,35 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
 }
 
 uint64_t adrcenters(uint64_t x){
+  uint64_t z = x % 1820; x /= 1820;
   uint64_t y = x % 4845; x /= 4845;
-  uint64_t a = (45-sqrt(5+4*sqrt(255025-24*x)))/2;
-  float bar = cbrtf(1147608+a*(1070442+a*(-74817+(2322-27*a)*a))-648*x+sqrt(1317004119936+x*(-1487299968+419904*x)+a*(2456895605472-1387292832*x
-    +a*(974124899892+96962832*x+a*(-154845026676-3009312*x+a*(10506745305+a*(-405254016+a*(9431802+a*(-125388+729*a)))+34992*x))))));
-  float btmp = (22-a-2/bar-bar/6);
-  uint64_t b = btmp;
-  if(b+1-btmp<0.00001)
-    if(5544+b*(5288+b*(-252+4*b))+a*(44934+b*(-504+12*b)+a*(-3023+(90-a)*a+12*b))<=24*x)b++;
-  uint64_t c = (129-6*a-6*b-sqrt(16641+b*(15864+b*(-756+12*b))+a*(134802+b*(-1512+36*b)+a*(-9069+(270-3*a)*a+36*b))-72*x))/6;
-  uint64_t d = (c*(-516+12*c)+a*(-45450+a*(3035+(-90+a)*a-12*b)+(528-12*b)*b+24*c)+b*(-5804+(264-4*b)*b+24*c)+24*x)/24;
-  uint64_t e = (37-sqrt(5+4*sqrt(116281-24*y)))/2;
-  float foo = cbrtf(627912+e*(576450+e*(-49545+(1890-27*e)*e))-648*y+sqrt(394273478016+y*(-813773952+419904*y)+e*(723919744800-747079200*y
-    +e*(270074802420+64210320*y+e*(-54746923140-2449440*y+e*(4599780777+e*(-218408400+e*(6247530+e*(-102060+729*e)))+34992*y))))));
-  float ftmp = (18-2/foo-foo/6-e);
-  uint64_t f = ftmp; 
-  if(f+1-ftmp<0.00001)
-    if(3672+f*(3464+f*(-204+4*f))+e*(24814+f*(-408+12*f)+e*(-2039+(74-e)*e+12*f))<=24*y)f++;
-  uint64_t g = (105-6*e-6*f-sqrt(11025+f*(10392+f*(-612+12*f))+e*(74442+f*(-1224+36*f)+e*(-6117+(222-3*e)*e+36*f))-72*y))/6;
-  uint64_t h = (g*(-420+12*g)+e*(-25234+e*(2051+(e-74)*e-12*f)+(432-12*f)*f+24*g)+f*(-3884+(216-4*f)*f+24*g)+24*y)/24;
 
-  b+=a+1;
-  f+=e+1;
-  c+=b+1;
-  g+=f+1;
-  d+=c+1;
-  h+=g+1;
+  uint64_t a = (45-sqrt(5+4*sqrt(255025-24*x)))/2;
+  double bar = cbrtf(1147608+a*(1070442+a*(-74817+(2322-27*a)*a))-648*x+sqrt(1317004119936+x*(-1487299968+419904*x)+a*(2456895605472-1387292832*x
+    +a*(974124899892+96962832*x+a*(-154845026676-3009312*x+a*(10506745305+a*(-405254016+a*(9431802+a*(-125388+729*a)))+34992*x))))));
+  double btmp = 23-2/bar-bar/6;
+  uint64_t b = btmp;
+  if(b+1-btmp<0.00001 && (a*(39646+a*((86-a)*a-2771))+b*(5804+b*(4*b-264))<=24*x))b++;
+  uint64_t c = (141-sqrt(9+a*(118938+a*((258-3*a)*a-8313))+b*(17412+b*(12*b-792))-72*x))/6;
+  uint64_t d = (6648+a*(a*(2771+(a-86)*a)-39646)+b*((264-4*b)*b-5804)+c*(12*c-540)+24*x)/24;
+
+  uint64_t e = (37-sqrt(5+4*sqrt(116281-24*y)))/2;
+  double foo = cbrtf(627912+e*(576450+e*(-49545+(1890-27*e)*e))-648*y+sqrt(394273478016+y*(-813773952+419904*y)+e*(723919744800-747079200*y
+    +e*(270074802420+64210320*y+e*(-54746923140-2449440*y+e*(4599780777+e*(-218408400+e*(6247530+e*(-102060+729*e)))+34992*y))))));
+  double ftmp = 19-2/foo-foo/6;
+  uint64_t f = ftmp; 
+  if(f+1-ftmp<0.00001 && (e*(21350+e*((70-e)*e-1835))+f*(3884+f*(4*f-216))<=24*y))f++;
+  uint64_t g = (117-sqrt(9+e*(64050+e*((210-3*e)*e-5505))+f*(11652+f*(12*f-648))-72*y))/6;
+  uint64_t h = (4584+e*(e*(1835+(e-70)*e)-21350)+f*((216-4*f)*f-3884)+g*(12*g-444)+24*y)/24;
+
+  uint64_t i = (29-sqrt(5+4*sqrt(43681-24*z)))/2;
+  double jee  = cbrtf(294840+i*(263898+i*((1458-27*i)*i-29457))-648*z+sqrt(86930623872+z*(419904*z-382112640)+i*(155615372640-342011808*z+
+    i*(52271950644+38176272*z+i*(i*(1621320057+i*(i*(3716442+i*(729*i-78732))-100147104)+34992*z)-14687533332-1889568*z)))));
+  double jtmp = 15-2/jee-jee/6;
+  uint64_t j = jtmp;
+  if(j+1-jtmp<0.00001 && (i*(14470+i*((86-i)*i-48*j-1763)+j*(672+24*j))-j*(2348+(168+4*j)*j)<=24*z))j++;
+  uint64_t k = (93-sqrt(9+i*(29322+i*((162-3*i)*i-3273))+j*(7044+j*(12*j-504))-72*z))/6;
+  uint64_t l = (2904+i*(i*(1091+(i-54)*i)-9774)+j*((168-4*j)*j-2348)+k*(12*k-348)+24*z)/24;
 
   if (e>=a) e++;
   if (e>=b) e++;
@@ -261,18 +264,21 @@ uint64_t adrcenters(uint64_t x){
   if (h>=c) h++;
   if (h>=d) h++;
 
-  return (h+256*(g+256*(f+256*(e+256*(d+256*(c+256*(b+256*a)))))));
+//do some more reverse magic here
+
+//ICDEPENDENTLY
+
+  return (l+32*(k+32*(j+32*(i+32*(h+32*(g+32*(f+32*(e+32*(d+32*(c+32*(b+32*a)))))))))));
 
 }
 
 uint8_t minDepth(cube Cube){
 
-  uint64_t address[7]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
-    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
-    poscenters(centerturn[3][Cube.center[4]],centerturn[3][Cube.center[5]],centerturn[3][Cube.center[6]],centerturn[3][Cube.center[7]],
-      centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]]),
-    poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
-      centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]]),
+  uint64_t address[6]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[4],Cube.center[5],Cube.center[6],Cube.center[7],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
+    poscenters(centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]],
+      centerturn[3][Cube.center[16]],centerturn[3][Cube.center[17]],centerturn[3][Cube.center[18]],centerturn[3][Cube.center[19]],
+      centerturn[3][Cube.center[20]],centerturn[3][Cube.center[21]],centerturn[3][Cube.center[22]],centerturn[3][Cube.center[23]]),
     poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[5],Cube.corner[4],Cube.corner[8],Cube.corner[9],Cube.corner[10],Cube.corner[11]),
     poscorners(cornerturn[15][Cube.corner[2]],cornerturn[15][Cube.corner[3]],cornerturn[15][Cube.corner[7]],cornerturn[15][Cube.corner[6]],
       cornerturn[15][Cube.corner[21]],cornerturn[15][Cube.corner[20]],cornerturn[15][Cube.corner[23]],cornerturn[15][Cube.corner[22]]),
@@ -280,8 +286,8 @@ uint8_t minDepth(cube Cube){
       cornerturn[0][Cube.corner[13]],cornerturn[0][Cube.corner[12]],cornerturn[0][Cube.corner[19]],cornerturn[0][Cube.corner[18]])};
 
   uint8_t max=0;
-  for(uint8_t i=0;i<7;i++){
-    uint8_t tmp=readhalfbyte(~table[(i+2)/3][address[i]/2],address[i]%2);
+  for(uint8_t i=0;i<6;i++){
+    uint8_t tmp=readhalfbyte(~table[(i+2)/3][address[i]/2],address[i]%2);		//TODO: FIX THE MAGIC FORMULA
     if(max<tmp) max=tmp;
   }
   return max;
