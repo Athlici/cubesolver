@@ -145,6 +145,23 @@ uint64_t poscorners(uint64_t a,uint64_t b,uint64_t c,uint64_t d,uint64_t e,uint6
 }
 
 uint64_t adrcorners(uint64_t x){
+/*
+  uint8_t elem[8];
+  for(uint8_t i=0;i<8;i++){
+    elem[i] = x % (i+17);
+    x /= i+17;
+  }
+
+  for(uint8_t i=7;i>0;i--)
+    for(int8_t j=i-1;j>=0;j--)
+      if(elem[j]<=elem[i])elem[i]++;
+
+  uint64_t result=0;
+  for(uint8_t i=0;i<8;i++)
+    result+=elem[i]<<(8*i);
+
+  return result;
+*/
   uint64_t h = x % 17; x /= 17;
   uint64_t g = x % 18; x /= 18;
   uint64_t f = x % 19; x /= 19;                         //Do a simple base conversion, could be done in a loop, but that would need an array
@@ -211,8 +228,10 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
 
   decdependently(a,b,c,d,e,f,g,h,i,j,k,l);		//do all the combinatorical magic in an ugly function.
 
-  return (a*(349594463400+a*((758339400-8817900*a)*a-24434400900))+b*(51179091600+b*(35271600*b-2327925600))+(4761666000-105814800*c)*c+211629600*d+e*(38857000+e*((127400-1820*e)*e-3339700))
-    +f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
+//  cout << a+0 << ";" << b+0 << ";" << c+0 << ";" << d+0 << ";" << e+0 << ";" << f+0 << ";" << g+0 << ";" << h+0 << ";" << i+0 << ";" << j+0 << ";" << k+0 << ";" << l+0 << "\n";
+
+  return (a*(349594463400+a*((758339400-8817900*(int64_t)a)*a-24434400900))+b*(51179091600+b*(35271600*(int64_t)b-2327925600))+(4761666000-105814800*(int64_t)c)*c+211629600*(int64_t)d+
+    e*(38857000+e*((127400-1820*e)*e-3339700))+f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
 
 }
 
@@ -247,34 +266,35 @@ uint64_t adrcenters(uint64_t x){
   uint64_t k = (93-sqrt(9+i*(29322+i*((162-3*i)*i-3273))+j*(7044+j*(12*j-504))-72*z))/6;
   uint64_t l = (2904+i*(i*(1091+(i-54)*i)-9774)+j*((168-4*j)*j-2348)+k*(12*k-348)+24*z)/24;
 
-  if (e>=a) e++;
-  if (e>=b) e++;
-  if (e>=c) e++;
-  if (e>=d) e++;
-  if (f>=a) f++;
-  if (f>=b) f++;
-  if (f>=c) f++;
-  if (f>=d) f++;
-  if (g>=a) g++;
-  if (g>=b) g++;
-  if (g>=c) g++;
-  if (g>=d) g++;
-  if (h>=a) h++;
-  if (h>=b) h++;
-  if (h>=c) h++;
-  if (h>=d) h++;
+  uint64_t first[] = {a,b,c,d};
+  uint64_t second[]= {e,f,g,h};
+  uint64_t third[] = {i,j,k,l};
 
-//do some more reverse magic here
+  for(uint8_t m=0;m<4;m++)
+    for(uint8_t n=0;n<4;n++)
+      if(first[n]<=second[m])
+        second[m]++;
 
-//ICDEPENDENTLY
+  uint8_t res[8];
+  merge(first,first+4,second,second+4,res);
 
-  return (l+32*(k+32*(j+32*(i+32*(h+32*(g+32*(f+32*(e+32*(d+32*(c+32*(b+32*a)))))))))));
+  for(uint8_t m=0;m<4;m++)
+    for(uint8_t n=0;n<8;n++)
+      if(res[n]<=third[m])
+        third[m]++;
+/*
+  for(uint8_t m=0;m<4;m++)cout << first[m]+0 << ";";
+  for(uint8_t m=0;m<4;m++)cout << second[m]+0 << ";";
+  for(uint8_t m=0;m<4;m++)cout << third[m]+0 << ";";
+  cout << "\n";
+*/
+  return (third[3]+32*(third[2]+32*(third[1]+32*(third[0]+32*(second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0])))))))))));
 
 }
 
-uint8_t minDepth(cube Cube){
+uint8_t minDepth(cube &Cube){
 
-  uint64_t address[6]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+  uint64_t address[6]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),  //TODO:adjust the covering
     poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[4],Cube.center[5],Cube.center[6],Cube.center[7],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
     poscenters(centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]],
       centerturn[3][Cube.center[16]],centerturn[3][Cube.center[17]],centerturn[3][Cube.center[18]],centerturn[3][Cube.center[19]],

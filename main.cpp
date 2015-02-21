@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <thread>
 #include <future>
+#include <algorithm>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>

@@ -1,4 +1,4 @@
-void v(uint8_t &a,uint8_t &b,uint8_t &c,uint8_t &d,uint8_t &e,uint8_t &f,uint8_t &g,uint8_t &h,uint8_t &i,uint8_t &j,uint8_t &k,uint8_t &l){
+void v(const uint8_t &a,const uint8_t &b,const uint8_t &c,const uint8_t &d,const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h,uint8_t &i,uint8_t &j,uint8_t &k,uint8_t &l){
 
 if(h<l){if(h<k){if(h<j){if(h<i){i-=8;} else {
 if(g<i){i-=7;} else {
@@ -333,7 +333,7 @@ if(a<l){if(a<k){if(a<j){if(a<i){i-=1;};j-=1;};k-=1;};l-=1;}}}}}}}}
 
 }
 
-void decdependently(uint8_t &a,uint8_t &b,uint8_t &c,uint8_t &d,uint8_t &e,uint8_t &f,uint8_t &g,uint8_t &h,uint8_t &i,uint8_t &j,uint8_t &k,uint8_t &l){
+void decdependently(const uint8_t &a,const uint8_t &b,const uint8_t &c,const uint8_t &d,uint8_t &e,uint8_t &f,uint8_t &g,uint8_t &h,uint8_t &i,uint8_t &j,uint8_t &k,uint8_t &l){
 
 if(d<h){if(d<g){if(d<f){if(d<e){v(a,b,c,d,e,f,g,h,i,j,k,l);e-=4;} else {
 if(c<e){v(a,b,c,e,d,f,g,h,i,j,k,l);e-=3;} else {
