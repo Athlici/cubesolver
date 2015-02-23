@@ -17,7 +17,7 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const uint64_t tablesize[3] = {44089920,46849502700,14827095360};
+const uint64_t tablesize[3] = {44089920,23424751350,/*14827095360*/7413547680};
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
 const uint8_t  elemsize [3] = {7,12,8};
