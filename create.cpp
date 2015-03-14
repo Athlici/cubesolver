@@ -21,6 +21,8 @@ uint64_t genpar(uint8_t k,uint8_t l){
             uint64_t j=poscenters(centermove[i][(adr>>55)&31],centermove[i][(adr>>50)&31],centermove[i][(adr>>45)&31],centermove[i][(adr>>40)&31],
               centermove[i][(adr>>35)&31],centermove[i][(adr>>30)&31],centermove[i][(adr>>25)&31],centermove[i][(adr>>20)&31],
               centermove[i][(adr>>15)&31],centermove[i][(adr>>10)&31],centermove[i][(adr>>5)&31],centermove[i][adr&31]);
+//  if(j>=4*tablesize[k])
+//    cout << adr+0 << ";" << i+0 << ";" << j+0 << "\n";
             if (read2bit(table[k][j/4],j%4)==0)				//and look it up int the table + compare
               table[k][j/4]=set2bit(table[k][j/4],3,j%4);		//when it is smaller keep it in the next round.
           }
