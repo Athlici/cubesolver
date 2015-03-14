@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include <math.h>
 
+#define centercount 8
+#define cornercount 6
+
 using namespace std;
 
 typedef struct {
@@ -15,6 +18,7 @@ uint8_t *table[3];
 
 #include "../arrays.cpp"
 #include "../helpers.cpp"
+#include "../ifshit.cpp"
 #include "../calc.cpp"
 
 uint8_t taken[20]={4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};		//if I would only know how to pass arrays.
@@ -51,10 +55,10 @@ int count=0;
 do{
   uint64_t pos = poscenters(A,B,C,D,E,F,G,H);
   uint64_t adr = adrcenters(pos);
-  if(count!=pos||(H+256*(G+256*(F+256*(E+256*(D+256*(C+256*(B+256*(uint64_t)A)))))))!=adr)
+  if(count!=pos||(H+32*(G+32*(F+32*(E+32*(D+32*(C+32*(B+32*(uint64_t)A)))))))!=adr)
     cout << A+0 << ";" << B+0 << ";" << C+0 << ";" << D+0 << ";" << E+0 << ";" << F+0 << ";" << G+0 << ";" << H+0 
-         << " -> " << ((adr>>56)&255)+0 << ";" << ((adr>>48)&255)+0 << ";" << ((adr>>40)&255)+0 << ";" << ((adr>>32)&255)+0 << ";" 
-         << ((adr>>24)&255)+0 << ";" << ((adr>>16)&255)+0 << ";" << ((adr>>8)&255)+0 << ";" << (adr&255)+0 << ";" << count+0 << ";" << pos+0 << "\n";
+         << " -> " << ((adr>>35)&31)+0 << ";" << ((adr>>30)&31)+0 << ";" << ((adr>>25)&31)+0 << ";" << ((adr>>20)&31)+0 << ";" 
+         << ((adr>>15)&31)+0 << ";" << ((adr>>10)&31)+0 << ";" << ((adr>>5)&31)+0 << ";" << (adr&31)+0 << ";" << count+0 << ";" << pos+0 << "\n";
   count++;
   if(h!=16){h++;H=taken[h+3];}									//take the next free number
   else{

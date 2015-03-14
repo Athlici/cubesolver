@@ -6,6 +6,9 @@
 #include <string.h>
 #include <math.h>
 
+#define cornercount 6
+#define centercount 8
+
 using namespace std;
 
 typedef struct {
@@ -18,13 +21,14 @@ uint8_t *table[3];
 const uint64_t tablesize[3] = {44089920,25741485,48454560};
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
-const uint8_t  elemsize [3] = {7,8,6};
+//const uint8_t  elemsize [3] = {7,8,6};
 const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
 uint8_t solution[20];
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
+#include "ifshit.cpp"
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
 #include "solve.cpp"					//solves a given cube position optimal

@@ -6,6 +6,16 @@ inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or up
   return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
+#if disktablegen==true
+inline uint8_t set2bit(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*which 2bit*/){
+	  return (b<<2*c)|(a&(255-(3<<2*c)));
+}
+
+inline uint8_t read2bit(uint8_t a/*Eingangsbyte*/, uint8_t c/*which 2bit*/){
+	  return (a>>2*c)&3;
+}
+#endif
+
 //inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
 ////  if(c)return (b<<4)|(a&15); else return b|(a&240);
 //  return c ? (b<<4)|(a&15) : b|(a&240);
@@ -45,121 +55,136 @@ uint8_t (*touint8(uint64_t val))[8]{}
 //The amount of comparisons can be reduced from n^2 to n*log(n) by using binary trees:
 //inserting the nth value und subtracting from it the amount of nodes on the left
 //of the element delivers the result.
-//Rewriting the routines in assembler to only use registers could furthermore improve speed.
 
-uint64_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
+uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
+		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
-  if (a<B) b-=3;
-  if (a<C) c-=3;
-  if (B<C) c-=3;
-  if (a<D) d-=3;
-  if (B<D) d-=3; 
-  if (C<D) d-=3;
-  if (a<E) e-=3;
-  if (B<E) e-=3;
-  if (C<E) e-=3;
-  if (D<E) e-=3;
-  if (a<F) f-=3;
-  if (B<F) f-=3;
-  if (C<F) f-=3;
-  if (D<F) f-=3;
-  if (E<F) f-=3;
-  if (a<G) g-=3;
-  if (B<G) g-=3;
-  if (C<G) g-=3;
-  if (D<G) g-=3;
-  if (E<G) g-=3;
-  if (F<G) g-=3;
+  if (A<b) B-=3;
+  if (A<c) C-=3;
+  if (b<c) C-=3;
+  if (A<d) D-=3;
+  if (b<d) D-=3; 
+  if (c<d) D-=3;
+  if (A<e) E-=3;
+  if (b<e) E-=3;
+  if (c<e) E-=3;
+  if (d<e) E-=3;
+  if (A<f) F-=3;
+  if (b<f) F-=3;
+  if (c<f) F-=3;
+  if (d<f) F-=3;
+  if (e<f) F-=3;
+  if (A<g) G-=3;
+  if (b<g) G-=3;
+  if (c<g) G-=3;
+  if (d<g) G-=3;
+  if (e<g) G-=3;
+  if (f<g) G-=3;
 
-  return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
+  return (G+6*(F+9*(E+12*(D+15*(C+18*(B+21*A))))));
 }
 
 uint64_t adredges(uint64_t x){
-  uint64_t g = x % 6; x /= 6;
-  uint64_t f = x % 9; x /= 9;
-  uint64_t e = x % 12; x /= 12;
-  uint64_t d = x % 15; x /= 15;
-  uint64_t c = x % 18; x /= 18;
-  uint64_t b = x % 21; x /= 21;
-  uint64_t a = x;
-
-  if(f/3<=g/3) g+=3;
-  if(e/3<=g/3) g+=3;
-  if(d/3<=g/3) g+=3;
-  if(c/3<=g/3) g+=3;
-  if(b/3<=g/3) g+=3;
-  if(a/3<=g/3) g+=3;
-  if(e/3<=f/3) f+=3;
-  if(d/3<=f/3) f+=3;
-  if(c/3<=f/3) f+=3;
-  if(b/3<=f/3) f+=3;
-  if(a/3<=f/3) f+=3;
-  if(d/3<=e/3) e+=3;
-  if(c/3<=e/3) e+=3;
-  if(b/3<=e/3) e+=3;
-  if(a/3<=e/3) e+=3;
-  if(c/3<=d/3) d+=3;
-  if(b/3<=d/3) d+=3;
-  if(a/3<=d/3) d+=3;
-  if(b/3<=c/3) c+=3;
-  if(a/3<=c/3) c+=3;
-  if(a/3<=b/3) b+=3;
-
-  return (g+256*(f+256*(e+256*(d+256*(c+256*(b+256*a))))));
-}
-
-uint64_t poscorners(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f){
- uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
-
- if (a<B) b--;		//the order might be changed by using <= signs
- if (a<C) c--;
- if (B<C) c--;
- if (a<D) d--;
- if (B<D) d--;
- if (C<D) d--;
- if (a<E) e--;
- if (B<E) e--;
- if (C<E) e--;
- if (D<E) e--;
- if (a<F) f--;
- if (B<F) f--;
- if (C<F) f--;
- if (D<F) f--;
- if (E<F) f--;
-
-return (f+19*(e+20*(d+21*(c+22*(b+23*a)))));
-}
-
-uint64_t adrcorners(uint64_t x){
-  uint64_t f = x % 19; x /= 19;                         //Do a simple base conversion, could be done in a loop, but that would need an array
-  uint64_t e = x % 20; x /= 20;
-  uint64_t d = x % 21; x /= 21;
-  uint64_t c = x % 22; x /= 22;
-  uint64_t b = x % 23; x /= 23;
-  uint64_t a = x;
   
-  if(e<=f) f++;
-  if(d<=f) f++;
-  if(c<=f) f++;
-  if(b<=f) f++;
-  if(a<=f) f++;
-  if(d<=e) e++;
-  if(c<=e) e++;
-  if(b<=e) e++;
-  if(a<=e) e++;
-  if(c<=d) d++;
-  if(b<=d) d++;
-  if(a<=d) d++;
-  if(b<=c) c++;
-  if(a<=c) c++;
-  if(a<=b) b++;
+  uint8_t pos[7];				//Array for orriginal values
+  for(uint8_t i=6;i<=24;i+=3){			//which can be extracted from the argument
+    pos[i/3-2] = x % i;				//in reduced form
+    x /= i;
+  }
 
-  return (f+256*(e+256*(d+256*(c+256*(b+256*a)))));
+  for(uint8_t i=0;i<6;i++)			//therefore we increase them dependently
+    for(uint8_t j=i+1;j<7;j++)
+      if(pos[j]/3<=pos[i]/3) 
+	pos[i]+=3;
 
+  uint64_t result=pos[6];			//store result in uin64_t bytewise
+  for(int8_t i=5;i>=0;i--){
+    result*=256;
+    result+=pos[i];
+  }
+
+  return result;
 }
 
+#if cornercount==6
+uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,
+		    const uint8_t &d,const uint8_t &e,const uint8_t &f){
+  uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
+#else
+uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
+		    const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h){
+  uint8_t B=b,C=c,D=d,E=e,F=f,G=g,H=h;
+#endif
+
+  if (A<b) B--;
+  if (A<c) C--;
+  if (b<c) C--;
+  if (A<d) D--;
+  if (b<d) D--;
+  if (c<d) D--;
+  if (A<e) E--;
+  if (b<e) E--;
+  if (c<e) E--;
+  if (d<e) E--;
+  if (A<f) F--;
+  if (b<f) F--;
+  if (c<f) F--;
+  if (d<f) F--;
+  if (e<f) F--;
+#if cornercount==8 
+  if (A<g) G--;
+  if (b<g) G--;
+  if (c<g) G--;
+  if (d<g) G--;
+  if (e<g) G--;
+  if (f<g) G--;
+  if (A<h) H--;
+  if (b<h) H--;
+  if (c<h) H--;
+  if (d<h) H--;
+  if (e<h) H--;
+  if (f<h) H--;
+  if (g<h) H--;
+ 
+  return (H+17*(G+18*(F+19*(E+20*(D+21*(C+22*(B+23*((uint64_t)A))))))));
+#else
+  return (F+19*(E+20*(D+21*(C+22*(B+23*A)))));
+#endif
+}
+
+//adjust this to match the cornercount definition
+uint64_t adrcorners(uint64_t x){
+  uint8_t pos[cornercount];			//Array for orriginal values
+  for(uint8_t i=25-cornercount;i<=24;i++){	//which can be extracted from the argument
+    pos[i+cornercount-25] = x % i;		//in reduced form
+    x /= i;
+  }
+
+  for(uint8_t i=0;i<cornercount-1;i++)		//therefore we increase them dependently
+    for(uint8_t j=i+1;j<cornercount;j++)
+      if(pos[j]<=pos[i]) 
+	pos[i]++;
+
+  uint64_t result=pos[cornercount-1];			//store result in uin64_t bytewise
+  for(int8_t i=cornercount-2;i>=0;i--){
+    result*=256;
+    result+=pos[i];
+  }
+//watch for order,alternatively:
+//  uint64_t result=0;
+//  for(uint8_t i=0;i<8;i++)
+//    result+=elem[i]<<(8*i);
+
+  return result;
+}
+
+#if centercount==8
 uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
+#else
+uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
+		    uint8_t g,uint8_t h,uint8_t i,uint8_t j,uint8_t k,uint8_t l){
+#endif
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 
@@ -174,196 +199,85 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
   if (e>g)swap(e,g);
   if (f>h)swap(f,h);
   if (f>g)swap(f,g);
-  
-if(d<h){ 						//decrease some values of the secondary positions, if these are already taken
-  if(d<g){
-    if(d<f){
-      if(d<e){e-=4;} else {
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-      }
-      f-=4;} else {
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} f-=1;} 
-        }
-      }
-    }
-    g-=4;} else {
-    if(c<g){
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-      }
-      g-=3;} else {
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-        g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-    }
-  }
-  h-=4;} else {
-  if(c<h){
-    if(c<g){
-      if(c<f){
-        if(c<e){e-=3;} else {
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-        }
-        f-=3;} else {
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-      }
-      g-=3;} else {
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }
-        g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-    }
-    h-=3;} else {
-    if(b<h){
-      if(b<g){
-        if(b<f){
-          if(b<e){e-=2;} else {
-            if(a<e){e-=1;} 
-          }
-          f-=2;} else {
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        }g-=2;} else {
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      }
-      h-=2;} else {
-      if(a<h){
-        if(a<g){
-          if(a<f){
-            if(a<e){e-=1;} 
-          f-=1;} 
-        g-=1;} 
-      h-=1;} 
-    }
-  }
-}
+#if centercount==8
+  decdependently(a,b,c,d,e,f,g,h);  //decrease some values of the secondary positions, if these are already taken
 
   return (a*(192084870+a*(-13425495+(416670-4845*a)*a))+b*(28120380+b*(-1279080+19380*b))+(2616300-58140*c)*c+
    116280*d+e*(21350+e*(-1835+(70-e)*e))+f*(3884+f*(-216+4*f))+(444-12*g)*g+24*h-32214144)/24;
+#else
+  if (i>j)swap(i,j);
+  if (k>l)swap(k,l);
+  if (i>k)swap(i,k);
+  if (j>l)swap(j,l);
+  if (j>k)swap(j,k);
+
+  decdependently(a,b,c,d,e,f,g,h,i,j,k,l);              //do all the combinatorical magic in an ugly function.
+
+  return (a*(349594463400+a*((758339400-8817900*(int64_t)a)*a-24434400900))+b*(51179091600+b*(35271600*(int64_t)b-2327925600))+(4761666000-105814800*(int64_t)c)*c+211629600*(int64_t)d+
+    e*(38857000+e*((127400-1820*e)*e-3339700))+f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
+
+#endif
 }
 
 uint64_t adrcenters(uint64_t x){
+#if centercount==12
+  uint64_t z = x % 1820; x /= 1820;
+#endif
   uint64_t y = x % 4845; x /= 4845;
+
   uint64_t a = (45-sqrt(5+4*sqrt(255025-24*x)))/2;
-  float bar = cbrtf(1147608+a*(1070442+a*(-74817+(2322-27*a)*a))-648*x+sqrt(1317004119936+x*(-1487299968+419904*x)+a*(2456895605472-1387292832*x
+  double bar = cbrtf(1147608+a*(1070442+a*(-74817+(2322-27*a)*a))-648*x+sqrt(1317004119936+x*(-1487299968+419904*x)+a*(2456895605472-1387292832*x
     +a*(974124899892+96962832*x+a*(-154845026676-3009312*x+a*(10506745305+a*(-405254016+a*(9431802+a*(-125388+729*a)))+34992*x))))));
-  float btmp = (22-a-2/bar-bar/6);
+  double btmp = 23-2/bar-bar/6;
   uint64_t b = btmp;
-  if(b+1-btmp<0.00001)
-    if(5544+b*(5288+b*(-252+4*b))+a*(44934+b*(-504+12*b)+a*(-3023+(90-a)*a+12*b))<=24*x)b++;
-  uint64_t c = (129-6*a-6*b-sqrt(16641+b*(15864+b*(-756+12*b))+a*(134802+b*(-1512+36*b)+a*(-9069+(270-3*a)*a+36*b))-72*x))/6;
-  uint64_t d = (c*(-516+12*c)+a*(-45450+a*(3035+(-90+a)*a-12*b)+(528-12*b)*b+24*c)+b*(-5804+(264-4*b)*b+24*c)+24*x)/24;
+  if(b+1-btmp<0.00001 && (a*(39646+a*((86-a)*a-2771))+b*(5804+b*(4*b-264))<=24*x))b++;
+  uint64_t c = (141-sqrt(9+a*(118938+a*((258-3*a)*a-8313))+b*(17412+b*(12*b-792))-72*x))/6;
+  uint64_t d = (6648+a*(a*(2771+(a-86)*a)-39646)+b*((264-4*b)*b-5804)+c*(12*c-540)+24*x)/24;
+
   uint64_t e = (37-sqrt(5+4*sqrt(116281-24*y)))/2;
-  float foo = cbrtf(627912+e*(576450+e*(-49545+(1890-27*e)*e))-648*y+sqrt(394273478016+y*(-813773952+419904*y)+e*(723919744800-747079200*y
+  double foo = cbrtf(627912+e*(576450+e*(-49545+(1890-27*e)*e))-648*y+sqrt(394273478016+y*(-813773952+419904*y)+e*(723919744800-747079200*y
     +e*(270074802420+64210320*y+e*(-54746923140-2449440*y+e*(4599780777+e*(-218408400+e*(6247530+e*(-102060+729*e)))+34992*y))))));
-  float ftmp = (18-2/foo-foo/6-e);
+  double ftmp = 19-2/foo-foo/6;
   uint64_t f = ftmp; 
-  if(f+1-ftmp<0.00001)
-    if(3672+f*(3464+f*(-204+4*f))+e*(24814+f*(-408+12*f)+e*(-2039+(74-e)*e+12*f))<=24*y)f++;
-  uint64_t g = (105-6*e-6*f-sqrt(11025+f*(10392+f*(-612+12*f))+e*(74442+f*(-1224+36*f)+e*(-6117+(222-3*e)*e+36*f))-72*y))/6;
-  uint64_t h = (g*(-420+12*g)+e*(-25234+e*(2051+(e-74)*e-12*f)+(432-12*f)*f+24*g)+f*(-3884+(216-4*f)*f+24*g)+24*y)/24;
+  if(f+1-ftmp<0.00001 && (e*(21350+e*((70-e)*e-1835))+f*(3884+f*(4*f-216))<=24*y))f++;
+  uint64_t g = (117-sqrt(9+e*(64050+e*((210-3*e)*e-5505))+f*(11652+f*(12*f-648))-72*y))/6;
+  uint64_t h = (4584+e*(e*(1835+(e-70)*e)-21350)+f*((216-4*f)*f-3884)+g*(12*g-444)+24*y)/24;
 
-  b+=a+1;
-  f+=e+1;
-  c+=b+1;
-  g+=f+1;
-  d+=c+1;
-  h+=g+1;
+#if centercount==12
+  uint64_t i = (29-sqrt(5+4*sqrt(43681-24*z)))/2;
+  double jee  = cbrtf(294840+i*(263898+i*((1458-27*i)*i-29457))-648*z+sqrt(86930623872+z*(419904*z-382112640)+i*(155615372640-342011808*z+
+    i*(52271950644+38176272*z+i*(i*(1621320057+i*(i*(3716442+i*(729*i-78732))-100147104)+34992*z)-14687533332-1889568*z)))));
+  double jtmp = 15-2/jee-jee/6;
+  uint64_t j = jtmp;
+  if(j+1-jtmp<0.00001 && ((i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168)))<=24*z))j++;
+  uint64_t k = (93-sqrt(9+i*(29322+i*((162-3*i)*i-3273))+j*(7044+j*(12*j-504))-72*z))/6;
+  uint64_t l = (2904+i*(i*(1091+(i-54)*i)-9774)+j*((168-4*j)*j-2348)+k*(12*k-348)+24*z)/24;
+#endif
+  uint64_t first[] = {a,b,c,d};
+  uint64_t second[]= {e,f,g,h};
 
-  if (e>=a) e++;
-  if (e>=b) e++;
-  if (e>=c) e++;
-  if (e>=d) e++;
-  if (f>=a) f++;
-  if (f>=b) f++;
-  if (f>=c) f++;
-  if (f>=d) f++;
-  if (g>=a) g++;
-  if (g>=b) g++;
-  if (g>=c) g++;
-  if (g>=d) g++;
-  if (h>=a) h++;
-  if (h>=b) h++;
-  if (h>=c) h++;
-  if (h>=d) h++;
+  for(uint8_t m=0;m<4;m++)
+    for(uint8_t n=0;n<4;n++)
+      if(first[n]<=second[m])
+        second[m]++;
+#if centercount==12
+  uint64_t third[] = {i,j,k,l};
+  uint8_t res[8];
+  merge(first,first+4,second,second+4,res);
 
-  return (h+256*(g+256*(f+256*(e+256*(d+256*(c+256*(b+256*a)))))));
-
+  for(uint8_t m=0;m<4;m++)
+    for(uint8_t n=0;n<8;n++)
+      if(res[n]<=third[m])
+        third[m]++;
+//do return in a loop, adjust the offset in centers=8 case everywhere else
+  return (third[3]+32*(third[2]+32*(third[1]+32*(third[0]+32*(second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0])))))))))));
+#else
+  return second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0]))))));
+#endif
 }
 
+//below this the code still has to be adjusted
+/*
 uint8_t minDepth(cube Cube){
 
   uint64_t address[8]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
@@ -386,4 +300,4 @@ uint8_t minDepth(cube Cube){
     if(max<tmp) max=tmp;}
   
   return max;
-}
+}*/
