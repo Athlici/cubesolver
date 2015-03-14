@@ -48,9 +48,11 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
   FILE* file  = fopen(tablepath[k],"rb");
 
   if(file!=0){
-    fread(table[k],1,tablesize[k],file);
-    cout << "loaded " << tablename[k] << " table from disk.\n";
-    fclose(file);
+    if(k==0){
+      fread(table[k],1,tablesize[k],file);
+      cout << "loaded " << tablename[k] << " table from disk.\n";
+      fclose(file);
+    }
   }else{
     uint64_t buffersize = 510;//524288;//520030;//51482970
     FILE* file=fopen(tablepath[k],"wb+");
@@ -103,5 +105,6 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       cout << "wrote changes to disk\n";
 
     }
+    free(buffer);
   }
 }

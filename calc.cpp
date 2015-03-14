@@ -55,32 +55,32 @@ uint8_t (*touint8(uint64_t val))[8]{}
 //of the element delivers the result.
 //Rewriting the routines in assembler to only use registers could furthermore improve speed.
 
-uint64_t posedges(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
+uint64_t posedges(uint8_t A,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
-  if (a<B) b-=3;
-  if (a<C) c-=3;
-  if (B<C) c-=3;
-  if (a<D) d-=3;
-  if (B<D) d-=3; 
-  if (C<D) d-=3;
-  if (a<E) e-=3;
-  if (B<E) e-=3;
-  if (C<E) e-=3;
-  if (D<E) e-=3;
-  if (a<F) f-=3;
-  if (B<F) f-=3;
-  if (C<F) f-=3;
-  if (D<F) f-=3;
-  if (E<F) f-=3;
-  if (a<G) g-=3;
-  if (B<G) g-=3;
-  if (C<G) g-=3;
-  if (D<G) g-=3;
-  if (E<G) g-=3;
-  if (F<G) g-=3;
+  if (A<b) B-=3;
+  if (A<c) C-=3;
+  if (b<c) C-=3;
+  if (A<d) D-=3;
+  if (b<d) D-=3; 
+  if (c<d) D-=3;
+  if (A<e) E-=3;
+  if (b<e) E-=3;
+  if (c<e) E-=3;
+  if (d<e) E-=3;
+  if (A<f) F-=3;
+  if (b<f) F-=3;
+  if (c<f) F-=3;
+  if (d<f) F-=3;
+  if (e<f) F-=3;
+  if (A<g) G-=3;
+  if (b<g) G-=3;
+  if (c<g) G-=3;
+  if (d<g) G-=3;
+  if (e<g) G-=3;
+  if (f<g) G-=3;
 
-  return (g+6*(f+9*(e+12*(d+15*(c+18*(b+21*a))))));
+  return (G+6*(F+9*(E+12*(D+15*(C+18*(B+21*A))))));
 }
 
 uint64_t adredges(uint64_t x){

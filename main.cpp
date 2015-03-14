@@ -23,6 +23,7 @@ const char*    tablename[3] = {"edge","center","corner"};
 const uint8_t  elemsize [3] = {7,12,8};
 const uint8_t  elemsol[3][12]= {{0,3,6,9,12,15,18,0,0,0,0,0},{0,1,2,3,4,5,6,7,8,9,10,11},{0,1,5,4,8,9,10,11,0,0,0,0}};
 const uint8_t  corecount    = 4;
+const uint8_t  maxdepth     = 17;
 
 uint8_t solution[36][20];
 
@@ -35,6 +36,10 @@ uint8_t solution[36][20];
 
 int main(int argc, char** argv) {
 
+//base action on hash of binary file?
+//implement things with map over uint64_t
+//merge all cubesolvers into one, switch based on #define or global vars
+
 //thread t1(gentable,0);					//parallel creation and loading of the tables
 //thread t2(gentable,1);
 //thread t3(gentable,2); 
@@ -43,22 +48,20 @@ int main(int argc, char** argv) {
 //t3.join();
 
 //gentable(0);
-gentable(1);
+//gentable(1);
 //gentable(2);
 
-//uint8_t n = 15;
-
-//cube Cube=goal();
-//Cube.corner[4]=5;
+//cube Cube=goal();						//examples for testing
+//Cube.corner[4]=5;						//corner flip parity
 //Cube.corner[5]=4;
 
-//uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
-//for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
+//uint8_t moves[17]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0, 19, 3};  //random position
+//for(uint8_t i=0;i<maxdepth;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 
 //cout << minDepth(Cube)+0 << "\n";
 
-//for(uint8_t i=minDepth(Cube);i<=n&&(!solvepar(Cube,i));i++)
+//for(uint8_t i=minDepth(Cube);i<=maxdepth&&(!solvepar(Cube,i));i++)
 //  cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
 
