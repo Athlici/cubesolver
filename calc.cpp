@@ -277,15 +277,24 @@ uint64_t adrcenters(uint64_t x){
 }
 
 //below this the code still has to be adjusted
-/*
+
 uint8_t minDepth(cube Cube){
 
-  uint64_t address[8]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+  uint64_t address[]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
+#if centercount==8
     poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
     poscenters(centerturn[3][Cube.center[4]],centerturn[3][Cube.center[5]],centerturn[3][Cube.center[6]],centerturn[3][Cube.center[7]],
       centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]]),
     poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
       centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]]),
+#else
+    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[4],Cube.center[5],
+	       Cube.center[6],Cube.center[7],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
+    poscenters(centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]],
+      centerturn[3][Cube.center[16]],centerturn[3][Cube.center[17]],centerturn[3][Cube.center[18]],centerturn[3][Cube.center[19]],
+      centerturn[3][Cube.center[20]],centerturn[3][Cube.center[21]],centerturn[3][Cube.center[22]],centerturn[3][Cube.center[23]]),
+#endif
+#if cornercount==6
     poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[2],Cube.corner[3],Cube.corner[4],Cube.corner[5]),
     poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[7]],cornerturn[0][Cube.corner[6]],
       cornerturn[0][Cube.corner[14]],cornerturn[0][Cube.corner[15]]),
@@ -293,11 +302,21 @@ uint8_t minDepth(cube Cube){
       cornerturn[1][Cube.corner[8]],cornerturn[1][Cube.corner[9]]),
     poscorners(cornerturn[2][Cube.corner[18]],cornerturn[2][Cube.corner[19]],cornerturn[2][Cube.corner[23]],cornerturn[2][Cube.corner[22]],
       cornerturn[2][Cube.corner[13]],cornerturn[2][Cube.corner[12]])};
+#else
+    poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[5],Cube.corner[4],Cube.corner[8],Cube.corner[9],Cube.corner[10],Cube.corner[11]),
+    poscorners(cornerturn[15][Cube.corner[2]],cornerturn[15][Cube.corner[3]],cornerturn[15][Cube.corner[7]],cornerturn[15][Cube.corner[6]],
+      cornerturn[15][Cube.corner[21]],cornerturn[15][Cube.corner[20]],cornerturn[15][Cube.corner[23]],cornerturn[15][Cube.corner[22]]),
+    poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[15]],cornerturn[0][Cube.corner[14]],
+      cornerturn[0][Cube.corner[13]],cornerturn[0][Cube.corner[12]],cornerturn[0][Cube.corner[19]],cornerturn[0][Cube.corner[18]])};
+#endif
 
   uint8_t max=readhalfbyte(~table[0][address[0]/2],address[0]%2);
-  for(uint8_t i=1;i<8;i++){
-    uint8_t tmp=readhalfbyte(~table[1+i/4][address[i]/2],address[i]%2);
+  for(uint8_t i=1;i<1+24/centercount;i++){
+    uint8_t tmp=readhalfbyte(~table[1][address[i]/2],address[i]%2);
     if(max<tmp) max=tmp;}
-  
+  for(uint8_t i=1+24/centercount;i<1+24/centercount+24/cornercount;i++){
+    uint8_t tmp=readhalfbyte(~table[2][address[i]/2],address[i]%2);
+    if(max<tmp) max=tmp;}
+
   return max;
-}*/
+}

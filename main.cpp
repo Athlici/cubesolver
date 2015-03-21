@@ -6,8 +6,8 @@
 #include <string.h>
 #include <math.h>
 
-#define cornercount 6
 #define centercount 8
+#define cornercount 8
 
 using namespace std;
 
@@ -18,11 +18,21 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const uint64_t tablesize[3] = {44089920,25741485,48454560};
+const uint64_t tablesize[3] = {44089920,
+#if centercount==8
+25741485,
+#else
+46849502700,
+#endif
+#if cornercount==6
+48454560};
+#else
+14827095360};
+#endif
 const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char*    tablename[3] = {"edge","center","corner"};
 //const uint8_t  elemsize [3] = {7,8,6};
-const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
+//const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
 uint8_t solution[20];
 
@@ -42,26 +52,26 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-gentable(0);
+//gentable(0);
 gentable(1);
 gentable(2);
 
-uint8_t n = 12;
+//uint8_t n = 12;
 
-cube Cube=goal();
-Cube.corner[4]=5;
-Cube.corner[5]=4;
+//cube Cube=goal();
+//Cube.corner[4]=5;
+//Cube.corner[5]=4;
 
 //cube Cube=goal();
 //uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
 //for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 
-cout << minDepth(Cube)+0 << "\n";
+//cout << minDepth(Cube)+0 << "\n";
 
-for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
-  cout << "finished depth " << i+0 << "\n";
+//for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
+//  cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
-for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
+//for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
 }
