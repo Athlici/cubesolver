@@ -276,9 +276,8 @@ uint64_t adrcenters(uint64_t x){
 #endif
 }
 
-//below this the code still has to be adjusted
 
-uint8_t minDepth(cube Cube){
+uint8_t minDepth(const cube &Cube){
 
   uint64_t address[]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
 #if centercount==8
