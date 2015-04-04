@@ -18,19 +18,22 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const uint64_t tablesize[3] = {44089920,
+const int64_t tablesize[3] = {
 #if centercount==8
 25741485,
 #else
 46849502700,
 #endif
 #if cornercount==6
-48454560};
+48454560,
 #else
-14827095360};
+14827095360,
 #endif
-const char*    tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
-const char*    tablename[3] = {"edge","center","corner"};
+44089920};
+
+const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
+const char* comppath[2]  = {"centers.cmp","corners.cmp2"};
+const char* tablename[3] = {"center","corner","edge"};
 //const uint8_t  elemsize [3] = {7,8,6};
 //const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
@@ -41,6 +44,7 @@ uint8_t solution[20];
 #include "ifshit.cpp"
 #include "calc.cpp"					//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
+#include "prefixcode.cpp"
 #include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
@@ -53,8 +57,10 @@ int main(int argc, char** argv) {
 //t3.join();
 
 //gentable(0);
-gentable(1);
-gentable(2);
+//gentable(1);
+//gentable(2);
+
+convert(1);
 
 //uint8_t n = 12;
 
