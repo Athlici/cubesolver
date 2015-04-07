@@ -1,8 +1,8 @@
-inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
+uint8_t sethalfbyte(const uint8_t &a/*Eingangsbyte*/,const uint8_t &b/*Modifikation*/,const uint8_t &c/*lower(0) or upper half(1)*/){
   return (b<<4*c)|(a&(240-225*c));			//returns the upper part of the byte when c==1 otherwise the lower part
 }
 
-inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
+uint8_t readhalfbyte(const uint8_t &a/*Eingangsbyte*/,const uint8_t &c/*lower(0) or upper half(1)*/){
   return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 

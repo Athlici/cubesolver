@@ -2,11 +2,12 @@
 #include <fstream>
 #include <cstdlib>
 #include <thread>
+#include <algorithm>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 
-#define centercount 8
+#define centercount 12
 #define cornercount 8
 
 using namespace std;
@@ -30,9 +31,11 @@ const int64_t tablesize[3] = {
 14827095360,
 #endif
 44089920};
+const uint64_t nextprime[2] = {93699005443,29654190733};
 
 const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
-const char* comppath[2]  = {"centers.cmp","corners.cmp2"};
+const char* comppath[2]  = {"centers.cmp","corners.cmp"};
+const char* scrampath[2] = {"centers.scr","corners.scr"};
 const char* tablename[3] = {"center","corner","edge"};
 //const uint8_t  elemsize [3] = {7,8,6};
 //const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
@@ -60,6 +63,7 @@ int main(int argc, char** argv) {
 //gentable(1);
 //gentable(2);
 
+scramble(1);
 convert(1);
 
 //uint8_t n = 12;
