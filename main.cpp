@@ -32,6 +32,7 @@ const int64_t tablesize[3] = {
 #endif
 44089920};
 const uint64_t nextprime[2] = {93699005443,29654190733};
+uint64_t maxdiff=100000;
 
 const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
 const char* comppath[2]  = {"centers.cmp","corners.cmp"};
@@ -64,7 +65,15 @@ int main(int argc, char** argv) {
 //gentable(2);
 
 scramble(1);
-convert(1);
+
+thread t0(threading,1,0);
+thread t1(threading,1,1);
+thread t2(threading,1,2);
+thread t3(threading,1,3);
+t0.join();
+t1.join();
+t2.join();
+t3.join();
 
 //uint8_t n = 12;
 
