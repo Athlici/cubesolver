@@ -61,10 +61,16 @@ bool primitiveroot(uint64_t s){
 }
 
 void threading(uint8_t k, uint8_t l){
-  for(uint64_t i=nextprime[k]*(l+1)/4;i>nextprime[k]*l/4;i--){
-    if(primitiveroot(i))
-      convert(k,i);
-    if(i%10000==0)
+//  for(uint64_t i=nextprime[k]*(l+1)/4;i>nextprime[k]*l/4;i--){
+  default_random_engine generator;
+  uint64_t seeds[4]={2377659449,127420827,659429031,3455659710};
+  generator.seed(seeds[l]);
+  uniform_real_distribution<double> distribution(6.0,10.47);
+  for(uint64_t i=0;i<nextprime[k]/4;i++){
+    uint64_t n = pow(10.0,distribution(generator));
+    if(primitiveroot(n))
+      convert(k,n);
+    if(i%1000==0)
       cout << i << "\n";
   }
 }
