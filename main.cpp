@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <thread>
+#include <future>
 #include <algorithm>
 #include <stdint.h>
 #include <string.h>
@@ -18,6 +19,7 @@ typedef struct {
   uint8_t corner[24];
 } cube ;
 
+const uint8_t corecount = 4;
 uint8_t *table[3];
 const int64_t tablesize[3] = {
 #if centercount==8
@@ -32,7 +34,7 @@ const int64_t tablesize[3] = {
 #endif
 44089920};
 const uint64_t nextprime[2] = {93699005443,29654190733};
-uint64_t maxdiff=100000;
+uint64_t maxdiff=68929;		//2482613
 
 const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
 const char* comppath[2]  = {"centers.cmp","corners.cmp"};
@@ -66,14 +68,15 @@ int main(int argc, char** argv) {
 
 scramble(1);
 
-thread t0(threading,1,0);
-thread t1(threading,1,1);
-thread t2(threading,1,2);
-thread t3(threading,1,3);
-t0.join();
-t1.join();
-t2.join();
-t3.join();
+future<void> par[corecount];
+for(uint8_t i=0;i<corecount;i++)
+  par[i]=async(launch::async,threading,1,i);
+for(uint8_t i=0;i<corecount;i++)
+  par[i].wait();
+//for(uint8_t i=0;i<corecount;i++)
+//  count+=par[i].get();
+
+//threading(1,0);
 
 //uint8_t n = 12;
 
