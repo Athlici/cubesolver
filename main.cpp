@@ -19,7 +19,7 @@ typedef struct {
   uint8_t corner[24];
 } cube ;
 
-const uint8_t corecount = 4;
+const uint8_t corecount = 32;
 uint8_t *table[3];
 const int64_t tablesize[3] = {
 #if centercount==8
@@ -34,7 +34,7 @@ const int64_t tablesize[3] = {
 #endif
 44089920};
 const uint64_t nextprime[2] = {93699005443,29654190733};
-uint64_t maxdiff=68929;		//2482613
+uint64_t maxdiff=1000000;
 
 const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
 const char* comppath[2]  = {"centers.cmp","corners.cmp"};
@@ -66,11 +66,11 @@ int main(int argc, char** argv) {
 //gentable(1);
 //gentable(2);
 
-scramble(1);
+scramble(0);
 
 future<void> par[corecount];
 for(uint8_t i=0;i<corecount;i++)
-  par[i]=async(launch::async,threading,1,i);
+  par[i]=async(launch::async,threading,0,i);
 for(uint8_t i=0;i<corecount;i++)
   par[i].wait();
 //for(uint8_t i=0;i<corecount;i++)

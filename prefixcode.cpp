@@ -45,8 +45,9 @@ void convert(uint8_t k, uint64_t s){	//swap the tables or adjust k to be 0 or 1
 }
 
 bool primitiveroot(uint64_t s){
-  uint64_t divisors[4]={17148,20751708,9884730244,14827095366};
-  for(uint8_t i=0;i<4;i++){
+//  uint64_t divisors[4]={17148,20751708,9884730244,14827095366};
+  uint64_t divisors[6]={1488018,187773558,1319704302,13385572206,31233001814,46849502721};
+  for(uint8_t i=0;i<6;i++){
     uint64_t res=1, base=s;
     for(uint64_t exp=divisors[i];exp>0;exp>>=1){
       uint64_t l=base&((1<<20)-1),h=base>>20;
@@ -71,7 +72,7 @@ void threading(uint8_t k, uint8_t l){
 //    uint64_t n = pow(10.0,distribution(generator));
     if(primitiveroot(corecount*i+l))
       convert(k,corecount*i+l);
-    if(i%10000==0)
+    if(i%1000==0)
       cout << "Thread " << l+0 << " is at " << i << "\n";
   }
 }
