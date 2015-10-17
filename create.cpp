@@ -22,7 +22,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 			    posedges(0,3,6,9,12,15,18)};
     table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
     uint64_t (*adrfunc[3])(uint64_t a);
-    adrfunc[0]=adredges; adrfunc[1]=adrcenters; adrfunc[2]=adrcorners;
+    adrfunc[0]=adrcenters; adrfunc[1]=adrcorners; adrfunc[2]=adredges;
     const uint8_t movespace[3] = {36,36,18};
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update

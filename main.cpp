@@ -56,28 +56,28 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-//gentable(0);
-//gentable(1);
-//gentable(2);
+gentable(0);
+gentable(1);
+gentable(2);
 
-convert(1);
+//convert(1);
 
-//uint8_t n = 12;
+uint8_t n = 12;
 
 //cube Cube=goal();
 //Cube.corner[4]=5;
 //Cube.corner[5]=4;
 
-//cube Cube=goal();
-//uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
-//for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
-//printcube(Cube);
+cube Cube=goal();
+uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
+for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
+printcube(Cube);
 
-//cout << minDepth(Cube)+0 << "\n";
+cout << minDepth(Cube)+0 << "\n";
 
-//for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
-//  cout << "finished depth " << i+0 << "\n";
+for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
+  cout << "finished depth " << i+0 << "\n";
 //solve(Cube,7);
-//for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
+for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
 }

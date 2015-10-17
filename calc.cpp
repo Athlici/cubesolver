@@ -116,7 +116,7 @@ uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uin
 		    const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g,H=h;
 #endif
-
+//rewrite this, maybe in n log n, by doing the subtraction after the ifs
   if (A<b) B--;
   if (A<c) C--;
   if (b<c) C--;
@@ -269,7 +269,7 @@ uint64_t adrcenters(uint64_t x){
     for(uint8_t n=0;n<8;n++)
       if(res[n]<=third[m])
         third[m]++;
-//do return in a loop, adjust the offset in centers=8 case everywhere else
+//TODO: return in a loop, adjust the offset in centers=8 case everywhere else
   return (third[3]+32*(third[2]+32*(third[1]+32*(third[0]+32*(second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0])))))))))));
 #else
   return second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0]))))));
@@ -309,12 +309,12 @@ uint8_t minDepth(const cube &Cube){
       cornerturn[0][Cube.corner[13]],cornerturn[0][Cube.corner[12]],cornerturn[0][Cube.corner[19]],cornerturn[0][Cube.corner[18]])};
 #endif
 
-  uint8_t max=readhalfbyte(~table[0][address[0]/2],address[0]%2);
+  uint8_t max=readhalfbyte(~table[2][address[0]/2],address[0]%2);
   for(uint8_t i=1;i<1+24/centercount;i++){
-    uint8_t tmp=readhalfbyte(~table[1][address[i]/2],address[i]%2);
+    uint8_t tmp=readhalfbyte(~table[0][address[i]/2],address[i]%2);
     if(max<tmp) max=tmp;}
   for(uint8_t i=1+24/centercount;i<1+24/centercount+24/cornercount;i++){
-    uint8_t tmp=readhalfbyte(~table[2][address[i]/2],address[i]%2);
+    uint8_t tmp=readhalfbyte(~table[1][address[i]/2],address[i]%2);
     if(max<tmp) max=tmp;}
 
   return max;
