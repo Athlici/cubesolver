@@ -8,7 +8,9 @@
 #include <math.h>
 
 #define centercount 12
-#define cornercount 8
+#define cornercount  8
+#define splitcomp    1
+#define disktablegen 1
 
 using namespace std;
 
@@ -19,7 +21,7 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const int64_t tablesize[3] = {
+const int64_t tablesize[3] = {44089920,
 #if centercount==8
 25741485,
 #else
@@ -30,24 +32,25 @@ const int64_t tablesize[3] = {
 #else
 14827095360,
 #endif
-44089920};
-const uint64_t nextprime[2] = {93699005443,29654190733};
+};
 
-const char* tablepath[3] = {"centers.bin","corners.bin","edges.bin"};
-const char* comppath[2]  = {"centers.cmp","corners.cmp"};
-const char* scrampath[2] = {"centers.scr","corners.scr"};
-const char* tablename[3] = {"center","corner","edge"};
+#if splitcomp
+uint8_t *cotab[3];
+const int64_t cotabsize[3] = {0,108089320,34977176};
+#endif
+
+const char* tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
+const char* tablename[3] = {"edge","center","corner"};
 //const uint8_t  elemsize [3] = {7,8,6};
 //const uint8_t  elemsol[3][8]= {{0,3,6,9,12,15,18,0},{0,1,2,3,8,9,10,11},{0,1,2,3,4,5,0,0}};
 
-uint8_t solution[20];
+uint8_t solution[20];                   //Add more bytes once those length become feasible
 
 #include "arrays.cpp"					//file with all the arrays for making the turns
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "ifshit.cpp"
-#include "calc.cpp"					//functions for the depth calculations
+#include "calc.cpp"				    	//functions for the depth calculations
 #include "create.cpp"					//creates the depthlookuptables
-#include "prefixcode.cpp"
 #include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
@@ -59,29 +62,26 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-//gentable(0);
-//gentable(1);
-//gentable(2);
+gentable(0);
+gentable(1);
+gentable(2);
 
-scramble(1);
-convert(1);
-
-//uint8_t n = 12;
+uint8_t n = 12;
 
 //cube Cube=goal();
 //Cube.corner[4]=5;
 //Cube.corner[5]=4;
 
-//cube Cube=goal();
-//uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
-//for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
+cube Cube=goal();
+uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
+for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 
-//cout << minDepth(Cube)+0 << "\n";
+cout << minDepth(Cube)+0 << "\n";
 
-//for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
-//  cout << "finished depth " << i+0 << "\n";
-//solve(Cube,7);
-//for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
+for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
+  cout << "finished depth " << i+0 << "\n";
+solve(Cube,7);
+for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
 }

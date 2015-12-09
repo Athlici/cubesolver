@@ -6,7 +6,7 @@ uint8_t readhalfbyte(const uint8_t &a/*Eingangsbyte*/,const uint8_t &c/*lower(0)
   return (a>>4*c)&15;					//sets the upper part of the byte when c==1 otherwise the lower part
 }
 
-#if disktablegen==true
+#if disktablegen || splitcomp
 inline uint8_t set2bit(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*which 2bit*/){
 	  return (b<<2*c)|(a&(255-(3<<2*c)));
 }
@@ -87,8 +87,8 @@ uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8
 
 uint64_t adredges(uint64_t x){
   
-  uint8_t pos[7];				//Array for orriginal values
-  for(uint8_t i=6;i<=24;i+=3){			//which can be extracted from the argument
+  uint8_t pos[7];				    //Array for orriginal values
+  for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
     pos[i/3-2] = x % i;				//in reduced form
     x /= i;
   }
@@ -276,6 +276,38 @@ uint64_t adrcenters(uint64_t x){
 #endif
 }
 
+#if splitcomp
+uint64_t nextfree(uint8_t k,uint64_t addr = 0){
+//solvable by table lookups, because
+//current node empty and left set   → fill current node  
+//current node empty and left empty → go to the left
+//current node set → go to the right  
+  uint64_t node = (table[k][5*addr]<<28)+(table[k][5*addr+1]<<20)+(table[k][5*addr+2]<<12)+(table[k][5*addr+3]<<4)+readhalfbyte(table[k][5*addr+4],1);
+  if(node==0){
+    uint64_t laddr=2*addr+1;
+    if(laddr>cotabsize[k])
+      return addr;
+    else{
+      uint64_t node2 = (table[k][5*laddr]<<28)+(table[k][5*laddr+1]<<20)+(table[k][5*laddr+2]<<12)+(table[k][5*laddr+3]<<4)+readhalfbyte(table[k][5*laddr+4],1);
+      if(node2==0)
+        return nextfree(k,laddr);
+      else
+        return addr;
+    }
+  }else
+    return nextfree(k,2*addr+2);
+}
+
+uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
+  if(addr>cotabsize[k])
+    return 8;
+  uint64_t node = (table[k][5*addr]<<28)+(table[k][5*addr+1]<<20)+(table[k][5*addr+2]<<12)+(table[k][5*addr+3]<<4)+readhalfbyte(table[k][5*addr+4],1);
+  if(node==addr)
+    return addr;
+  else
+    return colookup(k,key,2*addr+1+(node>addr));
+}
+#endif
 
 uint8_t minDepth(const cube &Cube){
 
@@ -311,10 +343,22 @@ uint8_t minDepth(const cube &Cube){
 
   uint8_t max=readhalfbyte(~table[0][address[0]/2],address[0]%2);
   for(uint8_t i=1;i<1+24/centercount;i++){
-    uint8_t tmp=readhalfbyte(~table[1][address[i]/2],address[i]%2);
+#if splitcomp==0
+    uint8_t tmp = readhalfbyte(~table[1][address[i]/2],address[i]%2);
+#else
+    uint8_t tmp = read2bit(~table[1][address[i]/4],address[i]%4) + 8;   //is the negation really there?
+    if(tmp==8)
+      tmp = colookup(1,address[i]);
+#endif
     if(max<tmp) max=tmp;}
   for(uint8_t i=1+24/centercount;i<1+24/centercount+24/cornercount;i++){
-    uint8_t tmp=readhalfbyte(~table[2][address[i]/2],address[i]%2);
+#if splitcomp==0
+    uint8_t tmp = readhalfbyte(~table[2][address[i]/2],address[i]%2);
+#else
+    uint8_t tmp = read2bit(~table[2][address[i]/4],address[i]%4) + 8;   //is the negation really there?
+    if(tmp==8)
+      tmp = colookup(2,address[i]);
+#endif
     if(max<tmp) max=tmp;}
 
   return max;
