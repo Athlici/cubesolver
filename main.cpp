@@ -62,6 +62,8 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
+cout << poscenters(0,1,2,3,4,5,6,7,8,9,10,11)+0 << ";" << poscorners(0,1,5,4,8,9,10,11)+0 << "\n";
+
 gentable(0);
 gentable(1);
 gentable(2);
@@ -81,7 +83,6 @@ cout << minDepth(Cube)+0 << "\n";
 
 for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
   cout << "finished depth " << i+0 << "\n";
-solve(Cube,7);
 for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
 
 }

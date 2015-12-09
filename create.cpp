@@ -29,7 +29,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
             cotab[k][coaddr+1]=(ind>>20);
             cotab[k][coaddr+2]=(ind>>12);
             cotab[k][coaddr+3]=(ind>>4);
-            cotab[k][coaddr+4]=sethalfbyte(d,ind%16,1);
+            cotab[k][coaddr+4]=sethalfbyte(~d,ind%16,1);
             coindex++;
           }
           table[k][ind/4] = set2bit(table[k][ind/4],t,ind%4);

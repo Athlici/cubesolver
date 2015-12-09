@@ -277,23 +277,41 @@ uint64_t adrcenters(uint64_t x){
 }
 
 #if splitcomp
+/*
+uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0){
+  const uint8_t h[3]={0,26,25}; //lb(cotabsize)
+  uint64_t ll = 
+  uint64_t noln = 1<<(h[k]-lb(pos+1))-1+ll;
+  if(noln<=addr)
+    if(noln==addr)
+      return pos;
+    else
+      return nextfree(k,addr,2*pos+1)
+  else
+    return noln+nextfree(k,addr-noln,2*pos+2);
+}
+*/
+/*
+uint64_t cotabpos[3]={0,1,1};       \\encode current position, read & mutate that when called
+uint64_t nextfree(uint8_t k){
+  
+}
+*/
+
 uint64_t nextfree(uint8_t k,uint64_t addr = 0){
 //solvable by table lookups, because
 //current node empty and left set   → fill current node  
 //current node empty and left empty → go to the left
 //current node set → go to the right  
-  uint64_t node = (table[k][5*addr]<<28)+(table[k][5*addr+1]<<20)+(table[k][5*addr+2]<<12)+(table[k][5*addr+3]<<4)+readhalfbyte(table[k][5*addr+4],1);
-  if(node==0){
+  if(table[k][5*addr+4]==0){
     uint64_t laddr=2*addr+1;
     if(laddr>cotabsize[k])
       return addr;
-    else{
-      uint64_t node2 = (table[k][5*laddr]<<28)+(table[k][5*laddr+1]<<20)+(table[k][5*laddr+2]<<12)+(table[k][5*laddr+3]<<4)+readhalfbyte(table[k][5*laddr+4],1);
-      if(node2==0)
+    else
+      if(table[k][5*laddr+4]==0)
         return nextfree(k,laddr);
       else
         return addr;
-    }
   }else
     return nextfree(k,2*addr+2);
 }
@@ -303,7 +321,7 @@ uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
     return 8;
   uint64_t node = (table[k][5*addr]<<28)+(table[k][5*addr+1]<<20)+(table[k][5*addr+2]<<12)+(table[k][5*addr+3]<<4)+readhalfbyte(table[k][5*addr+4],1);
   if(node==addr)
-    return addr;
+    return readhalfbyte(~table[k][5*addr+4],0);
   else
     return colookup(k,key,2*addr+1+(node>addr));
 }
