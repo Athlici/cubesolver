@@ -277,45 +277,68 @@ uint64_t adrcenters(uint64_t x){
 }
 
 #if splitcomp
-/*
 uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0){
-  const uint8_t h[3]={0,26,25}; //lb(cotabsize)
-  uint64_t ll = 
-  uint64_t noln = 1<<(h[k]-lb(pos+1))-1+ll;
-  if(noln<=addr)
+  uint64_t noln = addr;
+  if(2*pos+1<cotabsize[k]){
+    const uint8_t h[3] = {2,26,25}; //lb(cotabsize)
+    uint64_t lb = 2*pos+1,rb = 2*pos+1,ch = log2(pos+1);
+    for(uint8_t i=ch+1;i<h[k];i++){
+      lb=2*lb+1;
+      rb=2*rb+2;
+    }
+    noln = (1<<h[k]-(ch+1))+min(rb,cotabsize[k])-min(lb,cotabsize[k]);
+   }
+  if(noln>=addr)
     if(noln==addr)
       return pos;
     else
-      return nextfree(k,addr,2*pos+1)
+      return nextfree(k,addr,2*pos+1);
   else
-    return noln+nextfree(k,addr-noln,2*pos+2);
+    return nextfree(k,addr-noln,2*pos+2);
 }
-*/
+
+uint8_t log2(uint64_t v){
+  const uint64_t b[] = {0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000, 0xFFFFFFFF00000000};
+  const uint64_t S[] = {1, 2, 4, 8, 16, 32};
+  
+  register uint64_t r = 0; // result of log2(v) will go here
+  for (int8_t i = 5; i >= 0; i--) // unroll for speed...
+  {
+    if (v & b[i])
+    {
+      v >>= S[i];
+      r |= S[i];
+    } 
+  }
+
+  return r;
+}
+
 /*
 uint64_t cotabpos[3]={0,1,1};       \\encode current position, read & mutate that when called
 uint64_t nextfree(uint8_t k){
   
 }
 */
-
+/*
 uint64_t nextfree(uint8_t k,uint64_t addr = 0){
 //solvable by table lookups, because
 //current node empty and left set   → fill current node  
 //current node empty and left empty → go to the left
 //current node set → go to the right  
-  if(table[k][5*addr+4]==0){
+  if(cotab[k][5*addr+4]==0){
     uint64_t laddr=2*addr+1;
     if(laddr>cotabsize[k])
       return addr;
     else
-      if(table[k][5*laddr+4]==0)
+      if(cotab[k][5*laddr+4]==0)
         return nextfree(k,laddr);
       else
         return addr;
   }else
     return nextfree(k,2*addr+2);
 }
-
+*/
 uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
   if(addr>cotabsize[k])
     return 8;

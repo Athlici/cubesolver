@@ -36,7 +36,7 @@ const int64_t tablesize[3] = {44089920,
 
 #if splitcomp
 uint8_t *cotab[3];
-const int64_t cotabsize[3] = {0,108089320,34977176};
+const uint64_t cotabsize[3] = {5,108089320,34977176};
 #endif
 
 const char* tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
@@ -62,27 +62,43 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-cout << poscenters(0,1,2,3,4,5,6,7,8,9,10,11)+0 << ";" << poscorners(0,1,5,4,8,9,10,11)+0 << "\n";
-
 gentable(0);
 gentable(1);
 gentable(2);
 
-uint8_t n = 12;
+//uint8_t n = 12;
 
 //cube Cube=goal();
 //Cube.corner[4]=5;
 //Cube.corner[5]=4;
-
+/*
 cube Cube=goal();
 uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
 for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
+*/
 
+uint64_t depthcount[3][13]={{0}};
+for(uint8_t k=1;k<3;k++){
+  for(uint64_t i=0;i<tablesize[k];i++){
+    uint8_t tmp = read2bit(~table[k][i/4],i%4) + 8;
+    if(tmp==8)
+      tmp = colookup(k,i);
+    depthcount[k][tmp]++;
+  }
+  for(uint8_t i=0;i<13;i++)
+    cout << "positions in depth " << i+0 << ":" << depthcount[k][i] << "\n";
+}
+
+/*
+for (uint64_t i=0;i<cotabsize[0];i++)
+  cout << nextfree(0,i)+0 << "\n";
+*/
+/*
 cout << minDepth(Cube)+0 << "\n";
 
 for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
   cout << "finished depth " << i+0 << "\n";
 for(uint8_t i=0;i<n;i++)cout << solution[i]+0 << ";"; cout << "\n";
-
+*/
 }

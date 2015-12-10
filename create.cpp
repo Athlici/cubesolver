@@ -18,13 +18,13 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       for(uint64_t i=0;i<tablesize[k]/buffersize;i++){
         fread(buffer,1,buffersize,file);
         for(uint64_t j=0;j<2*buffersize;j++){
-          uint8_t t,d = readhalfbyte(buffer[j/2],j%2);
+          uint8_t t,d = readhalfbyte(~buffer[j/2],j%2);
           int64_t ind = i*2*buffersize+j;
           if(7<d && d<12){
             t=d-8;
           }else{
             t=0;
-            uint64_t coaddr=5*nextfree(k);
+            uint64_t coaddr=5*nextfree(k,coindex);
             cotab[k][coaddr+0]=(ind>>28);    //cotab[coaddr]=(int32_t) (ind>>4)
             cotab[k][coaddr+1]=(ind>>20);
             cotab[k][coaddr+2]=(ind>>12);
