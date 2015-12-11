@@ -277,76 +277,42 @@ uint64_t adrcenters(uint64_t x){
 }
 
 #if splitcomp
-uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0){
+uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0,uint8_t ch = 0){
   uint64_t noln = addr;
   if(2*pos+1<cotabsize[k]){
-    const uint8_t h[3] = {2,26,25}; //lb(cotabsize)
-    uint64_t lb = 2*pos+1,rb = 2*pos+1,ch = log2(pos+1);
+    const uint8_t h[3] = {3,26,25}; //lb(cotabsize)
+    uint64_t lb = 2*pos+1,rb = 2*pos+1;
     for(uint8_t i=ch+1;i<h[k];i++){
       lb=2*lb+1;
       rb=2*rb+2;
     }
-    noln = (1<<h[k]-(ch+1))+min(rb,cotabsize[k])-min(lb,cotabsize[k]);
+    noln = (1<<(h[k]-ch-1))+min(rb,cotabsize[k])-min(lb,cotabsize[k]+1);
+    //cout << addr+0 << ";" << pos+0 << ":" << noln+0 << "\n";
    }
   if(noln>=addr)
     if(noln==addr)
       return pos;
     else
-      return nextfree(k,addr,2*pos+1);
+      return nextfree(k,addr,2*pos+1,ch+1);
   else
-    return nextfree(k,addr-noln,2*pos+2);
-}
-
-uint8_t log2(uint64_t v){
-  const uint64_t b[] = {0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000, 0xFFFFFFFF00000000};
-  const uint64_t S[] = {1, 2, 4, 8, 16, 32};
-  
-  register uint64_t r = 0; // result of log2(v) will go here
-  for (int8_t i = 5; i >= 0; i--) // unroll for speed...
-  {
-    if (v & b[i])
-    {
-      v >>= S[i];
-      r |= S[i];
-    } 
-  }
-
-  return r;
+    return nextfree(k,addr-noln-1,2*pos+2,ch+1);
 }
 
 /*
 uint64_t cotabpos[3]={0,1,1};       \\encode current position, read & mutate that when called
 uint64_t nextfree(uint8_t k){
-  
 }
 */
-/*
-uint64_t nextfree(uint8_t k,uint64_t addr = 0){
-//solvable by table lookups, because
-//current node empty and left set   → fill current node  
-//current node empty and left empty → go to the left
-//current node set → go to the right  
-  if(cotab[k][5*addr+4]==0){
-    uint64_t laddr=2*addr+1;
-    if(laddr>cotabsize[k])
-      return addr;
-    else
-      if(cotab[k][5*laddr+4]==0)
-        return nextfree(k,laddr);
-      else
-        return addr;
-  }else
-    return nextfree(k,2*addr+2);
-}
-*/
+
 uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
   if(addr>cotabsize[k])
-    return 8;
-  uint64_t node = (table[k][5*addr]<<28)+(table[k][5*addr+1]<<20)+(table[k][5*addr+2]<<12)+(table[k][5*addr+3]<<4)+readhalfbyte(table[k][5*addr+4],1);
-  if(node==addr)
-    return readhalfbyte(~table[k][5*addr+4],0);
+    return 7;
+  uint64_t node = (((uint64_t) cotab[k][5*addr])<<28)+(((uint64_t) cotab[k][5*addr+1])<<20)+(((uint64_t) cotab[k][5*addr+2])<<12)
+                    +(((uint64_t) cotab[k][5*addr+3])<<4)+((uint64_t )readhalfbyte(cotab[k][5*addr+4],1));
+  if(node==key)
+    return readhalfbyte(cotab[k][5*addr+4],0);
   else
-    return colookup(k,key,2*addr+1+(node>addr));
+    return colookup(k,key,2*addr+1+(key>node));
 }
 #endif
 
@@ -387,8 +353,8 @@ uint8_t minDepth(const cube &Cube){
 #if splitcomp==0
     uint8_t tmp = readhalfbyte(~table[1][address[i]/2],address[i]%2);
 #else
-    uint8_t tmp = read2bit(~table[1][address[i]/4],address[i]%4) + 8;   //is the negation really there?
-    if(tmp==8)
+    uint8_t tmp = read2bit(table[1][address[i]/4],address[i]%4) + 7;
+    if(tmp==7)
       tmp = colookup(1,address[i]);
 #endif
     if(max<tmp) max=tmp;}
@@ -396,8 +362,8 @@ uint8_t minDepth(const cube &Cube){
 #if splitcomp==0
     uint8_t tmp = readhalfbyte(~table[2][address[i]/2],address[i]%2);
 #else
-    uint8_t tmp = read2bit(~table[2][address[i]/4],address[i]%4) + 8;   //is the negation really there?
-    if(tmp==8)
+    uint8_t tmp = read2bit(table[2][address[i]/4],address[i]%4) + 7;
+    if(tmp==7)
       tmp = colookup(2,address[i]);
 #endif
     if(max<tmp) max=tmp;}

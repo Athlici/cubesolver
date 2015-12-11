@@ -18,18 +18,17 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       for(uint64_t i=0;i<tablesize[k]/buffersize;i++){
         fread(buffer,1,buffersize,file);
         for(uint64_t j=0;j<2*buffersize;j++){
-          uint8_t t,d = readhalfbyte(~buffer[j/2],j%2);
-          int64_t ind = i*2*buffersize+j;
-          if(7<d && d<12){
-            t=d-8;
-          }else{
-            t=0;
+          uint8_t t = 0,d = readhalfbyte(~buffer[j/2],j%2);
+          uint64_t ind = i*2*buffersize+j;
+          if(6<d && d<11)
+            t=d-7;
+          else{
             uint64_t coaddr=5*nextfree(k,coindex);
             cotab[k][coaddr+0]=(ind>>28);    //cotab[coaddr]=(int32_t) (ind>>4)
             cotab[k][coaddr+1]=(ind>>20);
             cotab[k][coaddr+2]=(ind>>12);
             cotab[k][coaddr+3]=(ind>>4);
-            cotab[k][coaddr+4]=sethalfbyte(~d,ind%16,1);
+            cotab[k][coaddr+4]=sethalfbyte(d,ind%16,1);
             coindex++;
           }
           table[k][ind/4] = set2bit(table[k][ind/4],t,ind%4);
@@ -67,7 +66,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
         uint8_t mem = readhalfbyte(~table[k][mover/2],mover%2);
         if(depth==mem){
           count++;
-          uint64_t adr=(*adrfunc[k])(mover),j;
+          uint64_t adr=(*adrfunc[k])(mover),j=0;
           for(uint8_t i=0;i<movespace[k];i++){			//some of these moves are redundant, TODO: eliminate by checking depth
             switch(k){
 	          case 0:

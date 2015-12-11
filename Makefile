@@ -1,4 +1,4 @@
-CXXFLAGS= -Ofast -funroll-all-loops -std=c++0x -pthread -ggdb
+CXXFLAGS= -Ofast -funroll-all-loops -std=c++0x -pthread -ggdb -Wall
 
 release:
 	g++ $(CXXFLAGS) -o cubesolver main.cpp

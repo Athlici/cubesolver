@@ -21,7 +21,7 @@ typedef struct {
 } cube ;
 
 uint8_t *table[3];
-const int64_t tablesize[3] = {44089920,
+const uint64_t tablesize[3] = {44089920,
 #if centercount==8
 25741485,
 #else
@@ -36,7 +36,7 @@ const int64_t tablesize[3] = {44089920,
 
 #if splitcomp
 uint8_t *cotab[3];
-const uint64_t cotabsize[3] = {5,108089320,34977176};
+const uint64_t cotabsize[3] = {13,108089320,34977176};
 #endif
 
 const char* tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
 //t2.join();
 //t3.join();
 
-gentable(0);
+//gentable(0);
 gentable(1);
 gentable(2);
 
@@ -78,21 +78,36 @@ for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 */
 
-uint64_t depthcount[3][13]={{0}};
+uint64_t depthcount[3][12]={{0}};
 for(uint8_t k=1;k<3;k++){
-  for(uint64_t i=0;i<tablesize[k];i++){
-    uint8_t tmp = read2bit(~table[k][i/4],i%4) + 8;
-    if(tmp==8)
+  for(uint64_t i=0;i<2*tablesize[k];i++){
+    uint8_t tmp = read2bit(table[k][i/4],i%4) + 7;
+    if(tmp==7)
       tmp = colookup(k,i);
     depthcount[k][tmp]++;
   }
-  for(uint8_t i=0;i<13;i++)
+  for(uint8_t i=0;i<12;i++)
     cout << "positions in depth " << i+0 << ":" << depthcount[k][i] << "\n";
 }
 
 /*
-for (uint64_t i=0;i<cotabsize[0];i++)
+for(uint64_t i=0;i<cotabsize[0];i++)
   cout << nextfree(0,i)+0 << "\n";
+*/
+/*
+for(uint64_t i=0;i<cotabsize[1];i++){
+  if(cotab[1][5*i+4]==0)
+    cout << i+0 << ",";
+}
+*/
+/*
+uint64_t old=nextfree(1,0);
+for(uint64_t i=1;i<cotabsize[1];i++){
+  uint64_t tmp=nextfree(1,i);
+  if(tmp==old)
+    cout << i+0 << ":" << tmp+0 << "\n";
+  old=tmp;
+}
 */
 /*
 cout << minDepth(Cube)+0 << "\n";
