@@ -77,7 +77,7 @@ uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
 for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
 */
-
+/*
 uint64_t depthcount[3][12]={{0}};
 for(uint8_t k=1;k<3;k++){
   for(uint64_t i=0;i<2*tablesize[k];i++){
@@ -89,16 +89,25 @@ for(uint8_t k=1;k<3;k++){
   for(uint8_t i=0;i<12;i++)
     cout << "positions in depth " << i+0 << ":" << depthcount[k][i] << "\n";
 }
+*/
 
+uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18),
+#if centercount==8
+                            poscenters(0,1,2,3,8,9,10,11),
+#else
+                            poscenters(0,1,2,3,4,5,6,7,8,9,10,11),
+#endif
+#if cornercount==6
+                            poscorners(0,1,2,3,4,5)
+#else
+                            poscorners(0,1,5,4,8,9,10,11)
+#endif
+};
+for(uint8_t k=1;k<3;k++)
+  cout << zeroaddr[k]+0 << ":" << colookup(k,zeroaddr[k])+0 << "\n";
 /*
 for(uint64_t i=0;i<cotabsize[0];i++)
   cout << nextfree(0,i)+0 << "\n";
-*/
-/*
-for(uint64_t i=0;i<cotabsize[1];i++){
-  if(cotab[1][5*i+4]==0)
-    cout << i+0 << ",";
-}
 */
 /*
 uint64_t old=nextfree(1,0);
@@ -110,6 +119,7 @@ for(uint64_t i=1;i<cotabsize[1];i++){
 }
 */
 /*
+cout << minDepth(goal())+0 << "\n";
 cout << minDepth(Cube)+0 << "\n";
 
 for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)

@@ -307,11 +307,12 @@ uint64_t nextfree(uint8_t k){
 uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
   if(addr>cotabsize[k])
     return 7;
-  uint64_t node = (((uint64_t) cotab[k][5*addr])<<28)+(((uint64_t) cotab[k][5*addr+1])<<20)+(((uint64_t) cotab[k][5*addr+2])<<12)
-                    +(((uint64_t) cotab[k][5*addr+3])<<4)+((uint64_t )readhalfbyte(cotab[k][5*addr+4],1));
-  if(node==key)
-    return readhalfbyte(cotab[k][5*addr+4],0);
-  else
+  uint64_t node = (((uint64_t) cotab[k][5*addr])<<29)+(((uint64_t) cotab[k][5*addr+1])<<21)+(((uint64_t) cotab[k][5*addr+2])<<13)
+                    +(((uint64_t) cotab[k][5*addr+3])<<5)+(cotab[k][5*addr+4]>>3);
+  if(node==key){
+    uint8_t res = cotab[k][5*addr+4]%8;
+    return res+4*(res==7);
+  }else
     return colookup(k,key,2*addr+1+(key>node));
 }
 #endif

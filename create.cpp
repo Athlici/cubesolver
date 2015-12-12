@@ -24,11 +24,13 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
             t=d-7;
           else{
             uint64_t coaddr=5*nextfree(k,coindex);
-            cotab[k][coaddr+0]=(ind>>28);    //cotab[coaddr]=(int32_t) (ind>>4)
-            cotab[k][coaddr+1]=(ind>>20);
-            cotab[k][coaddr+2]=(ind>>12);
-            cotab[k][coaddr+3]=(ind>>4);
-            cotab[k][coaddr+4]=sethalfbyte(d,ind%16,1);
+            if(d==0)
+              cout << ind+0 << ":" << coaddr+0 << "\n";
+            cotab[k][coaddr+0]=(ind>>29);    //cotab[coaddr]=(int32_t) (ind>>4)
+            cotab[k][coaddr+1]=(ind>>21);
+            cotab[k][coaddr+2]=(ind>>13);
+            cotab[k][coaddr+3]=(ind>>5);
+            cotab[k][coaddr+4]=((ind%32)<<3)+(d-4*(d==11));
             coindex++;
           }
           table[k][ind/4] = set2bit(table[k][ind/4],t,ind%4);
