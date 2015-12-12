@@ -358,7 +358,8 @@ uint8_t minDepth(const cube &Cube){
     if(tmp==7)
       tmp = colookup(1,address[i]);
 #endif
-    if(max<tmp) max=tmp;}
+    if(max<tmp) max=tmp;
+  }
   for(uint8_t i=1+24/centercount;i<1+24/centercount+24/cornercount;i++){
 #if splitcomp==0
     uint8_t tmp = readhalfbyte(~table[2][address[i]/2],address[i]%2);
@@ -367,7 +368,8 @@ uint8_t minDepth(const cube &Cube){
     if(tmp==7)
       tmp = colookup(2,address[i]);
 #endif
-    if(max<tmp) max=tmp;}
+    if(max<tmp) max=tmp;
+  }
 
   return max;
 }

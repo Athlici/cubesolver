@@ -12,7 +12,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     }else{
       table[k] = (uint8_t*) calloc(tablesize[k]/2,1);
       cotab[k] = (uint8_t*) calloc(cotabsize[k]*5,1);
-      uint64_t buffersize = 235620,coindex = 0;
+      uint64_t buffersize = 102965940,coindex = 0;
       uint8_t *buffer;
       buffer = (uint8_t*) calloc(buffersize,1);
       for(uint64_t i=0;i<tablesize[k]/buffersize;i++){
@@ -54,7 +54,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 };
     table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
     uint64_t (*adrfunc[3])(uint64_t a);
-    adrfunc[0]=adredges; adrfunc[1]=adrcenters; adrfunc[2]=adrcorners;
+    adrfunc[0]=adrcenters; adrfunc[1]=adrcorners; adrfunc[2]=adredges;
     const uint8_t movespace[3] = {36,36,18};
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
