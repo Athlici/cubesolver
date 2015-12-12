@@ -329,9 +329,9 @@ uint8_t minDepth(const cube &Cube){
 #else
     poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[4],Cube.center[5],
 	       Cube.center[6],Cube.center[7],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
-    poscenters(centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]],
-      centerturn[3][Cube.center[16]],centerturn[3][Cube.center[17]],centerturn[3][Cube.center[18]],centerturn[3][Cube.center[19]],
-      centerturn[3][Cube.center[20]],centerturn[3][Cube.center[21]],centerturn[3][Cube.center[22]],centerturn[3][Cube.center[23]]),
+    poscenters(centerturn[8][Cube.center[16]],centerturn[8][Cube.center[17]],centerturn[8][Cube.center[18]],centerturn[8][Cube.center[19]],
+          centerturn[8][Cube.center[12]],centerturn[8][Cube.center[13]],centerturn[8][Cube.center[14]],centerturn[8][Cube.center[15]],
+          centerturn[8][Cube.center[20]],centerturn[8][Cube.center[21]],centerturn[8][Cube.center[22]],centerturn[8][Cube.center[23]]),
 #endif
 #if cornercount==6
     poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[2],Cube.corner[3],Cube.corner[4],Cube.corner[5]),

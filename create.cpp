@@ -24,8 +24,6 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
             t=d-7;
           else{
             uint64_t coaddr=5*nextfree(k,coindex);
-            if(d==0)
-              cout << ind+0 << ":" << coaddr+0 << "\n";
             cotab[k][coaddr+0]=(ind>>29);    //cotab[coaddr]=(int32_t) (ind>>4)
             cotab[k][coaddr+1]=(ind>>21);
             cotab[k][coaddr+2]=(ind>>13);
