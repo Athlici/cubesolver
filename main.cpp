@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 //t3.join();
 
 //gentable(0);
-//gentable(1);
+gentable(1);
 //gentable(2);
 
 //cube Cube=goal();						//examples for testing

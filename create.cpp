@@ -17,14 +17,18 @@ uint64_t genpar(uint8_t k,uint8_t l){
           break;
         case 1:
           adr=adrcenters(mover);
-          for (uint8_t i=0;i<36;i++){						//PROTIP: at least 3 are actually redundant
-            uint64_t j=poscenters(centermove[i][(adr>>55)&31],centermove[i][(adr>>50)&31],centermove[i][(adr>>45)&31],centermove[i][(adr>>40)&31],
-              centermove[i][(adr>>35)&31],centermove[i][(adr>>30)&31],centermove[i][(adr>>25)&31],centermove[i][(adr>>20)&31],
-              centermove[i][(adr>>15)&31],centermove[i][(adr>>10)&31],centermove[i][(adr>>5)&31],centermove[i][adr&31]);
+          for (uint8_t i=0;i<18;i++){						//PROTIP: at least 3 are actually redundant
+            uint8_t m=3+i+6*(i/6);
+            uint8_t c[12]={centermove[m][(adr>>55)&31],centermove[m][(adr>>50)&31],centermove[m][(adr>>45)&31],centermove[m][(adr>>40)&31],
+              centermove[m][(adr>>35)&31],centermove[m][(adr>>30)&31],centermove[m][(adr>>25)&31],centermove[m][(adr>>20)&31],
+              centermove[m][(adr>>15)&31],centermove[m][(adr>>10)&31],centermove[m][(adr>>5)&31],centermove[m][adr&31]};
 //  if(j>=4*tablesize[k])
 //    cout << adr+0 << ";" << i+0 << ";" << j+0 << "\n";
-            if (read2bit(table[k][j/4],j%4)==0)				//and look it up int the table + compare
-              table[k][j/4]=set2bit(table[k][j/4],3,j%4);		//when it is smaller keep it in the next round.
+            for (uint16_t n=0;n<4096;n++){
+              uint64_t j=centerequivalence(c,n);
+              if (read2bit(table[k][j/4],j%4)==0)				//and look it up int the table + compare
+                table[k][j/4]=set2bit(table[k][j/4],3,j%4);		//when it is smaller keep it in the next round.
+            }
           }
           break;
         case 2:

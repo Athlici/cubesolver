@@ -300,6 +300,17 @@ uint64_t adrcenters(uint64_t x){
 
 }
 
+uint64_t centerequivalence(uint8_t *oc,uint16_t m){
+  uint8_t c[12];
+  for(uint8_t i=0;i<12;i++)
+    c[i]=oc[i];
+  for(uint8_t i=0;i<6;i++)
+    if((m>>(2*i))&3)
+      for(uint8_t j=0;j<12;j++)
+        c[j]=centermove[3*i+6*((i+1)/2)+((m>>(2*i))&3)-1][c[j]];
+  return poscenters(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11]);
+}
+
 uint8_t minDepth(cube &Cube){
 
   uint64_t address[6]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),  //TODO:adjust the covering
