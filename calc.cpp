@@ -300,15 +300,21 @@ uint64_t adrcenters(uint64_t x){
 
 }
 
-uint64_t centerequivalence(uint8_t *oc,uint16_t m){
-  uint8_t c[12];
-  for(uint8_t i=0;i<12;i++)
-    c[i]=oc[i];
-  for(uint8_t i=0;i<6;i++)
-    if((m>>(2*i))&3)
-      for(uint8_t j=0;j<12;j++)
-        c[j]=centermove[3*i+6*((i+1)/2)+((m>>(2*i))&3)-1][c[j]];
-  return poscenters(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11]);
+uint64_t centerequivalence(uint8_t *oc,uint8_t d){
+  if(d==6){
+    uint64_t j=poscenters(oc[0],oc[1],oc[2],oc[3],oc[4],oc[5],oc[6],oc[7],oc[8],oc[9],oc[10],oc[11]);
+    if(read2bit(table[1][j/4],j%4)==0)                //and look it up int the table + compare
+      table[1][j/4]=set2bit(table[1][j/4],3,j%4);     //when it is smaller keep it in the next round.
+  }else{
+    centerequivalence(oc,d+1);
+    for(uint8_t m=0;m<3;m++){
+      for(uint8_t j=0;j<12;j++){
+        uint8_t c[12];
+        c[j]=centermove[3*d+6*((d+1)/2)+m][oc[j]];
+        centerequivalence(c,d+1);
+      }
+    }
+  }
 }
 
 uint8_t minDepth(cube &Cube){

@@ -22,13 +22,7 @@ uint64_t genpar(uint8_t k,uint8_t l){
             uint8_t c[12]={centermove[m][(adr>>55)&31],centermove[m][(adr>>50)&31],centermove[m][(adr>>45)&31],centermove[m][(adr>>40)&31],
               centermove[m][(adr>>35)&31],centermove[m][(adr>>30)&31],centermove[m][(adr>>25)&31],centermove[m][(adr>>20)&31],
               centermove[m][(adr>>15)&31],centermove[m][(adr>>10)&31],centermove[m][(adr>>5)&31],centermove[m][adr&31]};
-//  if(j>=4*tablesize[k])
-//    cout << adr+0 << ";" << i+0 << ";" << j+0 << "\n";
-            for (uint16_t n=0;n<4096;n++){
-              uint64_t j=centerequivalence(c,n);
-              if (read2bit(table[k][j/4],j%4)==0)				//and look it up int the table + compare
-                table[k][j/4]=set2bit(table[k][j/4],3,j%4);		//when it is smaller keep it in the next round.
-            }
+            centerequivalence(c,0);
           }
           break;
         case 2:
