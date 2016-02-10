@@ -21,7 +21,7 @@ uint8_t *table[3];
 #include "../ifshit.cpp"
 #include "../calc.cpp"
 
-uint8_t taken[20]={4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};		//if I would only know how to pass arrays.
+uint8_t taken[20]={4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};		//if I only knew how to pass arrays.
 uint8_t pos[24]={128,128,128,128,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};	//position of the number in the array
 
 
