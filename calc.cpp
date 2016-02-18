@@ -16,17 +16,20 @@ inline uint8_t read2bit(uint8_t a/*Eingangsbyte*/, uint8_t c/*which 2bit*/){
 }
 #endif
 
-//inline uint8_t sethalfbyte(uint8_t a/*Eingangsbyte*/,uint8_t b/*Modifikation*/,uint8_t c/*lower(0) or upper half(1)*/){
-////  if(c)return (b<<4)|(a&15); else return b|(a&240);
-//  return c ? (b<<4)|(a&15) : b|(a&240);
-//}
-//
-//inline uint8_t readhalfbyte(uint8_t a/*Eingangsbyte*/, uint8_t c/*lower(0) or upper half(1)*/){
-////  if(c)return a>>4; else return a&15
-//  return c ? a>>4 : a&15;
-//}
+//next two functions are taken from wikipedia, should be optimised to rol in asm
+uint32_t rotl32 (uint32_t value, unsigned int count) {
+    const unsigned int mask = (CHAR_BIT*sizeof(value)-1);
+    count &= mask;
+    return (value<<count) | (value>>( (-count) & mask ));
+}
 
-/*  functions to maybe use when switching to uint64_t
+uint64_t rotl64 (uint64_t value, unsigned int count) {
+    const unsigned int mask = (CHAR_BIT*sizeof(value)-1);
+    count &= mask;
+    return (value<<count) | (value>>( (-count) & mask ));
+}
+
+/*  functions to maybe use, till then example of inline assembly
 inline uint64_t setchar(uint64_t input,uint8_t shift,uint8_t change){
   shift*=8;
 //  asm ( "rol %1,%0    \n\t"
@@ -37,25 +40,10 @@ inline uint64_t setchar(uint64_t input,uint8_t shift,uint8_t change){
 asm ("mov %1,%%al" : "+a" (input) : "r" (change) );
   return (input<<shift)^(input>>(64-shift));
 }
-
-inline uint8_t getchar(uint64_t input,uint8_t shift){
-  return (input>>(8*shift))&255;
-}
-
-uint64_t touint64(uint8_t val[]){
-  uint64_t result=0;
-  for (uint8_t i=0,i<8,i++)result+=val[i]*(1<<(8*i));
-  return result;
-  //return val[0]+256*(val[1]+256*(val[2]+256*(val[3]+...)))
-}
-
-uint8_t (*touint8(uint64_t val))[8]{}
 */
 
-//The amount of comparisons can be reduced from n^2 to n*log(n) by using binary trees:
-//inserting the nth value und subtracting from it the amount of nodes on the left
-//of the element delivers the result.
-
+//Possible speedup: view permutation and orientation seperatly, use linear time map.
+//Might apply to corners as well, centers are a whole different game
 uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
