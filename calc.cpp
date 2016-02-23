@@ -179,6 +179,54 @@ uint64_t adrcorners(uint64_t x){
   return result;
 }
 
+static const uint8_t BitsSetTable256[256] = 
+{
+#   define B2(n) n,     n+1,     n+1,     n+2
+#   define B4(n) B2(n), B2(n+1), B2(n+1), B2(n+2)
+#   define B6(n) B4(n), B4(n+1), B4(n+1), B4(n+2)
+    B6(0), B6(1), B6(1), B6(2)
+};
+
+static const uint16_t binomials[3][24] = 
+  {{0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253}, 
+  {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
+  {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
+
+static const uint64_t factors[3] = {4845,1820,1};
+
+uint64_t poscenters2(uint8_t* a){
+  for (uint8_t i=0;i<12;i+=4){
+    if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
+    if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
+    if(a[0+i]>a[2+i])swap(a[0+i],a[2+i]);
+    if(a[1+i]>a[3+i])swap(a[1+i],a[3+i]);
+    if(a[1+i]>a[2+i])swap(a[1+i],a[2+i]);
+  }
+  uint32_t taken=0,foo,tmp;
+  for(uint8_t i=0;i<4;i++){
+    taken+=(1<<a[i]);
+    foo=taken&((1<<a[i])-1);
+  }
+  tmp=taken;
+  for(uint8_t i=4;i<8;i++){
+    taken+=(1<<a[i]);
+    foo=tmp&((1<<a[i])-1);
+    for(uint8_t j=0;j<24;j+=8)
+      a[i]-=BitsSetTable256[(foo>>j)%256];
+  }
+  tmp=taken;
+  for(uint8_t i=8;i<12;i++){
+    taken+=(1<<a[i]);
+    foo=tmp&((1<<a[i])-1);
+    for(uint8_t j=0;j<24;j+=8)
+      a[i]-=BitsSetTable256[(foo>>j)%256];
+  }
+  uint64_t res=0,bar=0;
+  for(int8_t i=8;i>=0;i-=4)
+    bar+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
+  return bar;
+}
+
 #if centercount==8
 uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
 #else
@@ -188,28 +236,28 @@ uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
 //and the same again for the centers, this is more difficult because 4 center pieces are equivalent
 //but therefore the memory usage is also reduced by a factor of 24^2.
 
-  if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
-  if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
-  if (a>c)swap(a,c);
-  if (b>d)swap(b,d);
-  if (b>c)swap(b,c);
+  if(a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
+  if(c>d)swap(c,d);              			//with increasing size from a-d;e-h
+  if(a>c)swap(a,c);
+  if(b>d)swap(b,d);
+  if(b>c)swap(b,c);
 
-  if (e>f)swap(e,f);
-  if (g>h)swap(g,h);
-  if (e>g)swap(e,g);
-  if (f>h)swap(f,h);
-  if (f>g)swap(f,g);
+  if(e>f)swap(e,f);
+  if(g>h)swap(g,h);
+  if(e>g)swap(e,g);
+  if(f>h)swap(f,h);
+  if(f>g)swap(f,g);
 #if centercount==8
   decdependently(a,b,c,d,e,f,g,h);  //decrease some values of the secondary positions, if these are already taken
 
   return (a*(192084870+a*(-13425495+(416670-4845*a)*a))+b*(28120380+b*(-1279080+19380*b))+(2616300-58140*c)*c+
    116280*d+e*(21350+e*(-1835+(70-e)*e))+f*(3884+f*(-216+4*f))+(444-12*g)*g+24*h-32214144)/24;
 #else
-  if (i>j)swap(i,j);
-  if (k>l)swap(k,l);
-  if (i>k)swap(i,k);
-  if (j>l)swap(j,l);
-  if (j>k)swap(j,k);
+  if(i>j)swap(i,j);
+  if(k>l)swap(k,l);
+  if(i>k)swap(i,k);
+  if(j>l)swap(j,l);
+  if(j>k)swap(j,k);
 
   decdependently(a,b,c,d,e,f,g,h,i,j,k,l);              //do all the combinatorical magic in an ugly function.
 

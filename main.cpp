@@ -54,6 +54,14 @@ uint8_t solution[36][20];               //Add more bytes once those length becom
 #include "solve.cpp"					//solves a given cube position optimal
 
 int main(int argc, char** argv) {
+
+for(uint8_t i=0;i<100;i++){
+  uint64_t tmp=adrcenters(i);
+  uint8_t pos[12]={(tmp>>55)%32,(tmp>>50)%32,(tmp>>45)%32,(tmp>>40)%32,(tmp>>35)%32,(tmp>>30)%32,(tmp>>25)%32,(tmp>>20)%32,(tmp>>15)%32,(tmp>>10)%32,(tmp>>5)%32,tmp%32};
+  cout << poscenters(pos[11],pos[10],pos[9],pos[8],pos[7],pos[6],pos[5],pos[4],pos[3],pos[2],pos[1],pos[0])+0 << ";" << poscenters2(pos)+0 << "\n";
+}
+
+/*
 future<void> gen[3];
 for(uint8_t i=0;i<3;i++)
   gen[i] =async(launch::async,gentable,i);
@@ -70,7 +78,7 @@ cube Cube=goal();
 uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
 for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
 //printcube(Cube);
-
+*/
 /*
 uint64_t depthcount[3][12]={{0}};
 for(uint8_t k=1;k<3;k++){
@@ -97,7 +105,7 @@ for(uint64_t i=1;i<cotabsize[1];i++){
   old=tmp;
 }
 */
-
+/*
 cout << minDepth(goal())+0 << "\n";
 
 cout << minDepth(Cube)+0 << "\n";
@@ -109,4 +117,5 @@ for(uint8_t j=0;j<36;j++){
     cout << solution[j][i]+0 << ";"; 
   cout << "\n";
 }
+*/
 }
