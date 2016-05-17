@@ -10,10 +10,10 @@
 
 //Number of centerpieces to use, 8,12 or 24 considerable memory use implications
 #define centercount 12
-//Number of cornerpieces to use, 8,9 (or 12)
+//Number of cornerpieces to use, 8,9
 #define cornercount  8
 //Utilise rotation/mirror symmetrie to reduce position count
-#define symred 0
+#define symred 1
 //Whether to use additive tables or plain maximum ones
 #define addtables 0
 //How to compress the tables in memory, 0: nibbles, 1: 2bit + lookup tree, 2: mod 3
@@ -21,7 +21,7 @@
 //How to use the disk during table creation, 0: don't, 1: 2bit in memory, 2: memory cached bfs
 #define disktablegen 0
 //how many threads to use to generate the tables
-#define corecount 4
+#define corecount 8
 
 using namespace std;
 
@@ -46,11 +46,20 @@ uint8_t solution[36][20];               //TODO: this is most ugly, fix it!
 #include "solve.cpp"					//the actual search algorithms to solve a given cube
 
 int main(int argc, char** argv) {
-
+/*
 for(uint8_t i=0;i<10;i++)
     solution[0][i]=i;
 
 cout << *((uint64_t*) solution+0)+0 << "\n";
+*/
+
+gentable(1);
+
+/* Check correctness of this at some point by running the symred on the old tables
+uint8_t tmp[4];
+for(uint8_t i=0;i<3)
+  tmp[i]=
+*/
 
 /*
   for(uint8_t i=0;i<3;i++)                //generate the tables, one after another

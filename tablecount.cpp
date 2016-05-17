@@ -12,7 +12,7 @@ const uint64_t tablecount[3] = {
       29654190720
     #endif
   #else
-    0,0,0
+    0,23861237400,0
   #endif
 };
 

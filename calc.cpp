@@ -1,4 +1,4 @@
-//use linear time map for the permutations
+//Might be faster with seperate permution/orientation encoding, but it's working this way and isn't the bottleneck.
 uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
@@ -28,32 +28,25 @@ uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8
   return (G+6*(F+9*(E+12*(D+15*(C+18*(B+21*A))))));
 }
 
-uint64_t adredges(uint64_t x){
+void adredges(uint8_t* res,uint64_t x){     //stores the result in the array of the first argument
   
-  uint8_t pos[7];				    //Array for orriginal values
   for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
-    pos[i/3-2] = x % i;				//in reduced form
+    res[i/3-2] = x % i;				//in reduced form
     x /= i;
   }
 
   for(uint8_t i=0;i<6;i++)			//therefore we increase them dependently
     for(uint8_t j=i+1;j<7;j++)
-      if(pos[j]/3<=pos[i]/3) 
-	pos[i]+=3;
+      if(res[j]/3<=res[i]/3) 
+	res[i]+=3;
 
-  uint64_t result=pos[6];			//store result in uin64_t bytewise
-  for(int8_t i=5;i>=0;i--){
-    result*=256;
-    result+=pos[i];
-  }
-
-  return result;
 }
 
+//Idea, implement permutation ranking once, use it on corners and edges
 #if cornercount==6
 uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,
 		    const uint8_t &d,const uint8_t &e,const uint8_t &f){
-  uint8_t B=b,C=c,D=d,E=e,F=f;			//the same for the corners
+  uint8_t B=b,C=c,D=d,E=e,F=f;
 #else
 uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		    const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h){
@@ -97,171 +90,123 @@ uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uin
 }
 
 //adjust this to match the cornercount definition
-uint64_t adrcorners(uint64_t x){
-  uint8_t pos[cornercount];			//Array for orriginal values
-  for(uint8_t i=25-cornercount;i<=24;i++){	//which can be extracted from the argument
-    pos[i+cornercount-25] = x % i;		//in reduced form
+void adrcorners(uint8_t* res,uint64_t x){
+  for(uint8_t i=25-cornercount;i<=24;i++){  //same principle as for the edges
+    res[i+cornercount-25] = x % i;
     x /= i;
   }
 
-  for(uint8_t i=0;i<cornercount-1;i++)		//therefore we increase them dependently
+  for(uint8_t i=0;i<cornercount-1;i++)		//reincrease them dependently
     for(uint8_t j=i+1;j<cornercount;j++)
-      if(pos[j]<=pos[i]) 
-	pos[i]++;
+      if(res[j]<=res[i]) 
+        res[i]++;
 
-  uint64_t result=pos[cornercount-1];			//store result in uin64_t bytewise
-  for(int8_t i=cornercount-2;i>=0;i--){
-    result*=256;
-    result+=pos[i];
+}
+
+#if symred==0
+static const uint8_t BitsSetTable256[256] = 
+{
+#   define B2(n) n,     n+1,     n+1,     n+2
+#   define B4(n) B2(n), B2(n+1), B2(n+1), B2(n+2)
+#   define B6(n) B4(n), B4(n+1), B4(n+1), B4(n+2)
+    B6(0), B6(1), B6(1), B6(2)
+};
+
+static const uint16_t binomials[3][24] = 
+  {{0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253}, 
+  {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
+  {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
+
+static const uint64_t factors[3] = {8817900,1820,1};
+
+uint64_t poscenters(uint8_t* a){
+
+  for (uint8_t i=0;i<12;i+=4){
+    if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
+    if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
+    if(a[0+i]>a[2+i])swap(a[0+i],a[2+i]);
+    if(a[1+i]>a[3+i])swap(a[1+i],a[3+i]);
+    if(a[1+i]>a[2+i])swap(a[1+i],a[2+i]);
   }
-//watch for order,alternatively:
-//  uint64_t result=0;
-//  for(uint8_t i=0;i<8;i++)
-//    result+=elem[i]<<(8*i);
-
-  return result;
+  uint32_t taken=0,foo,tmp;
+  for(uint8_t i=0;i<4;i++){
+    taken+=(1<<a[i]);
+    foo=taken&((1<<a[i])-1);
+  }
+  tmp=taken;
+  for(uint8_t i=4;i<8;i++){
+    taken+=(1<<a[i]);
+    foo=tmp&((1<<a[i])-1);
+    for(uint8_t j=0;j<24;j+=8)
+      a[i]-=BitsSetTable256[(foo>>j)%256];
+  }
+  tmp=taken;
+  for(uint8_t i=8;i<12;i++){
+    taken+=(1<<a[i]);
+    foo=tmp&((1<<a[i])-1);
+    for(uint8_t j=0;j<24;j+=8)
+      a[i]-=BitsSetTable256[(foo>>j)%256];
+  }
+  uint64_t bar=0;
+  for(int8_t i=8;i>=0;i-=4)
+    bar+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
+  return bar;
 }
 
-#if centercount==8
-uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,uint8_t g, uint8_t h){
-#else
-uint64_t poscenters(uint8_t a,uint8_t b,uint8_t c,uint8_t d,uint8_t e,uint8_t f,
-		    uint8_t g,uint8_t h,uint8_t i,uint8_t j,uint8_t k,uint8_t l){
-#endif
-//and the same again for the centers, this is more difficult because 4 center pieces are equivalent
-//but therefore the memory usage is also reduced by a factor of 24^2.
-
-  if (a>b)swap(a,b);              			//the values are sorted by size, each group of 4 elements on its own,
-  if (c>d)swap(c,d);              			//with increasing size from a-d;e-h
-  if (a>c)swap(a,c);
-  if (b>d)swap(b,d);
-  if (b>c)swap(b,c);
-
-  if (e>f)swap(e,f);
-  if (g>h)swap(g,h);
-  if (e>g)swap(e,g);
-  if (f>h)swap(f,h);
-  if (f>g)swap(f,g);
-#if centercount==8
-  decdependently(a,b,c,d,e,f,g,h);  //decrease some values of the secondary positions, if these are already taken
-
-  return (a*(192084870+a*(-13425495+(416670-4845*a)*a))+b*(28120380+b*(-1279080+19380*b))+(2616300-58140*c)*c+
-   116280*d+e*(21350+e*(-1835+(70-e)*e))+f*(3884+f*(-216+4*f))+(444-12*g)*g+24*h-32214144)/24;
-#else
-  if (i>j)swap(i,j);
-  if (k>l)swap(k,l);
-  if (i>k)swap(i,k);
-  if (j>l)swap(j,l);
-  if (j>k)swap(j,k);
-
-  decdependently(a,b,c,d,e,f,g,h,i,j,k,l);              //do all the combinatorical magic in an ugly function.
-
-  return (a*(349594463400+a*((758339400-8817900*(int64_t)a)*a-24434400900))+b*(51179091600+b*(35271600*(int64_t)b-2327925600))+(4761666000-105814800*(int64_t)c)*c+211629600*(int64_t)d+
-    e*(38857000+e*((127400-1820*e)*e-3339700))+f*(7068880+f*(7280*f-393120))+(808080-21840*g)*g+43680*h+i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168))+(348-12*k)*k+24*l-58629744984)/24;
-
-#endif
-}
-
-uint64_t adrcenters(uint64_t x){
-#if centercount==12
-  uint64_t z = x % 1820; x /= 1820;
-#endif
-  uint64_t y = x % 4845; x /= 4845;
-
-  uint64_t a = (45-sqrt(5+4*sqrt(255025-24*x)))/2;
-  double bar = cbrtf(1147608+a*(1070442+a*(-74817+(2322-27*a)*a))-648*x+sqrt(1317004119936+x*(-1487299968+419904*x)+a*(2456895605472-1387292832*x
-    +a*(974124899892+96962832*x+a*(-154845026676-3009312*x+a*(10506745305+a*(-405254016+a*(9431802+a*(-125388+729*a)))+34992*x))))));
-  double btmp = 23-2/bar-bar/6;
-  uint64_t b = btmp;
-  if(b+1-btmp<0.00001 && (a*(39646+a*((86-a)*a-2771))+b*(5804+b*(4*b-264))<=24*x))b++;
-  uint64_t c = (141-sqrt(9+a*(118938+a*((258-3*a)*a-8313))+b*(17412+b*(12*b-792))-72*x))/6;
-  uint64_t d = (6648+a*(a*(2771+(a-86)*a)-39646)+b*((264-4*b)*b-5804)+c*(12*c-540)+24*x)/24;
-
-  uint64_t e = (37-sqrt(5+4*sqrt(116281-24*y)))/2;
-  double foo = cbrtf(627912+e*(576450+e*(-49545+(1890-27*e)*e))-648*y+sqrt(394273478016+y*(-813773952+419904*y)+e*(723919744800-747079200*y
-    +e*(270074802420+64210320*y+e*(-54746923140-2449440*y+e*(4599780777+e*(-218408400+e*(6247530+e*(-102060+729*e)))+34992*y))))));
-  double ftmp = 19-2/foo-foo/6;
-  uint64_t f = ftmp; 
-  if(f+1-ftmp<0.00001 && (e*(21350+e*((70-e)*e-1835))+f*(3884+f*(4*f-216))<=24*y))f++;
-  uint64_t g = (117-sqrt(9+e*(64050+e*((210-3*e)*e-5505))+f*(11652+f*(12*f-648))-72*y))/6;
-  uint64_t h = (4584+e*(e*(1835+(e-70)*e)-21350)+f*((216-4*f)*f-3884)+g*(12*g-444)+24*y)/24;
-
-#if centercount==12
-  uint64_t i = (29-sqrt(5+4*sqrt(43681-24*z)))/2;
-  double jee  = cbrtf(294840+i*(263898+i*((1458-27*i)*i-29457))-648*z+sqrt(86930623872+z*(419904*z-382112640)+i*(155615372640-342011808*z+
-    i*(52271950644+38176272*z+i*(i*(1621320057+i*(i*(3716442+i*(729*i-78732))-100147104)+34992*z)-14687533332-1889568*z)))));
-  double jtmp = 15-2/jee-jee/6;
-  uint64_t j = jtmp;
-  if(j+1-jtmp<0.00001 && ((i*(9774+i*((54-i)*i-1091))+j*(2348+j*(4*j-168)))<=24*z))j++;
-  uint64_t k = (93-sqrt(9+i*(29322+i*((162-3*i)*i-3273))+j*(7044+j*(12*j-504))-72*z))/6;
-  uint64_t l = (2904+i*(i*(1091+(i-54)*i)-9774)+j*((168-4*j)*j-2348)+k*(12*k-348)+24*z)/24;
-#endif
-  uint64_t first[] = {a,b,c,d};
-  uint64_t second[]= {e,f,g,h};
-
-  for(uint8_t m=0;m<4;m++)
-    for(uint8_t n=0;n<4;n++)
-      if(first[n]<=second[m])
-        second[m]++;
-#if centercount==12
-  uint64_t third[] = {i,j,k,l};
-  uint8_t res[8];
-  merge(first,first+4,second,second+4,res);
-
-  for(uint8_t m=0;m<4;m++)
-    for(uint8_t n=0;n<8;n++)
-      if(res[n]<=third[m])
-        third[m]++;
-//do return in a loop, adjust the offset in centers=8 case everywhere else
-  return (third[3]+32*(third[2]+32*(third[1]+32*(third[0]+32*(second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0])))))))))));
-#else
-  return second[3]+32*(second[2]+32*(second[1]+32*(second[0]+32*(first[3]+32*(first[2]+32*(first[1]+32*first[0]))))));
-#endif
-}
-
-#if splitcomp
-uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0,uint8_t ch = 0){
-  uint64_t noln = addr;
-  if(2*pos+1<cotabsize[k]){
-    const uint8_t h[3] = {3,26,25}; //lb(cotabsize)
-    uint64_t lb = 2*pos+1,rb = 2*pos+1;
-    for(uint8_t i=ch+1;i<h[k];i++){
-      lb=2*lb+1;
-      rb=2*rb+2;
+void adrcenters(uint8_t* res,uint64_t x){
+  uint16_t subc[3];
+  subc[2]=x%1820; x/=1820;
+  subc[1]=x%4845; x/=4845;
+  subc[0]=x;
+  for(uint8_t i=0;i<3;i++){
+    for(int8_t j=2;j>=0;j--){
+      uint8_t pos=23;
+      while(binomials[j][pos]>subc[i]) pos--;
+      res[4*i+j+1]=pos;
+      subc[i]-=binomials[j][pos];
     }
-    noln = (1<<(h[k]-ch-1))+min(rb,cotabsize[k])-min(lb,cotabsize[k]+1);
-    //cout << addr+0 << ";" << pos+0 << ":" << noln+0 << "\n";
-   }
-  if(noln>=addr)
-    if(noln==addr)
-      return pos;
-    else
-      return nextfree(k,addr,2*pos+1,ch+1);
-  else
-    return nextfree(k,addr-noln-1,2*pos+2,ch+1);
+    res[4*i]=subc[i];
+  }
+  for(uint8_t i=4;i<8;i++)
+    for(uint8_t j=0;j<4;j++)
+      if(res[j]<=res[i])
+        res[i]++;
+
+  uint8_t foo[8];
+  merge(res,res+4,res+4,res+8,foo);
+  for(uint8_t i=8;i<12;i++)
+    for(uint8_t j=0;j<8;j++)
+      if(foo[j]<=res[i])
+        res[i]++;
+}
+#else
+
+
+
+uint64_t poscenters(uint8_t* a){
+  if(a[0]>a[1])swap(a[0],a[1]); //Sort the white pieces, hold off on the rest untill
+  if(a[2]>a[3])swap(a[2],a[3]); //we have applied out symmetry reductions
+  if(a[0]>a[2])swap(a[0],a[2]);
+  if(a[1]>a[3])swap(a[1],a[3]);
+  if(a[1]>a[2])swap(a[1],a[2]);
+ 
+  uint8_t layers=(a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4);
+  uint64_t res=0;
+  switch(layers){
+    case 0:
+    
+    break;
+  }
+
 }
 
-/*
-uint64_t cotabpos[3]={0,1,1};       \\encode current position, read & mutate that when called
-uint64_t nextfree(uint8_t k){
-}
-*/
+void adrcenters(uint8_t* res,uint64_t x){
 
-uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
-  if(addr>cotabsize[k])
-    return 7;
-  uint64_t node = (((uint64_t) cotab[k][5*addr])<<29)+(((uint64_t) cotab[k][5*addr+1])<<21)+(((uint64_t) cotab[k][5*addr+2])<<13)
-                    +(((uint64_t) cotab[k][5*addr+3])<<5)+(cotab[k][5*addr+4]>>3);
-  if(node==key){
-    uint8_t res = cotab[k][5*addr+4]%8;
-    return res+4*(res==7);
-  }else
-    return colookup(k,key,2*addr+1+(key>node));
 }
 #endif
 
 uint8_t minDepth(const cube &Cube){
-
+//WTF
   uint64_t address[]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
 #if centercount==8
     poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
