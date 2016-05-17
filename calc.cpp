@@ -192,9 +192,12 @@ static const uint16_t binomials[3][24] =
   {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
   {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
 
-static const uint64_t factors[3] = {4845,1820,1};
+static const uint8_t symmap[24] = {1,0,3,2,5,4,7,6,9,8,11,10,13,12,15,14,21,20,23,22,17,16,19,18};
 
-uint64_t poscenters2(uint8_t* a){
+static const uint64_t factors[3] = {8817900,1820,1};
+
+uint64_t poscenters3(uint8_t* a){
+
   for (uint8_t i=0;i<12;i+=4){
     if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
     if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
@@ -221,10 +224,51 @@ uint64_t poscenters2(uint8_t* a){
     for(uint8_t j=0;j<24;j+=8)
       a[i]-=BitsSetTable256[(foo>>j)%256];
   }
-  uint64_t res=0,bar=0;
+  uint64_t bar=0;
   for(int8_t i=8;i>=0;i-=4)
     bar+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
   return bar;
+}
+
+uint64_t poscenters2(uint8_t* a){
+  uint8_t b[12];
+  //if((a[0]<16&&(a[0]%4==1||a[0]%4==2))||a[0]>19)
+    for(uint8_t i=0;i<12;i++)
+      b[i]=symmap[a[i]];
+  return min(poscenters3(a),poscenters3(b));
+}
+
+uint64_t adrcenters2(uint64_t x){
+  uint16_t subc[3];
+  subc[2]=x%1820; x/=1820;
+  subc[1]=x%4845; x/=4845;
+  subc[0]=x;
+  uint8_t pieces[12];
+  for(uint8_t i=0;i<3;i++){
+    for(int8_t j=2;j>=0;j--){
+      uint8_t pos=23;
+      while(binomials[j][pos]>subc[i]) pos--;
+      pieces[4*i+j+1]=pos;
+      subc[i]-=binomials[j][pos];
+    }
+    pieces[4*i]=subc[i];
+  }
+  for(uint8_t i=4;i<8;i++){
+    for(uint8_t j=0;j<4;j++){
+      if(pieces[j]<=pieces[i]) pieces[i]++;
+    }
+  }
+  uint8_t foo[8];
+  merge(pieces,pieces+4,pieces+4,pieces+8,foo);
+  for(uint8_t i=8;i<12;i++){
+    for(uint8_t j=0;j<8;j++){
+      if(foo[j]<=pieces[i]) pieces[i]++;
+    }
+  }
+  uint64_t res=0;
+  for(uint8_t i=0;i<12;i++)
+    res=(res<<5)+pieces[i];
+  return res;
 }
 
 #if centercount==8
