@@ -103,7 +103,6 @@ void adrcorners(uint8_t* res,uint64_t x){
 
 }
 
-#if symred==0
 static const uint8_t BitsSetTable256[256] = 
 {
 #   define B2(n) n,     n+1,     n+1,     n+2
@@ -117,40 +116,98 @@ static const uint16_t binomials[3][24] =
   {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
   {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
 
-static const uint64_t factors[3] = {8817900,1820,1};
+#if symred==0
+static const uint64_t factors[3] = {1,10626,51482970};
+#else
+static const uint64_t factors[3] = {1, 2796,13546620};
+static const uint8_t bin6[4][6] = {{0,1,2,3,4,5,6},{0,0,1,3,6,10,15},{0,0,0,1,4,10,20},{0,0,0,0,1,5,15}};
+
+uint64_t bin6pos(uint8_t* a,uint8_t n){
+    uint64_t res=0;
+    for(uint8_t i=0;i<n;i++)
+      res+=bin6[i][a[i]/4];
+    return res;
+}
+#endif
 
 uint64_t poscenters(uint8_t* a){
+  uint64_t res=0;
 
-  for (uint8_t i=0;i<12;i+=4){
+  if(a[0]>a[1])swap(a[0],a[1]); //Sort the white pieces, hold off on the rest until
+  if(a[2]>a[3])swap(a[2],a[3]); //we have potentially applied out symmetry reductions
+  if(a[0]>a[2])swap(a[0],a[2]);
+  if(a[1]>a[3])swap(a[1],a[3]);
+  if(a[1]>a[2])swap(a[1],a[2]);
+
+#if symred==0
+  switch((a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4)){
+    case 0:
+      symcenters(a,a[0]%4);   //a[0]%4==0 after this;
+      res=bin6pos(a,4)*64+(a[3]%4)*16+(a[2]%4)*4+(a[1]%4);
+    break;
+    case 1:
+      symcenters(a,a[0]%4);
+      if(a[2]>a[3])swap(a[2],a[3]);
+      res=960+4*(20*(bin[0][a[2]%4]+bin[1][a[3]%4])+bin6pos(a,3))+a[1]%4;
+    break;
+    case 2:
+      symcenters(a,a[0]);
+      uint8_t b[3]={a[0],a[1],a[3]};
+      if(a[1]>a[2])swap(a[1],a[2]);
+      res=1440+4*(20*(bin[0][a[1]%4]+bin[1][a[2]%4])+bin6pos(b,3))+a[3]%4;
+    break;
+    case 4:
+      symcenters(a,a[2]%4);
+      if(a[0]>a[1])swap(a[0],a[1]);
+      res=1920+4*(20*(bin[0][a[0]%4]+bin[1][a[1]%4])+bin6pos(a+1,3))+a[3]%4;
+    break;
+    case 3:
+      symcenters(a,a[0]%4);
+      if(a[1]>a[2])swap(a[1],a[2]);
+      if(a[2]>a[3])swap(a[2],a[3]);
+      if(a[1]>a[2])swap(a[1],a[2]);
+      res=2400+4*bin6pos(a,2)+(bin[0][a[1]%4]+bin[1][a[2]%4]+bin[2][a[3]%4]);
+    break;
+    case 6:
+      symcenters(a,a[3]%4);
+      if(a[0]>a[1])swap(a[0],a[1]);
+      if(a[1]>a[2])swap(a[1],a[2]);
+      if(a[0]>a[1])swap(a[0],a[1]);
+      res=2460+4*bin6pos(a+2,2)+(bin[0][a[0]%4]+bin[1][a[1]%4]+bin[2][a[2]%4]);
+    break;
+    case 5://this is 3% suboptimal
+      symcenters(a,a[0]%4);
+      if(a[2]>a[3])swap(a[2],a[3]);
+      res=2520+3*(6*bin6pos(a+1,2)+(bin[0][a[2]%4]+bin[1][a[3]%4]))+(a[1]-1);
+    break;
+    case 7:
+      res=2790+a[0]/4;
+  }
+#endif
+  for (uint8_t i=4;i<12;i+=4){
     if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
     if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
     if(a[0+i]>a[2+i])swap(a[0+i],a[2+i]);
     if(a[1+i]>a[3+i])swap(a[1+i],a[3+i]);
     if(a[1+i]>a[2+i])swap(a[1+i],a[2+i]);
   }
-  uint32_t taken=0,foo,tmp;
-  for(uint8_t i=0;i<4;i++){
-    taken+=(1<<a[i]);
-    foo=taken&((1<<a[i])-1);
+  uint32_t curr=0,last=0;           //keep track which bits are set and have been set
+  for(uint8_t b=0;b<12;b+=4){       //for every block
+    for(uint8_t i=b;i<b+4;i++){     //for every element
+      curr+=(1<<a[i]);              //add it to the bit pile
+      uint32_t mask=last&((1<<a[i])-1);        //create a mask including only x<a[i]
+      for(uint8_t j=0;j<24;j+=8)    //and reduce a[i] appropiatly
+        a[i]-=BitsSetTable256[(mask>>j)%256];
+    }
+    last=curr;
   }
-  tmp=taken;
-  for(uint8_t i=4;i<8;i++){
-    taken+=(1<<a[i]);
-    foo=tmp&((1<<a[i])-1);
-    for(uint8_t j=0;j<24;j+=8)
-      a[i]-=BitsSetTable256[(foo>>j)%256];
-  }
-  tmp=taken;
-  for(uint8_t i=8;i<12;i++){
-    taken+=(1<<a[i]);
-    foo=tmp&((1<<a[i])-1);
-    for(uint8_t j=0;j<24;j+=8)
-      a[i]-=BitsSetTable256[(foo>>j)%256];
-  }
-  uint64_t bar=0;
-  for(int8_t i=8;i>=0;i-=4)
-    bar+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
-  return bar;
+#if symred==0
+  for(int8_t i=0;i<12;i+=4)
+#else
+  for(int8_t i=4;i<12;i+=4)
+#endif
+    res+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
+  return res;
 }
 
 void adrcenters(uint8_t* res,uint64_t x){
@@ -179,31 +236,6 @@ void adrcenters(uint8_t* res,uint64_t x){
       if(foo[j]<=res[i])
         res[i]++;
 }
-#else
-
-
-
-uint64_t poscenters(uint8_t* a){
-  if(a[0]>a[1])swap(a[0],a[1]); //Sort the white pieces, hold off on the rest untill
-  if(a[2]>a[3])swap(a[2],a[3]); //we have applied out symmetry reductions
-  if(a[0]>a[2])swap(a[0],a[2]);
-  if(a[1]>a[3])swap(a[1],a[3]);
-  if(a[1]>a[2])swap(a[1],a[2]);
- 
-  uint8_t layers=(a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4);
-  uint64_t res=0;
-  switch(layers){
-    case 0:
-    
-    break;
-  }
-
-}
-
-void adrcenters(uint8_t* res,uint64_t x){
-
-}
-#endif
 
 uint8_t minDepth(const cube &Cube){
 //WTF

@@ -42,7 +42,7 @@ cube rotatecube(cube Cube,const uint8_t move){
 void symcenters(uint8_t* addr,const uint8_t move){
   for(uint8_t i=0;i<12;i++)
     addr[i]=symcenters[move][addr[i]];
-  if(move>1)
+  if(move==1||move==3)
     for(uint8_t i=4;i<8;i++)      //4Byte in one?
         swap(addr[i],addr[i+4]);  //Adjust for colorswap;
 }
