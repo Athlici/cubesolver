@@ -3,9 +3,9 @@
 //the turn* functions mutate the data at the first argument in place
 //maybe unify all these into one function?
 
-void turnedges(uint8_t* addr,const uint8_t move){
+void turnedges(uint8_t* addr,const uint8_t move,const uint8_t n=7){
   if(move<18)       //moves >=18 are inner moves and therefore don't affect the edges
-    for(uint8_t i=0;i<7;i++)
+    for(uint8_t i=0;i<n;i++)
       addr[i]=edgemove[move][addr[i]];
 }
 
@@ -13,10 +13,10 @@ void turncenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
     addr[i]=centermove[move][addr[i]];
 }
-/*
+
 void turncorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){
-  for(uint8_t i=0;i<n;i++)
-    addr[i]=cornermove[move][addr[i]];
+//  for(uint8_t i=0;i<n;i++)
+//    addr[i]=cornermove[move][addr[i]];
 }
 
 cube turncube(cube Cube,const uint8_t move){        //this should implicitly use a copy
@@ -25,7 +25,7 @@ cube turncube(cube Cube,const uint8_t move){        //this should implicitly use
   turncorners(Cube.corner,move);
   return Cube;
 }
-
+/*
 void rotateedges(uint8_t* addr,const uint8_t move){}
 
 void rotatecenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){}

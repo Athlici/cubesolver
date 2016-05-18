@@ -52,21 +52,22 @@ for(uint8_t i=0;i<10;i++)
 cout << *((uint64_t*) solution+0)+0 << "\n";
 */
 
-//gentable(1);
+gentable(1);
 
+/*
 uint8_t foo[12],bar[12];
-for(uint64_t x=0;x<100;x++){
+for(uint64_t x=0;x<tablecount[1];x++){
   adrcenters(foo,x);
   memcpy(bar,foo,12);
   uint64_t res=poscenters(bar);
-  if(res!=x){
-    cout << "Mismatch at:" << x+0 << ";" << res << "\n";
+  if(x!=res){
+    cout << "Results at:" << x+0 << ";" << res << "\n";
     for(uint8_t i=0;i<12;i++)
       cout << foo[i]+0 << ";";
     cout << "\n";
   }
 }
-
+*/
 /* Check correctness of this at some point by running the symred on the old tables
 uint8_t tmp[4];
 for(uint8_t i=0;i<3)

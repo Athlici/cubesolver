@@ -1,5 +1,5 @@
 //Might be faster with seperate permution/orientation encoding, but it's working this way and isn't the bottleneck.
-uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
+uint64_t posedges2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
 
@@ -28,6 +28,10 @@ uint64_t posedges(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8
   return (G+6*(F+9*(E+12*(D+15*(C+18*(B+21*A))))));
 }
 
+uint64_t posedges(uint8_t* a){
+  return posedges2(a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
+}
+
 void adredges(uint8_t* res,uint64_t x){     //stores the result in the array of the first argument
   
   for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
@@ -44,11 +48,11 @@ void adredges(uint8_t* res,uint64_t x){     //stores the result in the array of 
 
 //Idea, implement permutation ranking once, use it on corners and edges
 #if cornercount==6
-uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,
+uint64_t poscorners2(const uint8_t &A,const uint8_t &b,const uint8_t &c,
 		    const uint8_t &d,const uint8_t &e,const uint8_t &f){
   uint8_t B=b,C=c,D=d,E=e,F=f;
 #else
-uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
+uint64_t poscorners2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		    const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h){
   uint8_t B=b,C=c,D=d,E=e,F=f,G=g,H=h;
 #endif
@@ -89,6 +93,10 @@ uint64_t poscorners(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uin
 #endif
 }
 
+uint64_t poscorners(uint8_t* a){
+  return poscorners2(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+}
+
 //adjust this to match the cornercount definition
 void adrcorners(uint8_t* res,uint64_t x){
   for(uint8_t i=25-cornercount;i<=24;i++){  //same principle as for the edges
@@ -126,7 +134,7 @@ uint64_t div4(uint8_t x){return x/4;}
 uint64_t binpos(uint8_t* a,uint8_t n,uint64_t (*f)(uint8_t)=id){
     uint64_t res=(*f)(a[0]);
     for(uint8_t i=1;i<n;i++)
-      res+=bin[i][(*f)(a[i])];
+      res+=bin[i-1][(*f)(a[i])];
     return res;
 }
 #endif
@@ -153,7 +161,7 @@ uint64_t poscenters(uint8_t* a){
       res=960+4*(20*binpos(a+2,2,mod4)+binpos(a,3,div4))+a[1]%4;
     break;
     case 2:
-      symcenters(a,a[0]);
+      symcenters(a,a[0]%4);
       if(a[1]>a[2])swap(a[1],a[2]);
       b[0]=a[0];b[1]=a[1];b[2]=a[3];
       res=1440+4*(20*binpos(a+1,2,mod4)+binpos(b,3,div4))+a[3]%4;
@@ -180,7 +188,7 @@ uint64_t poscenters(uint8_t* a){
     case 5://this is suboptimal by 3%
       symcenters(a,a[0]%4);
       if(a[2]>a[3])swap(a[2],a[3]);
-      res=2520+3*(6*binpos(a+1,2,div4)+binpos(a+2,2,mod4))+(a[1]-1);
+      res=2520+3*(6*binpos(a+1,2,div4)+binpos(a+2,2,mod4))+(a[1]-1)%4;
     break;
     case 7:
       res=2790+a[0]/4;
@@ -229,20 +237,22 @@ void binadr(uint8_t* res,uint64_t x,int8_t n){
 void adrcenters(uint8_t* res,uint64_t x){
   uint16_t subc[3];
 #if symred==1
-  static const uint64_t factors[3] = {2796,4845,1};
+  static const uint64_t factors[2] = {2796,4845};
 #else
-  static const uint64_t factors[3] = {10626,4845,1};
+  static const uint64_t factors[2] = {10626,4845};
 #endif
-  for(uint8_t i=0;i<3;i++){
-    subc[i]=x%factors[i];
-    x/=factors[i];
-  }
+  subc[0]=x%factors[0];
+  x/=factors[0];
+  subc[1]=x%factors[1];
+  x/=factors[1];
+  subc[2]=x;
+    
 #if symred==1
   if(subc[0]<2400){
     if(subc[0]<1440){
       if(subc[0]<960){
         uint8_t foo[4];
-        binadr(foo,subc[0],4);
+        binadr(foo,subc[0]/64,4);
         res[0]=foo[0]*4;
         for(uint8_t i=1;i<4;i++){
             res[i]=foo[i]*4+subc[0]%4;
