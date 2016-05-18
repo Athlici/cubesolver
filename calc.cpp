@@ -141,6 +141,7 @@ uint64_t poscenters(uint8_t* a){
   if(a[1]>a[2])swap(a[1],a[2]);
 
 #if symred==1
+  uint8_t b[3];
   switch((a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4)){
     case 0:
       symcenters(a,a[0]%4);   //a[0]%4==0 after this;
@@ -153,14 +154,14 @@ uint64_t poscenters(uint8_t* a){
     break;
     case 2:
       symcenters(a,a[0]);
-      uint8_t b[3]={a[0],a[1],a[3]};
       if(a[1]>a[2])swap(a[1],a[2]);
-      res=1440+4*(20*binpos(a+1,2,mod4)+binpos(b,3i,div4))+a[3]%4;
+      b[0]=a[0];b[1]=a[1];b[2]=a[3];
+      res=1440+4*(20*binpos(a+1,2,mod4)+binpos(b,3,div4))+a[3]%4;
     break;
     case 4:
       symcenters(a,a[2]%4);
       if(a[0]>a[1])swap(a[0],a[1]);
-      res=1920+4*(20*binpos(a,2,mod4)+binpos(a+1,3i,div4))+a[3]%4;
+      res=1920+4*(20*binpos(a,2,mod4)+binpos(a+1,3,div4))+a[3]%4;
     break;
     case 3:
       symcenters(a,a[0]%4);
@@ -209,7 +210,7 @@ uint64_t poscenters(uint8_t* a){
   static const uint64_t factors[3] = {1, 2796,13546620};
   for(int8_t i=4;i<12;i+=4)
 #endif
-    res+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
+    res+=factors[i/4]*binpos(a+i,4);
   return res;
 }
 
@@ -228,9 +229,9 @@ void binadr(uint8_t* res,uint64_t x,int8_t n){
 void adrcenters(uint8_t* res,uint64_t x){
   uint16_t subc[3];
 #if symred==1
-  static const uint64_t factors[2] = {2796,4845,1};
+  static const uint64_t factors[3] = {2796,4845,1};
 #else
-  static const uint64_t factors[2] = {10626,4845,1};
+  static const uint64_t factors[3] = {10626,4845,1};
 #endif
   for(uint8_t i=0;i<3;i++){
     subc[i]=x%factors[i];
@@ -240,27 +241,79 @@ void adrcenters(uint8_t* res,uint64_t x){
   if(subc[0]<2400){
     if(subc[0]<1440){
       if(subc[0]<960){
-        res[0]=0;
+        uint8_t foo[4];
+        binadr(foo,subc[0],4);
+        res[0]=foo[0]*4;
+        for(uint8_t i=1;i<4;i++){
+            res[i]=foo[i]*4+subc[0]%4;
+            subc[0]/=4;
+        }
       }else{
-        
+        subc[0]-=960;
+        uint8_t a=subc[0]%4; subc[0]/=4;
+        uint8_t foo[3],bar[2];
+        binadr(foo,subc[0]%20,3); subc[0]/=20;
+        binadr(bar,subc[0],2);
+        res[0]=4*foo[0];
+        res[1]=4*foo[1]+a;
+        res[2]=4*foo[2]+bar[0];
+        res[3]=4*foo[2]+bar[1];
       }
     }else{
       if(subc[0]<1920){
-        
+        subc[0]-=1440;
+        uint8_t a=subc[0]%4; subc[0]/=4;
+        uint8_t foo[3],bar[2];
+        binadr(foo,subc[0]%20,3); subc[0]/=20;
+        binadr(bar,subc[0],2);
+        res[0]=4*foo[0];
+        res[1]=4*foo[1]+bar[0];
+        res[2]=4*foo[1]+bar[1];
+        res[3]=4*foo[2]+a;
       }else{
-        
+        subc[0]-=1920;
+        uint8_t a=subc[0]%4; subc[0]/=4;
+        uint8_t foo[3],bar[2];
+        binadr(foo,subc[0]%20,3); subc[0]/=20;
+        binadr(bar,subc[0],2);
+        res[0]=4*foo[0]+bar[0];
+        res[1]=4*foo[0]+bar[1];
+        res[2]=4*foo[1];
+        res[3]=4*foo[2]+a;
       }
     }
   }else{
     if(subc[0]<2520){
       if(subc[0]<2460){
-        
+        subc[0]-=2400;
+        uint8_t foo[3],bar[2];
+        binadr(foo,subc[0]%4,3); subc[0]/=4;
+        binadr(bar,subc[0],2);
+        res[0]=4*bar[0];
+        res[1]=4*bar[1]+foo[0];
+        res[2]=4*bar[1]+foo[1];
+        res[3]=4*bar[1]+foo[2];
       }else{
-        
+        subc[0]-=2460;
+        uint8_t foo[3],bar[2];
+        binadr(foo,subc[0]%4,3); subc[0]/=4;
+        binadr(bar,subc[0],2);
+        res[0]=4*bar[0]+foo[0];
+        res[1]=4*bar[0]+foo[1];
+        res[2]=4*bar[0]+foo[2];
+        res[3]=4*bar[1];
       }
     }else{
       if(subc[0]<2790){
-
+        subc[0]-=2520;
+        uint8_t a=subc[0]%3; subc[0]/=3;
+        uint8_t foo[2],bar[2];
+        binadr(foo,subc[0]%6,2); subc[0]/=6;
+        binadr(bar,subc[0],2);
+        res[0]=4*bar[0];
+        res[1]=4*bar[0]+a+1;
+        res[2]=4*bar[1]+foo[0];
+        res[3]=4*bar[1]+foo[1];
       }else{
         for(uint8_t i=0;i<4;i++)
           res[i]=4*(subc[0]-2790)+i;
@@ -286,7 +339,7 @@ void adrcenters(uint8_t* res,uint64_t x){
       if(foo[j]<=res[i])
         res[i]++;
 }
-
+/*
 uint8_t minDepth(const cube &Cube){
 //WTF
   uint64_t address[]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
@@ -343,3 +396,4 @@ uint8_t minDepth(const cube &Cube){
 
   return max;
 }
+*/

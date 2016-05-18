@@ -33,17 +33,16 @@ typedef struct {
 } cube ;
 
 #include "tablecount.cpp"
+uint8_t* table[3];
 const char* tablepath[3] = {"edges.bin","centers.bin","corners.bin"};
 const char* tablename[3] = {"edge","center","corner"};
 
 uint8_t solution[36][20];               //TODO: this is most ugly, fix it!
 
-#include "arrays.cpp"
-
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"				    	//un/ranking of the permutations for table lookup
 #include "create.cpp"					//creates the various pattern databases
-#include "solve.cpp"					//the actual search algorithms to solve a given cube
+//#include "solve.cpp"					//the actual search algorithms to solve a given cube
 
 int main(int argc, char** argv) {
 /*
@@ -53,7 +52,20 @@ for(uint8_t i=0;i<10;i++)
 cout << *((uint64_t*) solution+0)+0 << "\n";
 */
 
-gentable(1);
+//gentable(1);
+
+uint8_t foo[12],bar[12];
+for(uint64_t x=0;x<100;x++){
+  adrcenters(foo,x);
+  memcpy(bar,foo,12);
+  uint64_t res=poscenters(bar);
+  if(res!=x){
+    cout << "Mismatch at:" << x+0 << ";" << res << "\n";
+    for(uint8_t i=0;i<12;i++)
+      cout << foo[i]+0 << ";";
+    cout << "\n";
+  }
+}
 
 /* Check correctness of this at some point by running the symred on the old tables
 uint8_t tmp[4];

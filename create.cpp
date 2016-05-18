@@ -3,8 +3,8 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
   FILE* file  = fopen(tablepath[k],"rb");
   if(file!=0){
 #if splitcomp==0
-    table[k] = (uint8_t*) calloc(tablesize[k],1);
-    fread(table[k],1,tablesize[k],file);
+    table[k] = (uint8_t*) calloc(tablecount[k]/2,1);
+    fread(table[k],1,tablecount[k]/2,file);
 #else
     if(k==0){
       table[k] = (uint8_t*) calloc(tablesize[k],1);
@@ -18,7 +18,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       for(uint64_t i=0;i<tablesize[k]/buffersize;i++){
         fread(buffer,1,buffersize,file);
         for(uint64_t j=0;j<2*buffersize;j++){
-          uint8_t t = 0,d = readhalfbyte(~buffer[j/2],j%2);
+          uint8_t t = 0,d = readnibble(~buffer[j/2],j%2);
           uint64_t ind = i*2*buffersize+j;
           if(6<d && d<11)
             t=d-7;
@@ -40,7 +40,8 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
   }else{
-    uint64_t zeroaddr[3] = {posedges(0,3,6,9,12,15,18), //get this shit out of here
+    uint64_t zeroaddr[3] = {0,0,0};
+/*{posedges(0,3,6,9,12,15,18), //get this shit out of here
 #if centercount==8
 	            		    poscenters(0,1,2,3,8,9,10,11),
 #else
@@ -52,11 +53,13 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 			                poscorners(0,1,5,4,8,9,10,11)   //fix this with the new arraytables
 #endif
 };
-    table[k][zeroaddr[k]/2]=~sethalfbyte(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
-    void (*adrfunc[3])()={&adredges, &adrcenters, &adrcorners};
-    void (*posfunc[3])()={&posedges, &poscenters, &poscorners};
-    void (*movfunc[3])()={&movedges, &movcenters, &movcorners};
-    uint8_t n={7,centercount,cornercount}[k];
+*/
+    table[k][zeroaddr[k]/2]=~setnibble(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
+    void     (*adrfunc[3])()={&adredges, &adrcenters, &adrcorners};
+    uint64_t (*posfunc[3])()={&posedges, &poscenters, &poscorners};
+    void     (*movfunc[3])()={&movedges, &movcenters, &movcorners};
+    uint8_t tmp[3]={7,centercount,cornercount};
+    uint8_t n=tmp[k];
     const uint8_t movespace[3] = {36,36,18};
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
@@ -64,8 +67,8 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     uint64_t count=1;
     for(uint8_t depth=0;count>0;depth++){
       count=0;
-      for(uint64_t mover=0;mover<2*tablesize[k];mover++){		//apply moves to all positions in the current depth
-        uint8_t mem = readhalfbyte(~table[k][mover/2],mover%2);
+      for(uint64_t mover=0;mover<tablecount[k];mover++){		//apply moves to all positions in the current depth
+        uint8_t mem = readnibble(~table[k][mover/2],mover%2);
         if(depth==mem){
           count++;
           uint8_t current[n],next[n];
@@ -74,8 +77,8 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
             memcpy(next,current,n);
             (*movfunc[k])(next,i,n);
             uint64_t pos=(*posfunc[k])(next);
-            if(depth<readhalfbyte(~table[k][pos/2],pos%2))
-              table[k][pos/2]=~sethalfbyte(~table[k][pos/2],depth+1,pos%2);
+            if(depth<readnibble(~table[k][pos/2],pos%2))
+              table[k][pos/2]=~setnibble(~table[k][pos/2],depth+1,pos%2);
 	      }
 	    }
       }
@@ -84,7 +87,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 
   FILE* file=fopen(tablepath[k],"wb");
   if(file!=0){
-    fwrite(table[k],1,tablesize[k],file);
+    fwrite(table[k],1,tablecount[k]/2,file);
     fclose(file);
   }
   cout << tablename[k] << " table created\n"; 

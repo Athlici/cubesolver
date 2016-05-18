@@ -2,6 +2,7 @@
 
 //the turn* functions mutate the data at the first argument in place
 //maybe unify all these into one function?
+
 void turnedges(uint8_t* addr,const uint8_t move){
   if(move<18)       //moves >=18 are inner moves and therefore don't affect the edges
     for(uint8_t i=0;i<7;i++)
@@ -12,7 +13,7 @@ void turncenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
     addr[i]=centermove[move][addr[i]];
 }
-
+/*
 void turncorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
     addr[i]=cornermove[move][addr[i]];
@@ -37,11 +38,11 @@ cube rotatecube(cube Cube,const uint8_t move){
   rotatecorners(Cube.corner,move);
   return Cube;
 }
-
+*/
 #if symred==1
 void symcenters(uint8_t* addr,const uint8_t move){
   for(uint8_t i=0;i<12;i++)
-    addr[i]=symcenters[move][addr[i]];
+    addr[i]=centersym[move][addr[i]];
   if(move==1||move==3)
     for(uint8_t i=4;i<8;i++)      //4Byte in one?
         swap(addr[i],addr[i+4]);  //Adjust for colorswap;
@@ -135,7 +136,7 @@ cube goal(void){
   return Cube;
 }
 
-cube inverse(cube Cube){}   //TODO: implement for DIDA*
+//cube inverse(cube Cube){}   //TODO: implement for DIDA*
 
 void printcube(cube Cube){
   cout << "edges: " ;
