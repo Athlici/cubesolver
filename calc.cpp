@@ -111,21 +111,22 @@ static const uint8_t BitsSetTable256[256] =
     B6(0), B6(1), B6(1), B6(2)
 };
 
-static const uint16_t binomials[3][24] = 
+static const uint16_t bin[3][24] = 
   {{0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253}, 
   {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
   {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
 
-#if symred==0
-static const uint64_t factors[3] = {1,10626,51482970};
-#else
-static const uint64_t factors[3] = {1, 2796,13546620};
-static const uint8_t bin6[4][6] = {{0,1,2,3,4,5,6},{0,0,1,3,6,10,15},{0,0,0,1,4,10,20},{0,0,0,0,1,5,15}};
+#if symred==1
+uint64_t id(uint8_t x){return x;}
 
-uint64_t bin6pos(uint8_t* a,uint8_t n){
-    uint64_t res=0;
-    for(uint8_t i=0;i<n;i++)
-      res+=bin6[i][a[i]/4];
+uint64_t mod4(uint8_t x){return x%4;}
+
+uint64_t div4(uint8_t x){return x/4;}
+
+uint64_t binpos(uint8_t* a,uint8_t n,uint64_t (*f)(uint8_t)=id){
+    uint64_t res=(*f)(a[0]);
+    for(uint8_t i=1;i<n;i++)
+      res+=bin[i][(*f)(a[i])];
     return res;
 }
 #endif
@@ -139,46 +140,46 @@ uint64_t poscenters(uint8_t* a){
   if(a[1]>a[3])swap(a[1],a[3]);
   if(a[1]>a[2])swap(a[1],a[2]);
 
-#if symred==0
+#if symred==1
   switch((a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4)){
     case 0:
       symcenters(a,a[0]%4);   //a[0]%4==0 after this;
-      res=bin6pos(a,4)*64+(a[3]%4)*16+(a[2]%4)*4+(a[1]%4);
+      res=binpos(a,4,div4)*64+(a[3]%4)*16+(a[2]%4)*4+(a[1]%4);
     break;
     case 1:
       symcenters(a,a[0]%4);
       if(a[2]>a[3])swap(a[2],a[3]);
-      res=960+4*(20*(bin[0][a[2]%4]+bin[1][a[3]%4])+bin6pos(a,3))+a[1]%4;
+      res=960+4*(20*binpos(a+2,2,mod4)+binpos(a,3,div4))+a[1]%4;
     break;
     case 2:
       symcenters(a,a[0]);
       uint8_t b[3]={a[0],a[1],a[3]};
       if(a[1]>a[2])swap(a[1],a[2]);
-      res=1440+4*(20*(bin[0][a[1]%4]+bin[1][a[2]%4])+bin6pos(b,3))+a[3]%4;
+      res=1440+4*(20*binpos(a+1,2,mod4)+binpos(b,3i,div4))+a[3]%4;
     break;
     case 4:
       symcenters(a,a[2]%4);
       if(a[0]>a[1])swap(a[0],a[1]);
-      res=1920+4*(20*(bin[0][a[0]%4]+bin[1][a[1]%4])+bin6pos(a+1,3))+a[3]%4;
+      res=1920+4*(20*binpos(a,2,mod4)+binpos(a+1,3i,div4))+a[3]%4;
     break;
     case 3:
       symcenters(a,a[0]%4);
       if(a[1]>a[2])swap(a[1],a[2]);
       if(a[2]>a[3])swap(a[2],a[3]);
       if(a[1]>a[2])swap(a[1],a[2]);
-      res=2400+4*bin6pos(a,2)+(bin[0][a[1]%4]+bin[1][a[2]%4]+bin[2][a[3]%4]);
+      res=2400+4*binpos(a,2,div4)+binpos(a+1,3,mod4);
     break;
     case 6:
       symcenters(a,a[3]%4);
       if(a[0]>a[1])swap(a[0],a[1]);
       if(a[1]>a[2])swap(a[1],a[2]);
       if(a[0]>a[1])swap(a[0],a[1]);
-      res=2460+4*bin6pos(a+2,2)+(bin[0][a[0]%4]+bin[1][a[1]%4]+bin[2][a[2]%4]);
+      res=2460+4*binpos(a+2,2,div4)+binpos(a,3,mod4);
     break;
-    case 5://this is 3% suboptimal
+    case 5://this is suboptimal by 3%
       symcenters(a,a[0]%4);
       if(a[2]>a[3])swap(a[2],a[3]);
-      res=2520+3*(6*bin6pos(a+1,2)+(bin[0][a[2]%4]+bin[1][a[3]%4]))+(a[1]-1);
+      res=2520+3*(6*binpos(a+1,2,div4)+binpos(a+2,2,mod4))+(a[1]-1);
     break;
     case 7:
       res=2790+a[0]/4;
@@ -202,28 +203,77 @@ uint64_t poscenters(uint8_t* a){
     last=curr;
   }
 #if symred==0
+  static const uint64_t factors[3] = {1,10626,51482970};
   for(int8_t i=0;i<12;i+=4)
 #else
+  static const uint64_t factors[3] = {1, 2796,13546620};
   for(int8_t i=4;i<12;i+=4)
 #endif
     res+=factors[i/4]*(binomials[2][a[3+i]]+binomials[1][a[2+i]]+binomials[0][a[1+i]]+a[0+i]);
   return res;
 }
 
+#if symred==1
+void binadr(uint8_t* res,uint64_t x,int8_t n){
+  for(int8_t i=n-2;i>=0;i--){
+    uint8_t pos=23;
+    while(bin[i][pos]>x) pos--;
+    res[i+1]=pos;
+    x-=bin[i][pos];
+  }
+  res[0]=x;
+}
+#endif
+
 void adrcenters(uint8_t* res,uint64_t x){
   uint16_t subc[3];
-  subc[2]=x%1820; x/=1820;
-  subc[1]=x%4845; x/=4845;
-  subc[0]=x;
+#if symred==1
+  static const uint64_t factors[2] = {2796,4845,1};
+#else
+  static const uint64_t factors[2] = {10626,4845,1};
+#endif
   for(uint8_t i=0;i<3;i++){
-    for(int8_t j=2;j>=0;j--){
-      uint8_t pos=23;
-      while(binomials[j][pos]>subc[i]) pos--;
-      res[4*i+j+1]=pos;
-      subc[i]-=binomials[j][pos];
-    }
-    res[4*i]=subc[i];
+    subc[i]=x%factors[i];
+    x/=factors[i];
   }
+#if symred==1
+  if(subc[0]<2400){
+    if(subc[0]<1440){
+      if(subc[0]<960){
+        res[0]=0;
+      }else{
+        
+      }
+    }else{
+      if(subc[0]<1920){
+        
+      }else{
+        
+      }
+    }
+  }else{
+    if(subc[0]<2520){
+      if(subc[0]<2460){
+        
+      }else{
+        
+      }
+    }else{
+      if(subc[0]<2790){
+
+      }else{
+        for(uint8_t i=0;i<4;i++)
+          res[i]=4*(subc[0]-2790)+i;
+      }
+    }
+  }
+
+  for(uint8_t i=1;i<3;i++)
+#else
+  for(uint8_t i=0;i<3;i++)
+#endif
+    binadr(res+4*i,subc[i],4);
+//Rewrite the rest of this another time
   for(uint8_t i=4;i<8;i++)
     for(uint8_t j=0;j<4;j++)
       if(res[j]<=res[i])
