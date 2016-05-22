@@ -48,7 +48,10 @@ void symcenters(uint8_t* addr,const uint8_t move){
         swap(addr[i],addr[i+4]);  //Adjust for colorswap;
 }
 
-void symcorners(uint8_t* addr,const uint8_t move){}
+void symcorners(uint8_t* addr,const uint8_t move){
+  for(uint8_t i=0;i<8;i++)
+    addr[i]=cornersym[move][addr[i]];
+}
 #endif
 
 uint8_t setnibble(const uint8_t &a/*Original*/,const uint8_t &b/*Modifikation*/,const uint8_t &c/*lower(0) or upper half(1)*/){

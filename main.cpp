@@ -52,8 +52,19 @@ for(uint8_t i=0;i<10;i++)
 cout << *((uint64_t*) solution+0)+0 << "\n";
 */
 
-gentable(1);
+//gentable(1);
 
+initcornerfuncs();
+/*
+uint8_t subset[8];
+binadr(subset,1,8);
+for(uint8_t i=0;i<8;i++)
+  cout << subset[i]+0 << ";";
+symcorners(subset,15);
+for(uint8_t i=0;i<8;i++)
+  cout << subset[i]+0 << ";";
+cout << "\n" << binpos(subset,8)+0 << "\n";
+*/
 /*
 uint8_t foo[12],bar[12];
 for(uint64_t x=0;x<tablecount[1];x++){

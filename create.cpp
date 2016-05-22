@@ -1,5 +1,31 @@
-void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
+uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
+  void     (*adrfunc[3])(uint8_t*,uint64_t)        = {&adredges, &adrcenters, &adrcorners};
+  uint64_t (*posfunc[3])(uint8_t*)                 = {&posedges, &poscenters, &poscorners};
+  void     (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
+  const uint8_t movespace[3] = {36,36,18};
+  uint8_t tmp[3]={7,centercount,cornercount};
+  uint8_t n=tmp[k];
+  uint64_t count = 0;
+  for(uint64_t mover=l*tablecount[k]/corecount;mover<(l+1)*tablecount[k]/corecount;mover++){              //apply moves to all positions in the current depth
+    uint8_t mem = readnibble(~table[k][mover/2],mover%2);
+    if(depth==mem){
+      count++;
+      uint8_t current[n],next[n];
+      (*adrfunc[k])(current,mover);
+      for(uint8_t i=0;i<movespace[k];i++){			//some of these moves are redundant, TODO: eliminate by checking depth
+        memcpy(next,current,n);
+        (*movfunc[k])(next,i,n);
+        uint64_t pos=(*posfunc[k])(next);
+        if(depth<readnibble(~table[k][pos/2],pos%2))
+          table[k][pos/2]=~setnibble(~table[k][pos/2],depth+1,pos%2);
+	  }
+	}
+  }
+  return count;
+}
 
+
+void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
   FILE* file  = fopen(tablepath[k],"rb");
   table[k] = (uint8_t*) calloc(1,tablecount[k]/2);
   if(table[1]==NULL){
@@ -46,50 +72,20 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
   }else{
     uint8_t s[12]={2,4,1,3,10,6,12,8,9,5,11,7};
     uint64_t zeroaddr[3] = {0,poscenters(s),0};
-/*{posedges(0,3,6,9,12,15,18), //get this shit out of here
-#if centercount==8
-	            		    poscenters(0,1,2,3,8,9,10,11),
-#else
-			                poscenters(0,1,2,3,4,5,6,7,8,9,10,11),
-#endif
-#if cornercount==6
-			                poscorners(0,1,2,3,4,5)
-#else
-			                poscorners(0,1,5,4,8,9,10,11)   //fix this with the new arraytables
-#endif
-};
-*/
     table[k][zeroaddr[k]/2]=~setnibble(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
-    void     (*adrfunc[3])(uint8_t*,uint64_t)        = {&adredges, &adrcenters, &adrcorners};
-    uint64_t (*posfunc[3])(uint8_t*)                 = {&posedges, &poscenters, &poscorners};
-    void     (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
-    uint8_t tmp[3]={7,centercount,cornercount};
-    uint8_t n=tmp[k];
-    const uint8_t movespace[3] = {36,36,18};
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
 
     uint64_t count=1;
     for(uint8_t depth=0;count>0;depth++){
       count=0;
-      for(uint64_t mover=0;mover<tablecount[k];mover++){		//apply moves to all positions in the current depth
-        uint8_t mem = readnibble(~table[k][mover/2],mover%2);
-        if(depth==mem){
-          count++;
-          uint8_t current[n],next[n];
-          (*adrfunc[k])(current,mover);
-          for(uint8_t i=0;i<movespace[k];i++){			//some of these moves are redundant, TODO: eliminate by checking depth
-            memcpy(next,current,n);
-            (*movfunc[k])(next,i,n);
-            //for(uint j=0;j<n;j++)
-            //  cout << next[j]+0 << ";";
-            uint64_t pos=(*posfunc[k])(next);
-            //  cout << pos+0 << "\n";
-            if(depth<readnibble(~table[k][pos/2],pos%2))
-              table[k][pos/2]=~setnibble(~table[k][pos/2],depth+1,pos%2);
-	      }
-	    }
-      }
+      future<uint64_t> par[corecount];
+      for(uint8_t i=0;i<corecount;i++)
+        par[i]=async(launch::async,genpar,k,i,depth);
+      for(uint8_t i=0;i<corecount;i++)
+        par[i].wait();
+      for(uint8_t i=0;i<corecount;i++)
+        count+=par[i].get();
       cout << count << " positions after depth " << depth+0 << "\n";	//little status update
     }
 

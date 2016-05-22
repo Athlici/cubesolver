@@ -1,3 +1,50 @@
+static const uint8_t BitsSetTable256[256] = {
+#   define B2(n) n,     n+1,     n+1,     n+2
+#   define B4(n) B2(n), B2(n+1), B2(n+1), B2(n+2)
+#   define B6(n) B4(n), B4(n+1), B4(n+1), B4(n+2)
+    B6(0), B6(1), B6(1), B6(2)
+};
+
+uint64_t bin(uint8_t k,uint8_t n){
+  static const uint32_t bintable[8][24] =
+      {{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23},
+      {0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253},
+      {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771},
+      {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855},
+      {0,0,0,0,0,1,6,21,56,126,252,462,792,1287,2002,3003,4368,6188,8568,11628,15504,20349,26334,33649},
+      {0,0,0,0,0,0,1,7,28,84,210,462,924,1716,3003,5005,8008,12376,18564,27132,38760,54264,74613,100947},
+      {0,0,0,0,0,0,0,1,8,36,120,330,792,1716,3432,6435,11440,19448,31824,50388,77520,116280,170544,245157},
+      {0,0,0,0,0,0,0,0,1,9,45,165,495,1287,3003,6435,12870,24310,43758,75582,125970,203490,319770,490314}};
+  return bintable[k][n];
+}
+/*
+static const uint16_t bin[3][24] = 
+  {{0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253}, 
+  {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
+  {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
+*/
+uint64_t id(uint8_t x){return x;}
+
+uint64_t mod4(uint8_t x){return x%4;}
+
+uint64_t div4(uint8_t x){return x/4;}
+
+uint64_t binpos(uint8_t* a,uint8_t n,uint64_t (*f)(uint8_t)=id){
+    uint64_t res=0;
+    for(uint8_t i=0;i<n;i++)
+      res+=bin(i,(*f)(a[i]));
+    return res;
+}
+
+void binadr(uint8_t* res,uint64_t x,int8_t n){
+  for(int8_t i=n-1;i>=0;i--){
+    uint8_t pos=23;
+    while(bin(i,pos)>x) pos--;
+    res[i]=pos;
+    x-=bin(i,pos);
+  }
+}
+
 //Might be faster with seperate permution/orientation encoding, but it's working this way and isn't the bottleneck.
 uint64_t posedges2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
@@ -46,7 +93,8 @@ void adredges(uint8_t* res,uint64_t x){     //stores the result in the array of 
 
 }
 
-//Idea, implement permutation ranking once, use it on corners and edges
+//TODO: implement permutation ranking once, use it on corners and edges
+#if symred==0
 #if cornercount==6
 uint64_t poscorners2(const uint8_t &A,const uint8_t &b,const uint8_t &c,
 		    const uint8_t &d,const uint8_t &e,const uint8_t &f){
@@ -110,32 +158,45 @@ void adrcorners(uint8_t* res,uint64_t x){
         res[i]++;
 
 }
+#else
 
-static const uint8_t BitsSetTable256[256] = 
-{
-#   define B2(n) n,     n+1,     n+1,     n+2
-#   define B4(n) B2(n), B2(n+1), B2(n+1), B2(n+2)
-#   define B6(n) B4(n), B4(n+1), B4(n+1), B4(n+2)
-    B6(0), B6(1), B6(1), B6(2)
-};
+uint16_t srposcorn[735471]={0};
+uint8_t cornsymred[367736]={0};
+uint32_t sradrcorn[46371]; //slightly wastefull, almost all values are below 2^16
 
-static const uint16_t bin[3][24] = 
-  {{0,0,1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210,231,253}, 
-  {0,0,0,1,4,10,20,35,56,84,120,165,220,286,364,455,560,680,816,969,1140,1330,1540,1771}, 
-  {0,0,0,0,1,5,15,35,70,126,210,330,495,715,1001,1365,1820,2380,3060,3876,4845,5985,7315,8855}};
+void initcornerfuncs(){
+  uint32_t count=1;
+  for(uint32_t i=0;i<735471;i++){
+    uint32_t pos[16],min=-1;
+    uint8_t  minind=0;
+    for(uint8_t j=0;j<16;j++){
+      uint8_t subset[8];
+      binadr(subset,i,8);
+      symcorners(subset,j);
+      sort(subset,subset+8);
+      pos[j]=binpos(subset,8);
+      if(pos[j]<min){
+        min=pos[j];
+        minind=j;
+      }
+    }
+    cornsymred[i/2]=setnibble(cornsymred[i/2],minind,i%2);
+    if(srposcorn[i]==0){
+      for(uint8_t j=0;j<16;j++)
+        srposcorn[pos[j]]=count-1;
+      count++;
+      sradrcorn[count-1]=min;
+    }
+  }
+  cout << "Wrote " << count+0 << " orbits to the table!\n";
+}
 
-#if symred==1
-uint64_t id(uint8_t x){return x;}
+uint64_t poscorners(uint8_t* a){
+    return 0;
+}
 
-uint64_t mod4(uint8_t x){return x%4;}
+void adrcorners(uint8_t* res,uint64_t x){
 
-uint64_t div4(uint8_t x){return x/4;}
-
-uint64_t binpos(uint8_t* a,uint8_t n,uint64_t (*f)(uint8_t)=id){
-    uint64_t res=(*f)(a[0]);
-    for(uint8_t i=1;i<n;i++)
-      res+=bin[i-1][(*f)(a[i])];
-    return res;
 }
 #endif
 
@@ -221,18 +282,6 @@ uint64_t poscenters(uint8_t* a){
     res+=factors[i/4]*binpos(a+i,4);
   return res;
 }
-
-#if symred==1
-void binadr(uint8_t* res,uint64_t x,int8_t n){
-  for(int8_t i=n-2;i>=0;i--){
-    uint8_t pos=23;
-    while(bin[i][pos]>x) pos--;
-    res[i+1]=pos;
-    x-=bin[i][pos];
-  }
-  res[0]=x;
-}
-#endif
 
 void adrcenters(uint8_t* res,uint64_t x){
   uint16_t subc[3];
