@@ -192,11 +192,29 @@ void initcornerfuncs(){
 }
 
 uint64_t poscorners(uint8_t* a){
-    return 0;
+  uint8_t pos[8];
+  for(uint8_t i=0;i<8;i++)  //(uint64_t* pos)[0]=(uint64_t* a)[0] ?
+    pos[i]=a[i];
+  sort(pos,pos+8);
+  uint32_t tmp=binpos(pos,8);
+  uint64_t x=srposcorn[tmp];
+  symcorners(a,cornsymred[tmp]);
+  for(int8_t i=0;i<7;i++){          //this can/should be done in linear time
+    uint8_t rnk[7]={0};
+    for(uint8_t j=i+1;j<8;j++)
+      rnk[i]+=a[j]<a[i];
+  }
+  uint16_t y=0;
+  for(uint8_t i=1;i<9;i++)
+    y=i*y+rnk[8-i];
+  return 46371*y+x;
 }
 
-void adrcorners(uint8_t* res,uint64_t x){
-
+void adrcorners(uint8_t* res,uint64_t pos){
+  uint64_t x = pos%46371; pos/=46371;
+  uint64_t y = pos;
+  binadr(res,x,8);
+  //and unrank y...
 }
 #endif
 
