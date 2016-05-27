@@ -15,8 +15,8 @@ void turncenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){
 }
 
 void turncorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){
-//  for(uint8_t i=0;i<n;i++)
-//    addr[i]=cornermove[move][addr[i]];
+  for(uint8_t i=0;i<n;i++)
+    addr[i]=cornermove[move][addr[i]];
 }
 
 cube turncube(cube Cube,const uint8_t move){        //this should implicitly use a copy
@@ -95,7 +95,6 @@ uint64_t nextfree(uint8_t k,uint64_t addr,uint64_t pos = 0,uint8_t ch = 0){
       rb=2*rb+2;
     }
     noln = (1<<(h[k]-ch-1))+min(rb,cotabsize[k])-min(lb,cotabsize[k]+1);
-    //cout << addr+0 << ";" << pos+0 << ":" << noln+0 << "\n";
    }
   if(noln>=addr)
     if(noln==addr)

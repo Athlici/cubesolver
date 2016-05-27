@@ -21,7 +21,7 @@
 //How to use the disk during table creation, 0: don't, 1: 2bit in memory, 2: memory cached bfs
 #define disktablegen 0
 //how many threads to use to generate the tables
-#define corecount 8
+#define corecount 4
 
 using namespace std;
 
@@ -46,24 +46,60 @@ uint8_t solution[36][20];               //TODO: this is most ugly, fix it!
 
 int main(int argc, char** argv) {
 /*
-for(uint8_t i=0;i<10;i++)
-    solution[0][i]=i;
-
-cout << *((uint64_t*) solution+0)+0 << "\n";
+uint8_t perm[8];
+permadr(perm,0,8);
+for(uint8_t i=0;i<8;i++)
+  cout << perm[i]+0 << ";";
+cout << "\n";
 */
-
 //gentable(1);
 
 initcornerfuncs();
+
+gentable(2);
+
 /*
+uint8_t perm[8];
+for(uint16_t i=0;i<40320;i++){
+  permadr(perm,i,8);
+  uint64_t tmp=permpos(perm,8);
+  for(uint8_t i=0;i<8;i++)
+    if(perm[i]>7)
+      cout << "error";
+  if(tmp!=i)
+    cout << "Mismatch at " << tmp+0 << "," << i+0 << "\n";
+}
+
 uint8_t subset[8];
-binadr(subset,1,8);
-for(uint8_t i=0;i<8;i++)
-  cout << subset[i]+0 << ";";
-symcorners(subset,15);
-for(uint8_t i=0;i<8;i++)
-  cout << subset[i]+0 << ";";
-cout << "\n" << binpos(subset,8)+0 << "\n";
+for(uint16_t i=0;i<735471;i++){
+  binadr(subset,i,8);
+  uint64_t x=binpos(subset,8);
+  uint8_t tmp[8];
+  for(uint8_t i=0;i<8;i++)
+    tmp[i]=subset[i];
+  symcorners(tmp,readnibble(cornsymred[i/2],i%2));
+  sort(tmp,tmp+8);
+  uint64_t y=
+  if(x!=i){
+    for(uint8_t j=0;j<8;j++)
+      cout << subset[j]+0 << ";";
+    cout << "\n" << i+0 << ";" << x+0 << "\n";
+  }
+}
+*/
+/*
+uint8_t foo[8],bar[8];
+for(uint64_t x=0;x<tablecount[2];x++){
+  adrcorners(foo,x);
+  memcpy(bar,foo,8);
+  uint64_t res=poscorners(bar);
+  if(x!=res){
+    cout << "Results at:" << x+0 << ";" << res << "\n";
+    for(uint8_t i=0;i<8;i++)
+      cout << foo[i]+0 << ";";
+    cout << "\n";
+  }
+}
 */
 /*
 uint8_t foo[12],bar[12];

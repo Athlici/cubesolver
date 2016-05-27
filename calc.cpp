@@ -45,6 +45,29 @@ void binadr(uint8_t* res,uint64_t x,int8_t n){
   }
 }
 
+uint64_t permrank(uint8_t* a,uint8_t* b,uint8_t n){
+  if(n==1)
+    return 0;
+  uint8_t s=a[n-1];
+  swap(a[n-1],a[b[n-1]]);
+  swap(b[s],b[n-1]);
+  return s+n*permrank(a,b,n-1);
+}
+
+uint64_t permpos(uint8_t* a,uint8_t n){
+  uint8_t b[n];
+  for(uint8_t i=0;i<n;i++)
+    b[a[i]]=i;
+  return permrank(a,b,n);
+}
+
+void permadr(uint8_t* res,uint64_t x,int8_t n){
+  for(uint8_t i=0;i<n;i++)
+    res[i]=i;
+  for(int8_t i=n;i>1;x/=i--)
+    swap(res[i-1],res[x%i]);
+}
+
 //Might be faster with seperate permution/orientation encoding, but it's working this way and isn't the bottleneck.
 uint64_t posedges2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
 		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
@@ -162,7 +185,7 @@ void adrcorners(uint8_t* res,uint64_t x){
 
 uint16_t srposcorn[735471]={0};
 uint8_t cornsymred[367736]={0};
-uint32_t sradrcorn[46371]; //slightly wastefull, almost all values are below 2^16
+uint32_t sradrcorn[46372]; //slightly wastefull, almost all values are below 2^16
 
 void initcornerfuncs(){
   uint32_t count=1;
@@ -183,12 +206,13 @@ void initcornerfuncs(){
     cornsymred[i/2]=setnibble(cornsymred[i/2],minind,i%2);
     if(srposcorn[i]==0){
       for(uint8_t j=0;j<16;j++)
-        srposcorn[pos[j]]=count-1;
-      count++;
+        srposcorn[pos[j]]=count;
       sradrcorn[count-1]=min;
+      count++;
     }
   }
-  cout << "Wrote " << count+0 << " orbits to the table!\n";
+  for(uint32_t i=0;i<735471;i++) srposcorn[i]--;
+  cout << "Wrote " << count-1 << " orbits to the table!\n";
 }
 
 uint64_t poscorners(uint8_t* a){
@@ -196,25 +220,33 @@ uint64_t poscorners(uint8_t* a){
   for(uint8_t i=0;i<8;i++)  //(uint64_t* pos)[0]=(uint64_t* a)[0] ?
     pos[i]=a[i];
   sort(pos,pos+8);
-  uint32_t tmp=binpos(pos,8);
-  uint64_t x=srposcorn[tmp];
-  symcorners(a,cornsymred[tmp]);
-  for(int8_t i=0;i<7;i++){          //this can/should be done in linear time
-    uint8_t rnk[7]={0};
-    for(uint8_t j=i+1;j<8;j++)
-      rnk[i]+=a[j]<a[i];
+  uint32_t x=binpos(pos,8);
+  symcorners(a,readnibble(cornsymred[x/2],x%2));
+  uint32_t bmp=0;
+  uint8_t perm[8]={0};
+  for(uint8_t i=0;i<8;i++)
+    bmp+=(1<<a[i]);
+  for(uint8_t i=0;i<8;i++){
+    uint32_t mask=bmp&((1<<a[i])-1);        //create a mask including only x<a[i]
+    for(uint8_t j=0;j<24;j+=8)    //and reduce a[i] appropiatly
+      perm[i]+=BitsSetTable256[(mask>>j)%256];
   }
-  uint16_t y=0;
-  for(uint8_t i=1;i<9;i++)
-    y=i*y+rnk[8-i];
-  return 46371*y+x;
+  return 46371*permpos(perm,8)+srposcorn[x];
 }
 
 void adrcorners(uint8_t* res,uint64_t pos){
   uint64_t x = pos%46371; pos/=46371;
   uint64_t y = pos;
-  binadr(res,x,8);
-  //and unrank y...
+  uint8_t tmp[8];
+  binadr(tmp,sradrcorn[x],8);
+  uint8_t perm[8];
+  permadr(perm,y,8);
+  for(uint8_t i=0;i<8;i++)
+    res[i]=tmp[perm[i]];
+  //for(uint8_t i=0;i<8;i++) cout << tmp[i]+0 << ";";
+  //cout << "\n";
+  //for(uint8_t i=0;i<8;i++) cout << res[i]+0 << ";";
+  //cout << "\n";
 }
 #endif
 

@@ -28,7 +28,7 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
 void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
   FILE* file  = fopen(tablepath[k],"rb");
   table[k] = (uint8_t*) calloc(1,tablecount[k]/2);
-  if(table[1]==NULL){
+  if(table[k]==NULL){
     cout << "allocation failure?";
     exit(1);
   }
