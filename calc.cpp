@@ -68,121 +68,28 @@ void permadr(uint8_t* res,uint64_t x,int8_t n){
     swap(res[i-1],res[x%i]);
 }
 
-//Might be faster with seperate permution/orientation encoding, but it's working this way and isn't the bottleneck.
-uint64_t posedges2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
-		  const uint8_t &e,const uint8_t &f,const uint8_t &g){
-  uint8_t B=b,C=c,D=d,E=e,F=f,G=g; 		//calculates a unique linear position for every possible edgeposition
-
-  if (A<b) B-=3;
-  if (A<c) C-=3;
-  if (b<c) C-=3;
-  if (A<d) D-=3;
-  if (b<d) D-=3; 
-  if (c<d) D-=3;
-  if (A<e) E-=3;
-  if (b<e) E-=3;
-  if (c<e) E-=3;
-  if (d<e) E-=3;
-  if (A<f) F-=3;
-  if (b<f) F-=3;
-  if (c<f) F-=3;
-  if (d<f) F-=3;
-  if (e<f) F-=3;
-  if (A<g) G-=3;
-  if (b<g) G-=3;
-  if (c<g) G-=3;
-  if (d<g) G-=3;
-  if (e<g) G-=3;
-  if (f<g) G-=3;
-
-  return (G+6*(F+9*(E+12*(D+15*(C+18*(B+21*A))))));
-}
-
+//Might be reformulated, involves ugly 7 out of 8 choice though.
 uint64_t posedges(uint8_t* a){
-  return posedges2(a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
+  uint8_t A[7]={a[0],a[1],a[2],a[3],a[4],a[5],a[6]} //memcpy?
+  for(uint8_t i=0;i<6)
+    for(uint8_t j=i+1;j<7)
+      if(a[i]<a[j])
+        A[i]-=3;
+  return (A[6]+6*(A[5]+9*(A[4]+12*(A[3]+15*(A[2]+18*(A[1]+21*A[0]))))));
 }
 
-void adredges(uint8_t* res,uint64_t x){     //stores the result in the array of the first argument
-  
+void adredges(uint8_t* res,uint64_t x){  //stores the result in the array of the first argument
   for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
     res[i/3-2] = x % i;				//in reduced form
     x /= i;
   }
-
   for(uint8_t i=0;i<6;i++)			//therefore we increase them dependently
     for(uint8_t j=i+1;j<7;j++)
       if(res[j]/3<=res[i]/3) 
-	res[i]+=3;
-
+	    res[i]+=3;
 }
 
-//TODO: implement permutation ranking once, use it on corners and edges
-#if symred==0
-#if cornercount==6
-uint64_t poscorners2(const uint8_t &A,const uint8_t &b,const uint8_t &c,
-		    const uint8_t &d,const uint8_t &e,const uint8_t &f){
-  uint8_t B=b,C=c,D=d,E=e,F=f;
-#else
-uint64_t poscorners2(const uint8_t &A,const uint8_t &b,const uint8_t &c,const uint8_t &d,
-		    const uint8_t &e,const uint8_t &f,const uint8_t &g,const uint8_t &h){
-  uint8_t B=b,C=c,D=d,E=e,F=f,G=g,H=h;
-#endif
-
-  if (A<b) B--;
-  if (A<c) C--;
-  if (b<c) C--;
-  if (A<d) D--;
-  if (b<d) D--;
-  if (c<d) D--;
-  if (A<e) E--;
-  if (b<e) E--;
-  if (c<e) E--;
-  if (d<e) E--;
-  if (A<f) F--;
-  if (b<f) F--;
-  if (c<f) F--;
-  if (d<f) F--;
-  if (e<f) F--;
-#if cornercount==8 
-  if (A<g) G--;
-  if (b<g) G--;
-  if (c<g) G--;
-  if (d<g) G--;
-  if (e<g) G--;
-  if (f<g) G--;
-  if (A<h) H--;
-  if (b<h) H--;
-  if (c<h) H--;
-  if (d<h) H--;
-  if (e<h) H--;
-  if (f<h) H--;
-  if (g<h) H--;
- 
-  return (H+17*(G+18*(F+19*(E+20*(D+21*(C+22*(B+23*((uint64_t)A))))))));
-#else
-  return (F+19*(E+20*(D+21*(C+22*(B+23*A)))));
-#endif
-}
-
-uint64_t poscorners(uint8_t* a){
-  return poscorners2(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-}
-
-//adjust this to match the cornercount definition
-void adrcorners(uint8_t* res,uint64_t x){
-  for(uint8_t i=25-cornercount;i<=24;i++){  //same principle as for the edges
-    res[i+cornercount-25] = x % i;
-    x /= i;
-  }
-
-  for(uint8_t i=0;i<cornercount-1;i++)		//reincrease them dependently
-    for(uint8_t j=i+1;j<cornercount;j++)
-      if(res[j]<=res[i]) 
-        res[i]++;
-
-}
-#else
-
+#if symred==1
 uint16_t srposcorn[735471]={0};
 uint8_t cornsymred[367736]={0};
 uint32_t sradrcorn[46372]; //slightly wastefull, almost all values are below 2^16
@@ -214,41 +121,49 @@ void initcornerfuncs(){
   for(uint32_t i=0;i<735471;i++) srposcorn[i]--;
   cout << "Wrote " << count-1 << " orbits to the table!\n";
 }
-
+#endif
 uint64_t poscorners(uint8_t* a){
-  uint8_t pos[8];
-  for(uint8_t i=0;i<8;i++)  //(uint64_t* pos)[0]=(uint64_t* a)[0] ?
-    pos[i]=a[i];
-  sort(pos,pos+8);
-  uint32_t x=binpos(pos,8);
+  uint8_t pos[cornercount];
+  memcpy(pos,a,cornercount);
+  sort(pos,pos+cornercount);
+  uint32_t x=binpos(pos,cornercount);
+#if symred==1
   symcorners(a,readnibble(cornsymred[x/2],x%2));
+#endif
   uint32_t bmp=0;
-  uint8_t perm[8]={0};
-  for(uint8_t i=0;i<8;i++)
+  uint8_t perm[cornercount]={0};
+  for(uint8_t i=0;i<cornercount;i++)
     bmp+=(1<<a[i]);
-  for(uint8_t i=0;i<8;i++){
+  for(uint8_t i=0;i<cornercount;i++){
     uint32_t mask=bmp&((1<<a[i])-1);        //create a mask including only x<a[i]
     for(uint8_t j=0;j<24;j+=8)    //and reduce a[i] appropiatly
       perm[i]+=BitsSetTable256[(mask>>j)%256];
   }
+#if symred==1
   return 46371*permpos(perm,8)+srposcorn[x];
+#elif cornercount==8
+  return 735471*permpos(perm,8)+x;
+#else
+  return 134596*permpos(perm,6)+x;
+#endif
 }
 
 void adrcorners(uint8_t* res,uint64_t pos){
-  uint64_t x = pos%46371; pos/=46371;
-  uint64_t y = pos;
-  uint8_t tmp[8];
-  binadr(tmp,sradrcorn[x],8);
-  uint8_t perm[8];
-  permadr(perm,y,8);
-  for(uint8_t i=0;i<8;i++)
-    res[i]=tmp[perm[i]];
-  //for(uint8_t i=0;i<8;i++) cout << tmp[i]+0 << ";";
-  //cout << "\n";
-  //for(uint8_t i=0;i<8;i++) cout << res[i]+0 << ";";
-  //cout << "\n";
-}
+#if symred==1
+  uint64_t x=sradrcorn[pos%46371];pos/=46371;
+#elif cornercount==8
+  uint64_t x=pos%735471;pos/=735471;
+#else
+  uint64_t x=pos%134596;pos/=134596;
 #endif
+  uint64_t y=pos;
+  uint8_t tmp[cornercount];
+  binadr(tmp,x,cornercount);
+  uint8_t perm[cornercount];
+  permadr(perm,y,cornercount);
+  for(uint8_t i=0;i<cornercount;i++)
+    res[i]=tmp[perm[i]];
+}
 
 uint64_t poscenters(uint8_t* a){
   uint64_t res=0;
