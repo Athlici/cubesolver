@@ -70,9 +70,9 @@ void permadr(uint8_t* res,uint64_t x,int8_t n){
 
 //Might be reformulated, involves ugly 7 out of 8 choice though.
 uint64_t posedges(uint8_t* a){
-  uint8_t A[7]={a[0],a[1],a[2],a[3],a[4],a[5],a[6]} //memcpy?
-  for(uint8_t i=0;i<6)
-    for(uint8_t j=i+1;j<7)
+  uint8_t A[7]={a[0],a[1],a[2],a[3],a[4],a[5],a[6]}; //memcpy?
+  for(uint8_t i=0;i<6;i++)
+    for(uint8_t j=i+1;j<7;j++)
       if(a[i]<a[j])
         A[i]-=3;
   return (A[6]+6*(A[5]+9*(A[4]+12*(A[3]+15*(A[2]+18*(A[1]+21*A[0]))))));

@@ -2,7 +2,7 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
   void     (*adrfunc[3])(uint8_t*,uint64_t)        = {&adredges, &adrcenters, &adrcorners};
   uint64_t (*posfunc[3])(uint8_t*)                 = {&posedges, &poscenters, &poscorners};
   void     (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
-  const uint8_t movespace[3] = {36,36,18};
+  const uint8_t movespace[3] = {18,36,36};
   uint8_t tmp[3]={7,centercount,cornercount};
   uint8_t n=tmp[k];
   uint64_t count = 0;
@@ -70,8 +70,9 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
   }else{
-    uint8_t s[12]={2,4,1,3,10,6,12,8,9,5,11,7};
-    uint64_t zeroaddr[3] = {0,poscenters(s),0};
+    uint8_t sce[12]={2,4,1,3,10,6,12,8,9,5,11,7};
+    uint8_t sco[8]={1,2,3,4,5,6,7,8};
+    uint64_t zeroaddr[3] = {0,poscenters(sce),poscorners(sco)};
     table[k][zeroaddr[k]/2]=~setnibble(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
