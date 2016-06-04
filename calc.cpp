@@ -363,61 +363,32 @@ void adrcenters(uint8_t* res,uint64_t x){
       if(foo[j]<=res[i])
         res[i]++;
 }
-/*
-uint8_t minDepth(const cube &Cube){
-//WTF
-  uint64_t address[]={posedges(Cube.edge[0],Cube.edge[1],Cube.edge[2],Cube.edge[3],Cube.edge[4],Cube.edge[5],Cube.edge[6]),
-#if centercount==8
-    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
-    poscenters(centerturn[3][Cube.center[4]],centerturn[3][Cube.center[5]],centerturn[3][Cube.center[6]],centerturn[3][Cube.center[7]],
-      centerturn[3][Cube.center[12]],centerturn[3][Cube.center[13]],centerturn[3][Cube.center[14]],centerturn[3][Cube.center[15]]),
-    poscenters(centerturn[0][Cube.center[16]],centerturn[0][Cube.center[17]],centerturn[0][Cube.center[18]],centerturn[0][Cube.center[19]],
-      centerturn[0][Cube.center[20]],centerturn[0][Cube.center[21]],centerturn[0][Cube.center[22]],centerturn[0][Cube.center[23]]),
-#else
-    poscenters(Cube.center[0],Cube.center[1],Cube.center[2],Cube.center[3],Cube.center[4],Cube.center[5],
-	       Cube.center[6],Cube.center[7],Cube.center[8],Cube.center[9],Cube.center[10],Cube.center[11]),
-    poscenters(centerturn[8][Cube.center[16]],centerturn[8][Cube.center[17]],centerturn[8][Cube.center[18]],centerturn[8][Cube.center[19]],
-          centerturn[8][Cube.center[12]],centerturn[8][Cube.center[13]],centerturn[8][Cube.center[14]],centerturn[8][Cube.center[15]],
-          centerturn[8][Cube.center[20]],centerturn[8][Cube.center[21]],centerturn[8][Cube.center[22]],centerturn[8][Cube.center[23]]),
-#endif
-#if cornercount==6
-    poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[2],Cube.corner[3],Cube.corner[4],Cube.corner[5]),
-    poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[7]],cornerturn[0][Cube.corner[6]],
-      cornerturn[0][Cube.corner[14]],cornerturn[0][Cube.corner[15]]),
-    poscorners(cornerturn[1][Cube.corner[11]],cornerturn[1][Cube.corner[10]],cornerturn[1][Cube.corner[21]],cornerturn[1][Cube.corner[20]],
-      cornerturn[1][Cube.corner[8]],cornerturn[1][Cube.corner[9]]),
-    poscorners(cornerturn[2][Cube.corner[18]],cornerturn[2][Cube.corner[19]],cornerturn[2][Cube.corner[23]],cornerturn[2][Cube.corner[22]],
-      cornerturn[2][Cube.corner[13]],cornerturn[2][Cube.corner[12]])};
-#else
-    poscorners(Cube.corner[0],Cube.corner[1],Cube.corner[5],Cube.corner[4],Cube.corner[8],Cube.corner[9],Cube.corner[10],Cube.corner[11]),
-    poscorners(cornerturn[15][Cube.corner[2]],cornerturn[15][Cube.corner[3]],cornerturn[15][Cube.corner[7]],cornerturn[15][Cube.corner[6]],
-      cornerturn[15][Cube.corner[21]],cornerturn[15][Cube.corner[20]],cornerturn[15][Cube.corner[23]],cornerturn[15][Cube.corner[22]]),
-    poscorners(cornerturn[0][Cube.corner[17]],cornerturn[0][Cube.corner[16]],cornerturn[0][Cube.corner[15]],cornerturn[0][Cube.corner[14]],
-      cornerturn[0][Cube.corner[13]],cornerturn[0][Cube.corner[12]],cornerturn[0][Cube.corner[19]],cornerturn[0][Cube.corner[18]])};
-#endif
 
-  uint8_t max=readhalfbyte(~table[0][address[0]/2],address[0]%2);
-  for(uint8_t i=1;i<1+24/centercount;i++){
-#if splitcomp==0
-    uint8_t tmp = readhalfbyte(~table[1][address[i]/2],address[i]%2);
-#else
-    uint8_t tmp = read2bit(table[1][address[i]/4],address[i]%4) + 7;
-    if(tmp==7)
-      tmp = colookup(1,address[i]);
-#endif
+uint8_t minDepth(const cube &Cube){     //make sure the destruction of the cube is without consequences
+  uint8_t max=readtabval(0,posedges(Cube.edge));
     if(max<tmp) max=tmp;
+#if centercount==12
+  const uint8_t centerrots[2]={0,0};        //TODO: Write the Mathematica Code to calculate these + the movetables
+#else
+  const uint8_t centerrots[3]={0,0,0}:
+#endif
+  for(uint8_t i=0;i<24;i+=centercount){
+    rotatecenters(Cube.centers+i,centercount);
+    uint8_t tmp=readtabval(1,poscenters(Cube.centers+i));
+    if(tmp>max)
+      max=tmp;
   }
-  for(uint8_t i=1+24/centercount;i<1+24/centercount+24/cornercount;i++){
-#if splitcomp==0
-    uint8_t tmp = readhalfbyte(~table[2][address[i]/2],address[i]%2);
+#if cornercount==8
+  const uint8_t cornerrots[3]={0,0,0};
 #else
-    uint8_t tmp = read2bit(table[2][address[i]/4],address[i]%4) + 7;
-    if(tmp==7)
-      tmp = colookup(2,address[i]);
+  const uint8_t cornerrots[4]={0,0,0,0};
 #endif
-    if(max<tmp) max=tmp;
+  for(uint8_t i=0;i<24;i+=cornercount){
+    rotatecorners(Cube.corners+i,cornercount);
+    uint8_t tmp=readtabval(2,poscorners(Cube.corners+i));
+    if(tmp>max)
+      max=tmp;
   }
 
   return max;
 }
-*/

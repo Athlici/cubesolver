@@ -118,6 +118,26 @@ uint8_t colookup(uint8_t k,uint64_t key,uint64_t addr = 0){
 }
 #endif
 
+uint8_t readtabval(uint8_t k,uint64_t pos){
+#if tablecompression==0
+  return readnibble(~table[k][pos/2],pos%2);
+#elif tablecompression==1
+
+#else
+
+#endif
+}
+
+void settabval(uint8_t k,uint64_t pos,uint8_t mod){
+#if tablecompression==0
+  table[k][pos/2]=~setnibble(~table[k][pos/2],mod,pos%2);
+#elif tablecompression==1
+
+#else
+
+#endif
+}
+
 bool solved(cube Cube){
   for(int i=0;i<7;i++)
     if(Cube.edge[i]!=3*i) return false;

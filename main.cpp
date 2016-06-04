@@ -27,7 +27,7 @@ using namespace std;
 
 //the cube structure stores at which position the indexed part is.
 typedef struct {
-  uint8_t edge[8];
+  uint8_t edge[7];
   uint8_t center[24];
   uint8_t corner[24];
 } cube ;

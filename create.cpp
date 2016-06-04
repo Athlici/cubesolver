@@ -7,7 +7,7 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
   uint8_t n=tmp[k];
   uint64_t count = 0;
   for(uint64_t mover=l*tablecount[k]/corecount;mover<(l+1)*tablecount[k]/corecount;mover++){              //apply moves to all positions in the current depth
-    uint8_t mem = readnibble(~table[k][mover/2],mover%2);
+    uint8_t mem = readtabval(k,mover);
     if(depth==mem){
       count++;
       uint8_t current[n],next[n];
@@ -16,8 +16,8 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
         memcpy(next,current,n);
         (*movfunc[k])(next,i,n);
         uint64_t pos=(*posfunc[k])(next);
-        if(depth<readnibble(~table[k][pos/2],pos%2))
-          table[k][pos/2]=~setnibble(~table[k][pos/2],depth+1,pos%2);
+        if(depth<readtabval(k,pos))
+          settabval(k,pos,depth+1);
 	  }
 	}
   }
@@ -73,7 +73,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     uint8_t sce[12]={2,4,1,3,10,6,12,8,9,5,11,7};
     uint8_t sco[8]={1,2,3,4,5,6,7,8};
     uint64_t zeroaddr[3] = {0,poscenters(sce),poscorners(sco)};
-    table[k][zeroaddr[k]/2]=~setnibble(255,0,zeroaddr[k]%2);          //The starting Position is set to have depth 0
+    settabval(k,zeroaddr[k],0);                                 //The starting Position is set to have depth 0
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
 
