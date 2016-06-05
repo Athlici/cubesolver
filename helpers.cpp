@@ -25,7 +25,7 @@ cube turncube(cube Cube,const uint8_t move){        //this should implicitly use
   turncorners(Cube.corner,move);
   return Cube;
 }
-/*
+
 void rotateedges(uint8_t* addr,const uint8_t move){}
 
 void rotatecenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){}
@@ -38,11 +38,12 @@ cube rotatecube(cube Cube,const uint8_t move){
   rotatecorners(Cube.corner,move);
   return Cube;
 }
-*/
+
 #if symred==1
 void symcenters(uint8_t* addr,const uint8_t move){
   for(uint8_t i=0;i<12;i++)
     addr[i]=centersym[move][addr[i]];
+  //addr[centersym[move][i]]=centersym[move][addr[i]];??? sym^-1 * addr * sym ???
   if(move==1||move==3)
     for(uint8_t i=4;i<8;i++)      //4Byte in one?
         swap(addr[i],addr[i+4]);  //Adjust for colorswap;

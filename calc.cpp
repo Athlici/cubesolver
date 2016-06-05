@@ -364,17 +364,16 @@ void adrcenters(uint8_t* res,uint64_t x){
         res[i]++;
 }
 
-uint8_t minDepth(const cube &Cube){     //make sure the destruction of the cube is without consequences
+uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
   uint8_t max=readtabval(0,posedges(Cube.edge));
-    if(max<tmp) max=tmp;
 #if centercount==12
   const uint8_t centerrots[2]={0,0};        //TODO: Write the Mathematica Code to calculate these + the movetables
 #else
   const uint8_t centerrots[3]={0,0,0}:
 #endif
   for(uint8_t i=0;i<24;i+=centercount){
-    rotatecenters(Cube.centers+i,centercount);
-    uint8_t tmp=readtabval(1,poscenters(Cube.centers+i));
+    rotatecenters(Cube.center+i,centercount);
+    uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
     if(tmp>max)
       max=tmp;
   }
@@ -384,8 +383,8 @@ uint8_t minDepth(const cube &Cube){     //make sure the destruction of the cube 
   const uint8_t cornerrots[4]={0,0,0,0};
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
-    rotatecorners(Cube.corners+i,cornercount);
-    uint8_t tmp=readtabval(2,poscorners(Cube.corners+i));
+    rotatecorners(Cube.corner+i,cornercount);
+    uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
     if(tmp>max)
       max=tmp;
   }
