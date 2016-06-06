@@ -21,7 +21,7 @@
 //How to use the disk during table creation, 0: don't, 1: 2bit in memory, 2: memory cached bfs
 #define disktablegen 0
 //how many threads to use to generate the tables
-#define corecount 8
+#define corecount 4
 
 using namespace std;
 
@@ -56,6 +56,7 @@ cout << "\n";
 
 initcornerfuncs();
 
+gentable(1);
 gentable(2);
 
 /*

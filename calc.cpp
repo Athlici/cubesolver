@@ -367,23 +367,23 @@ void adrcenters(uint8_t* res,uint64_t x){
 uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
   uint8_t max=readtabval(0,posedges(Cube.edge));
 #if centercount==12
-  const uint8_t centerrots[2]={0,0};        //TODO: Write the Mathematica Code to calculate these + the movetables
+  const uint8_t centerrots[2]={0,12};
 #else
-  const uint8_t centerrots[3]={0,0,0}:
+  const uint8_t centerrots[3]={0,0,0};  //Im not sure these do even exist without changing the movearrays?
 #endif
   for(uint8_t i=0;i<24;i+=centercount){
-    rotatecenters(Cube.center+i,centercount);
+    rotatecenters(Cube.center+i,Cube.center+i,centercount);
     uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
     if(tmp>max)
       max=tmp;
   }
 #if cornercount==8
-  const uint8_t cornerrots[3]={0,0,0};
+  const uint8_t cornerrots[3]={0,13,22};
 #else
-  const uint8_t cornerrots[4]={0,0,0,0};
+  const uint8_t cornerrots[4]={0,0,0,0}; //Same here (Probably not?)?
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
-    rotatecorners(Cube.corner+i,cornercount);
+    rotatecorners(Cube.corner+i,Cube.corner+i,cornercount);
     uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
     if(tmp>max)
       max=tmp;

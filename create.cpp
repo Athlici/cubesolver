@@ -70,8 +70,8 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
   }else{
-    uint8_t sce[12]={2,4,1,3,10,6,12,8,9,5,11,7};
-    uint8_t sco[8]={1,2,3,4,5,6,7,8};
+    uint8_t sce[12]={0,1,2,3,4,5,6,7,8,9,10,11};    //center12/.centermap - 1
+    uint8_t sco[8]={0,1,2,3,4,5,6,7};               //corner8/.cornermap - 1
     uint64_t zeroaddr[3] = {0,poscenters(sce),poscorners(sco)};
     settabval(k,zeroaddr[k],0);                                 //The starting Position is set to have depth 0
 
