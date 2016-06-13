@@ -47,10 +47,15 @@ cube rotatecube(cube Cube,const uint8_t move){  //rewrite this later to avoid un
 
 #if symred==1
 void symcenters(uint8_t* addr,const uint8_t move){
-  uint8_t tmp[12];
   for(uint8_t i=0;i<12;i++)
-    tmp[centersym[move][i]]=centersym[move][addr[i]];
-  memcpy(addr,tmp,12);  //res = centersym^-1 * addr * centersym
+    addr[i]=centersym[move][addr[i]];
+  if(move%2)
+    for(uint8_t j=0;j<4;j++)
+    swap(addr[4+j],addr[8+j]);
+//  uint8_t tmp[12];
+//  for(uint8_t i=0;i<12;i++)
+//    tmp[centersym[move][i]]=centersym[move][addr[i]];
+//  memcpy(addr,tmp,12);  //res = centersym^-1 * addr * centersym
 }
 
 void symcorners(uint8_t* addr,const uint8_t move){
