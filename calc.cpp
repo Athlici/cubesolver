@@ -195,25 +195,15 @@ void adrcorners(uint8_t* res,uint64_t pos){
 
 uint64_t poscenters(uint8_t* a){
   uint64_t res=0;
-
-  if(a[0]>a[1])swap(a[0],a[1]); //Sort the white pieces, hold off on the rest until
-  if(a[2]>a[3])swap(a[2],a[3]); //we have potentially applied out symmetry reductions
-  if(a[0]>a[2])swap(a[0],a[2]);
-  if(a[1]>a[3])swap(a[1],a[3]);
-  if(a[1]>a[2])swap(a[1],a[2]);
+  sort(a,a+4);
 
 #if symred==1
   uint16_t tmp=srposcent[binpos(a,4)];
   symcenters(a,tmp%4);
   res+=tmp/4;
 #endif
-  for (uint8_t i=4;i<12;i+=4){
-    if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
-    if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
-    if(a[0+i]>a[2+i])swap(a[0+i],a[2+i]);
-    if(a[1+i]>a[3+i])swap(a[1+i],a[3+i]);
-    if(a[1+i]>a[2+i])swap(a[1+i],a[2+i]);
-  }
+  for (uint8_t i=4;i<12;i+=4)
+    sort(a+i,a+i+4);
   uint32_t curr=0,last=0;           //keep track which bits are set and have been set
   for(uint8_t b=0;b<12;b+=4){       //for every block
     for(uint8_t i=b;i<b+4;i++){     //for every element

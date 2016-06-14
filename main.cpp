@@ -56,8 +56,9 @@ cout << "\n";
 
 initsymfuncs();
 
+gentable(0);
 gentable(1);
-//gentable(2);
+gentable(2);
 
 /*
 uint8_t perm[8];
