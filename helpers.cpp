@@ -168,7 +168,7 @@ cube goal(void){
   for(int i=0;i<7;i++)
     Cube.edge[i]=3*i;
   for(int i=0;i<24;i++){
-    Cube.center[i]=i/6;     //there are only 6 colours
+    Cube.center[i]=i;
     Cube.corner[i]=i;
   }
   return Cube;

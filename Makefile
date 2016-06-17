@@ -1,4 +1,5 @@
-CXXFLAGS= -Ofast -std=c++0x -ggdb -Wall -fno-strict-aliasing -pthread -funroll-all-loops
+CXXFLAGS= -Ofast -std=c++0x -Wall -pthread -funroll-all-loops
+#-ggdb -fno-strict-aliasing
 
 release:
 	g++ $(CXXFLAGS) -o cubesolver main.cpp

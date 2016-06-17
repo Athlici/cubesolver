@@ -275,6 +275,5 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
     if(tmp>max)
       max=tmp;
   }
-
   return max;
 }

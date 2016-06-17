@@ -42,25 +42,41 @@ uint8_t solution[36][20];               //TODO: this is most ugly, fix it!
 #include "helpers.cpp"					//various helper files for read, write and movemaking
 #include "calc.cpp"				    	//un/ranking of the permutations for table lookup
 #include "create.cpp"					//creates the various pattern databases
-//#include "solve.cpp"					//the actual search algorithms to solve a given cube
+#include "solve.cpp"					//the actual search algorithms to solve a given cube
 
 int main(int argc, char** argv) {
-/*
-uint8_t perm[8];
-permadr(perm,0,8);
-for(uint8_t i=0;i<8;i++)
-  cout << perm[i]+0 << ";";
-cout << "\n";
-*/
-//gentable(1);
 
-initsymfuncs();
+  initsymfuncs();
 
-gentable(0);
-gentable(1);
-gentable(2);
+  for(uint8_t i=0;i<3;i++)                //generate the tables, one after another
+    gentable(i);
+  
+  //the following are example positions for testing purposes
+  
+  uint8_t n = 15;
+  
+  //cube Cube=goal();
+  //Cube.corner[4]=5;
+  //Cube.corner[5]=4;
+  
+  cube Cube=goal();
+  uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
+  for(uint8_t i=0;i<n;i++) Cube=turncube(Cube,moves[i]);
+  //printcube(Cube);
+  
+  cout << minDepth(goal())+0 << "\n";
+  
+  cout << minDepth(Cube)+0 << "\n";
+  
+  for(uint8_t i=minDepth(Cube);i<=n&&(!solvepar(Cube,i));i++)
+    cout << "finished depth " << i+0 << "\n";
+  for(uint8_t j=0;j<36;j++){
+    for(uint8_t i=0;i<n;i++)
+      cout << solution[j][i]+0 << ";"; 
+    cout << "\n";
+  }
 
-/*
+/*  //test edge commutativity
 for(uint8_t i=0;i<3;i++){
   for(uint8_t j=0;j<3;j++){
     for(uint8_t k=0;k<6;k++){
@@ -154,35 +170,5 @@ for(uint64_t x=0;x<tablecount[1];x++){
 uint8_t tmp[4];
 for(uint8_t i=0;i<3)
   tmp[i]=
-*/
-
-/*
-  for(uint8_t i=0;i<3;i++)                //generate the tables, one after another
-    gentable(i);
-  
-  //the following are example positions for testing purposes
-  
-  uint8_t n = 15;
-  
-  //cube Cube=goal();
-  //Cube.corner[4]=5;
-  //Cube.corner[5]=4;
-  
-  cube Cube=goal();
-  uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
-  for(uint8_t i=0;i<n;i++) Cube=movecube(Cube,moves[i]);
-  //printcube(Cube);
-  
-  cout << minDepth(goal())+0 << "\n";
-  
-  cout << minDepth(Cube)+0 << "\n";
-  
-  for(uint8_t i=minDepth(Cube);i<=n&&(!solve(Cube,i));i++)
-    cout << "finished depth " << i+0 << "\n";
-  for(uint8_t j=0;j<36;j++){
-    for(uint8_t i=0;i<n;i++)
-      cout << solution[j][i]+0 << ";"; 
-    cout << "\n";
-  }
 */
 }
