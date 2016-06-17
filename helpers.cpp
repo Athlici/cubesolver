@@ -25,32 +25,45 @@ cube turncube(cube Cube,const uint8_t move){        //this should implicitly use
   turncorners(Cube.corner,move);
   return Cube;
 }
-/*
-void rotateedges(uint8_t* addr,const uint8_t move){}
 
-void rotatecenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){}
+void rotateedges(uint8_t* addr,uint8_t* res,const uint8_t move){
+  for(uint8_t i=0;i<24;i++)
+    res[i]=edgerot[move][addr[i]];
+}
 
-void rotatecorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){}
+void rotatecenters(uint8_t* addr,uint8_t* res,const uint8_t move,const uint8_t n=24){
+  for(uint8_t i=0;i<n;i++)
+    res[i]=centerrot[move][addr[i]];    //possibly change to res[cntrrot[m][i]] later?
+}
 
-cube rotatecube(cube Cube,const uint8_t move){
-  rotateedges(Cube.edge,move);
-  rotatecenters(Cube.center,move);
-  rotatecorners(Cube.corner,move);
+void rotatecorners(uint8_t* addr,uint8_t* res,const uint8_t move,const uint8_t n=24){
+  for(uint8_t i=0;i<n;i++)
+    res[i]=cornerrot[move][addr[i]];
+}
+
+cube rotatecube(cube Cube,const uint8_t move){  //rewrite this later to avoid unnecessary cube creation
+  rotateedges(Cube.edge,Cube.edge,move);
+  rotatecenters(Cube.center,Cube.center,move);
+  rotatecorners(Cube.corner,Cube.corner,move);
   return Cube;
 }
-*/
+
 #if symred==1
 void symcenters(uint8_t* addr,const uint8_t move){
   for(uint8_t i=0;i<12;i++)
     addr[i]=centersym[move][addr[i]];
-  if(move==1||move==3)
-    for(uint8_t i=4;i<8;i++)      //4Byte in one?
-        swap(addr[i],addr[i+4]);  //Adjust for colorswap;
+  if(move%2)
+    for(uint8_t j=0;j<4;j++)
+    swap(addr[4+j],addr[8+j]);
+//  uint8_t tmp[12];
+//  for(uint8_t i=0;i<12;i++)
+//    tmp[centersym[move][i]]=centersym[move][addr[i]];
+//  memcpy(addr,tmp,12);  //res = centersym^-1 * addr * centersym
 }
 
 void symcorners(uint8_t* addr,const uint8_t move){
-  for(uint8_t i=0;i<8;i++)
-    addr[i]=cornersym[move][addr[i]];
+  for(uint8_t i=0;i<8;i++)              //I think the necessity of applying the inverse is avoided by
+    addr[i]=cornersym[move][addr[i]];   //the problem split and only using this function for ranking
 }
 #endif
 
@@ -130,6 +143,9 @@ uint8_t readtabval(uint8_t k,uint64_t pos){
 
 void settabval(uint8_t k,uint64_t pos,uint8_t mod){
 #if tablecompression==0
+        if(pos>tablecount[k]){
+          cout << pos+0 << "\n";
+        }
   table[k][pos/2]=~setnibble(~table[k][pos/2],mod,pos%2);
 #elif tablecompression==1
 

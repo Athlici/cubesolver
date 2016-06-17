@@ -74,27 +74,29 @@ uint64_t posedges(uint8_t* a){
   for(uint8_t i=0;i<6;i++)
     for(uint8_t j=i+1;j<7;j++)
       if(a[i]<a[j])
-        A[i]-=3;
+        A[j]-=3;
   return (A[6]+6*(A[5]+9*(A[4]+12*(A[3]+15*(A[2]+18*(A[1]+21*A[0]))))));
 }
 
 void adredges(uint8_t* res,uint64_t x){  //stores the result in the array of the first argument
   for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
-    res[i/3-2] = x % i;				//in reduced form
+    res[8-i/3] = x % i;				//in reduced form
     x /= i;
   }
-  for(uint8_t i=0;i<6;i++)			//therefore we increase them dependently
+  for(int8_t i=6;i>=0;i--)			//therefore we increase them dependently
     for(uint8_t j=i+1;j<7;j++)
-      if(res[j]/3<=res[i]/3) 
-	    res[i]+=3;
+      if(res[i]/3<=res[j]/3) 
+	    res[j]+=3;
 }
 
 #if symred==1
 uint16_t srposcorn[735471]={0};
 uint8_t cornsymred[367736]={0};
 uint32_t sradrcorn[46372]; //slightly wastefull, almost all values are below 2^16
+uint16_t srposcent[10626]={0};
+uint16_t sradrcent[2706];
 
-void initcornerfuncs(){
+void initsymfuncs(){
   uint32_t count=1;
   for(uint32_t i=0;i<735471;i++){
     uint32_t pos[16],min=-1;
@@ -119,7 +121,33 @@ void initcornerfuncs(){
     }
   }
   for(uint32_t i=0;i<735471;i++) srposcorn[i]--;
-  cout << "Wrote " << count-1 << " orbits to the table!\n";
+  cout << "Wrote " << count-1 << " corner orbits to the table!\n";
+  
+  count=1;
+  for(uint16_t i=0;i<10626;i++){
+    uint16_t pos[4],min=-1;
+    uint8_t  minind=0;
+    for(uint8_t j=0;j<4;j++){
+      uint8_t subset[4];
+      binadr(subset,i,4);
+      symcenters(subset,j);
+      sort(subset,subset+4);
+      pos[j]=binpos(subset,4);
+      if(pos[j]<min){
+        min=pos[j];
+        minind=j;
+      }
+    }
+    srposcent[i]+=minind;
+    if(srposcent[i]<4){
+      for(uint8_t j=0;j<4;j++)
+        srposcent[pos[j]]=4*count+srposcent[pos[j]]%4;
+      sradrcent[count-1]=min;
+      count++;
+    }
+  }
+  for(uint32_t i=0;i<10626;i++) srposcent[i]-=4;
+  cout << "Wrote " << count-1 << " center orbits to the table!\n";
 }
 #endif
 uint64_t poscorners(uint8_t* a){
@@ -167,66 +195,15 @@ void adrcorners(uint8_t* res,uint64_t pos){
 
 uint64_t poscenters(uint8_t* a){
   uint64_t res=0;
-
-  if(a[0]>a[1])swap(a[0],a[1]); //Sort the white pieces, hold off on the rest until
-  if(a[2]>a[3])swap(a[2],a[3]); //we have potentially applied out symmetry reductions
-  if(a[0]>a[2])swap(a[0],a[2]);
-  if(a[1]>a[3])swap(a[1],a[3]);
-  if(a[1]>a[2])swap(a[1],a[2]);
+  sort(a,a+4);
 
 #if symred==1
-  uint8_t b[3];
-  switch((a[0]/4==a[1]/4)*4+(a[1]/4==a[2]/4)*2+(a[2]/4==a[3]/4)){
-    case 0:
-      symcenters(a,a[0]%4);   //a[0]%4==0 after this;
-      res=binpos(a,4,div4)*64+(a[3]%4)*16+(a[2]%4)*4+(a[1]%4);
-    break;
-    case 1:
-      symcenters(a,a[0]%4);
-      if(a[2]>a[3])swap(a[2],a[3]);
-      res=960+4*(20*binpos(a+2,2,mod4)+binpos(a,3,div4))+a[1]%4;
-    break;
-    case 2:
-      symcenters(a,a[0]%4);
-      if(a[1]>a[2])swap(a[1],a[2]);
-      b[0]=a[0];b[1]=a[1];b[2]=a[3];
-      res=1440+4*(20*binpos(a+1,2,mod4)+binpos(b,3,div4))+a[3]%4;
-    break;
-    case 4:
-      symcenters(a,a[2]%4);
-      if(a[0]>a[1])swap(a[0],a[1]);
-      res=1920+4*(20*binpos(a,2,mod4)+binpos(a+1,3,div4))+a[3]%4;
-    break;
-    case 3:
-      symcenters(a,a[0]%4);
-      if(a[1]>a[2])swap(a[1],a[2]);
-      if(a[2]>a[3])swap(a[2],a[3]);
-      if(a[1]>a[2])swap(a[1],a[2]);
-      res=2400+4*binpos(a,2,div4)+binpos(a+1,3,mod4);
-    break;
-    case 6:
-      symcenters(a,a[3]%4);
-      if(a[0]>a[1])swap(a[0],a[1]);
-      if(a[1]>a[2])swap(a[1],a[2]);
-      if(a[0]>a[1])swap(a[0],a[1]);
-      res=2460+4*binpos(a+2,2,div4)+binpos(a,3,mod4);
-    break;
-    case 5://this is suboptimal by 3%
-      symcenters(a,a[0]%4);
-      if(a[2]>a[3])swap(a[2],a[3]);
-      res=2520+3*(6*binpos(a+1,2,div4)+binpos(a+2,2,mod4))+(a[1]-1)%4;
-    break;
-    case 7:
-      res=2790+a[0]/4;
-  }
+  uint16_t tmp=srposcent[binpos(a,4)];
+  symcenters(a,tmp%4);
+  res+=tmp/4;
 #endif
-  for (uint8_t i=4;i<12;i+=4){
-    if(a[0+i]>a[1+i])swap(a[0+i],a[1+i]);
-    if(a[2+i]>a[3+i])swap(a[2+i],a[3+i]);
-    if(a[0+i]>a[2+i])swap(a[0+i],a[2+i]);
-    if(a[1+i]>a[3+i])swap(a[1+i],a[3+i]);
-    if(a[1+i]>a[2+i])swap(a[1+i],a[2+i]);
-  }
+  for (uint8_t i=4;i<12;i+=4)
+    sort(a+i,a+i+4);
   uint32_t curr=0,last=0;           //keep track which bits are set and have been set
   for(uint8_t b=0;b<12;b+=4){       //for every block
     for(uint8_t i=b;i<b+4;i++){     //for every element
@@ -241,7 +218,7 @@ uint64_t poscenters(uint8_t* a){
   static const uint64_t factors[3] = {1,10626,51482970};
   for(int8_t i=0;i<12;i+=4)
 #else
-  static const uint64_t factors[3] = {1, 2796,13546620};
+  static const uint64_t factors[3] = {1, 2706,13110570};
   for(int8_t i=4;i<12;i+=4)
 #endif
     res+=factors[i/4]*binpos(a+i,4);
@@ -251,104 +228,14 @@ uint64_t poscenters(uint8_t* a){
 void adrcenters(uint8_t* res,uint64_t x){
   uint16_t subc[3];
 #if symred==1
-  static const uint64_t factors[2] = {2796,4845};
+  subc[0]=sradrcent[x%2706];x/=2706;
 #else
-  static const uint64_t factors[2] = {10626,4845};
+  subc[0]=x%10626;x/=10626;
 #endif
-  subc[0]=x%factors[0];
-  x/=factors[0];
-  subc[1]=x%factors[1];
-  x/=factors[1];
+  subc[1]=x%4845;x/=4845;
   subc[2]=x;
     
-#if symred==1
-  if(subc[0]<2400){
-    if(subc[0]<1440){
-      if(subc[0]<960){
-        uint8_t foo[4];
-        binadr(foo,subc[0]/64,4);
-        res[0]=foo[0]*4;
-        for(uint8_t i=1;i<4;i++){
-            res[i]=foo[i]*4+subc[0]%4;
-            subc[0]/=4;
-        }
-      }else{
-        subc[0]-=960;
-        uint8_t a=subc[0]%4; subc[0]/=4;
-        uint8_t foo[3],bar[2];
-        binadr(foo,subc[0]%20,3); subc[0]/=20;
-        binadr(bar,subc[0],2);
-        res[0]=4*foo[0];
-        res[1]=4*foo[1]+a;
-        res[2]=4*foo[2]+bar[0];
-        res[3]=4*foo[2]+bar[1];
-      }
-    }else{
-      if(subc[0]<1920){
-        subc[0]-=1440;
-        uint8_t a=subc[0]%4; subc[0]/=4;
-        uint8_t foo[3],bar[2];
-        binadr(foo,subc[0]%20,3); subc[0]/=20;
-        binadr(bar,subc[0],2);
-        res[0]=4*foo[0];
-        res[1]=4*foo[1]+bar[0];
-        res[2]=4*foo[1]+bar[1];
-        res[3]=4*foo[2]+a;
-      }else{
-        subc[0]-=1920;
-        uint8_t a=subc[0]%4; subc[0]/=4;
-        uint8_t foo[3],bar[2];
-        binadr(foo,subc[0]%20,3); subc[0]/=20;
-        binadr(bar,subc[0],2);
-        res[0]=4*foo[0]+bar[0];
-        res[1]=4*foo[0]+bar[1];
-        res[2]=4*foo[1];
-        res[3]=4*foo[2]+a;
-      }
-    }
-  }else{
-    if(subc[0]<2520){
-      if(subc[0]<2460){
-        subc[0]-=2400;
-        uint8_t foo[3],bar[2];
-        binadr(foo,subc[0]%4,3); subc[0]/=4;
-        binadr(bar,subc[0],2);
-        res[0]=4*bar[0];
-        res[1]=4*bar[1]+foo[0];
-        res[2]=4*bar[1]+foo[1];
-        res[3]=4*bar[1]+foo[2];
-      }else{
-        subc[0]-=2460;
-        uint8_t foo[3],bar[2];
-        binadr(foo,subc[0]%4,3); subc[0]/=4;
-        binadr(bar,subc[0],2);
-        res[0]=4*bar[0]+foo[0];
-        res[1]=4*bar[0]+foo[1];
-        res[2]=4*bar[0]+foo[2];
-        res[3]=4*bar[1];
-      }
-    }else{
-      if(subc[0]<2790){
-        subc[0]-=2520;
-        uint8_t a=subc[0]%3; subc[0]/=3;
-        uint8_t foo[2],bar[2];
-        binadr(foo,subc[0]%6,2); subc[0]/=6;
-        binadr(bar,subc[0],2);
-        res[0]=4*bar[0];
-        res[1]=4*bar[0]+a+1;
-        res[2]=4*bar[1]+foo[0];
-        res[3]=4*bar[1]+foo[1];
-      }else{
-        for(uint8_t i=0;i<4;i++)
-          res[i]=4*(subc[0]-2790)+i;
-      }
-    }
-  }
-
-  for(uint8_t i=1;i<3;i++)
-#else
   for(uint8_t i=0;i<3;i++)
-#endif
     binadr(res+4*i,subc[i],4);
 //Rewrite the rest of this another time
   for(uint8_t i=4;i<8;i++)
@@ -364,28 +251,27 @@ void adrcenters(uint8_t* res,uint64_t x){
         res[i]++;
 }
 
-uint8_t minDepth(const cube &Cube){     //make sure the destruction of the cube is without consequences
+uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
   uint8_t max=readtabval(0,posedges(Cube.edge));
-    if(max<tmp) max=tmp;
 #if centercount==12
-  const uint8_t centerrots[2]={0,0};        //TODO: Write the Mathematica Code to calculate these + the movetables
+  const uint8_t centerrots[2]={0,12};
 #else
-  const uint8_t centerrots[3]={0,0,0}:
+  const uint8_t centerrots[3]={0,0,0};  //Im not sure these do even exist without changing the movearrays?
 #endif
   for(uint8_t i=0;i<24;i+=centercount){
-    rotatecenters(Cube.centers+i,centercount);
-    uint8_t tmp=readtabval(1,poscenters(Cube.centers+i));
+    rotatecenters(Cube.center+i,Cube.center+i,centerrots[i/centercount],centercount);
+    uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
     if(tmp>max)
       max=tmp;
   }
 #if cornercount==8
-  const uint8_t cornerrots[3]={0,0,0};
+  const uint8_t cornerrots[3]={0,13,22};
 #else
-  const uint8_t cornerrots[4]={0,0,0,0};
+  const uint8_t cornerrots[4]={0,0,0,0}; //Same here (Probably not?)?
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
-    rotatecorners(Cube.corners+i,cornercount);
-    uint8_t tmp=readtabval(2,poscorners(Cube.corners+i));
+    rotatecorners(Cube.corner+i,Cube.corner+i,cornerrots[i/cornercount],cornercount);
+    uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
     if(tmp>max)
       max=tmp;
   }
