@@ -61,6 +61,25 @@ gentable(1);
 gentable(2);
 
 /*
+for(uint8_t i=0;i<3;i++){
+  for(uint8_t j=0;j<3;j++){
+    for(uint8_t k=0;k<6;k++){
+      uint8_t foo[7]={0,3,6,9,12,15,18};
+      uint8_t bar[7]={0,3,6,9,12,15,18};
+      turnedges(foo,6*i+j);
+      turnedges(bar,6*i+k);
+      turnedges(foo,6*i+k);
+      turnedges(bar,6*i+j);
+      if(posedges(foo)!=posedges(bar)){
+        for(uint8_t m=0;m<7;m++)
+          cout << foo[m]+0 << ":" << bar[m]+0 << "-";
+        cout << "\n" << i+0 << ":" << j+0 << ":" << k+0 << "\n";
+      }
+    }
+  }
+}
+*/
+/*
 uint8_t perm[8];
 for(uint16_t i=0;i<40320;i++){
   permadr(perm,i,8);
@@ -86,6 +105,20 @@ for(uint16_t i=0;i<735471;i++){
     for(uint8_t j=0;j<8;j++)
       cout << subset[j]+0 << ";";
     cout << "\n" << i+0 << ";" << x+0 << "\n";
+  }
+}
+*/
+/*
+uint8_t foo[7],bar[7];
+for(uint64_t x=0;x<tablecount[0];x++){
+  adredges(foo,x);
+  memcpy(bar,foo,7);
+  uint64_t res=posedges(bar);
+  if(x!=res){
+    cout << "Results at:" << x+0 << ";" << res << "\n";
+    for(uint8_t i=0;i<7;i++)
+      cout << foo[i]+0 << ";";
+    cout << "\n";
   }
 }
 */

@@ -26,7 +26,10 @@ cube turncube(cube Cube,const uint8_t move){        //this should implicitly use
   return Cube;
 }
 
-void rotateedges(uint8_t* addr,uint8_t* res,const uint8_t move){}
+void rotateedges(uint8_t* addr,uint8_t* res,const uint8_t move){
+  for(uint8_t i=0;i<24;i++)
+    res[i]=edgerot[move][addr[i]];
+}
 
 void rotatecenters(uint8_t* addr,uint8_t* res,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
@@ -140,6 +143,9 @@ uint8_t readtabval(uint8_t k,uint64_t pos){
 
 void settabval(uint8_t k,uint64_t pos,uint8_t mod){
 #if tablecompression==0
+        if(pos>tablecount[k]){
+          cout << pos+0 << "\n";
+        }
   table[k][pos/2]=~setnibble(~table[k][pos/2],mod,pos%2);
 #elif tablecompression==1
 

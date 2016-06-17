@@ -1,6 +1,6 @@
 const uint64_t tablecount[3] = {
-  #if symred==0
     88179840,
+  #if symred==0
     #if centercount==8
       51482970,
     #else
@@ -12,7 +12,7 @@ const uint64_t tablecount[3] = {
       29654190720
     #endif
   #else
-    0,23861237400,1869678720
+    23861237400,1869678720
   #endif
 };
 

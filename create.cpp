@@ -12,6 +12,11 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
       count++;
       uint8_t current[n],next[n];
       (*adrfunc[k])(current,mover);
+//      if(depth==2){
+//      for(uint8_t i=0;i<6;i++)
+//        cout << current[i]+0 << ",";
+//      cout << current[6]+0 << "},{";
+//      }
       for(uint8_t i=0;i<movespace[k];i++){			//some of these moves are redundant, TODO: eliminate by checking depth
         memcpy(next,current,n);
         (*movfunc[k])(next,i,n);
@@ -70,9 +75,10 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
   }else{
+    uint8_t sed[7]={0,3,6,9,12,15,18};
     uint8_t sce[12]={0,1,2,3,4,5,6,7,8,9,10,11};    //center12/.centermap - 1
     uint8_t sco[8]={0,1,2,3,4,5,6,7};               //corner8/.cornermap - 1
-    uint64_t zeroaddr[3] = {0,poscenters(sce),poscorners(sco)};
+    uint64_t zeroaddr[3] = {posedges(sed),poscenters(sce),poscorners(sco)};
     settabval(k,zeroaddr[k],0);                                 //The starting Position is set to have depth 0
 
     cout << "generating " << tablename[k] <<" table.\n";		//little status update

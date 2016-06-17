@@ -74,19 +74,19 @@ uint64_t posedges(uint8_t* a){
   for(uint8_t i=0;i<6;i++)
     for(uint8_t j=i+1;j<7;j++)
       if(a[i]<a[j])
-        A[i]-=3;
+        A[j]-=3;
   return (A[6]+6*(A[5]+9*(A[4]+12*(A[3]+15*(A[2]+18*(A[1]+21*A[0]))))));
 }
 
 void adredges(uint8_t* res,uint64_t x){  //stores the result in the array of the first argument
   for(uint8_t i=6;i<=24;i+=3){		//which can be extracted from the argument
-    res[i/3-2] = x % i;				//in reduced form
+    res[8-i/3] = x % i;				//in reduced form
     x /= i;
   }
-  for(uint8_t i=0;i<6;i++)			//therefore we increase them dependently
+  for(int8_t i=6;i>=0;i--)			//therefore we increase them dependently
     for(uint8_t j=i+1;j<7;j++)
-      if(res[j]/3<=res[i]/3) 
-	    res[i]+=3;
+      if(res[i]/3<=res[j]/3) 
+	    res[j]+=3;
 }
 
 #if symred==1
@@ -259,7 +259,7 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
   const uint8_t centerrots[3]={0,0,0};  //Im not sure these do even exist without changing the movearrays?
 #endif
   for(uint8_t i=0;i<24;i+=centercount){
-    rotatecenters(Cube.center+i,Cube.center+i,centercount);
+    rotatecenters(Cube.center+i,Cube.center+i,centerrots[i/centercount],centercount);
     uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
     if(tmp>max)
       max=tmp;
@@ -270,7 +270,7 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
   const uint8_t cornerrots[4]={0,0,0,0}; //Same here (Probably not?)?
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
-    rotatecorners(Cube.corner+i,Cube.corner+i,cornercount);
+    rotatecorners(Cube.corner+i,Cube.corner+i,cornerrots[i/cornercount],cornercount);
     uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
     if(tmp>max)
       max=tmp;
