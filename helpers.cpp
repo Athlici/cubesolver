@@ -2,22 +2,52 @@
 
 //the turn* functions mutate the data at the first argument in place
 //maybe unify all these into one function?
-
+#if addtables==0
 void turnedges(uint8_t* addr,const uint8_t move,const uint8_t n=7){
+#else
+uint8_t turnedges(uint8_t* addr,const uint8_t move,const uint8_t n=7){
+#endif
   if(move<18)       //moves >=18 are inner moves and therefore don't affect the edges
     for(uint8_t i=0;i<n;i++)
       addr[i]=edgemove[move][addr[i]];
+#if addtables==1
+  return 1;
+#endif
 }
 
+#if addtables==0
 void turncenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
     addr[i]=centermove[move][addr[i]];
 }
+#else
+uint8_t turncenters(uint8_t* addr,const uint8_t move,const uint8_t n=24){
+  uint8_t cost=0;
+  for(uint8_t i=0;i<n;i++){
+    uint8_t tmp=centermove[move][addr[i]];
+    cost+=addr[i]!=tmp;
+    addr[i]=tmp;
+  }         //costs are 1/16 for every piece with a move < 18
+  return cost*(3+(18<=move));   //1/12 else -> lcm=48
+}
+#endif
 
+#if addtables==0
 void turncorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){
   for(uint8_t i=0;i<n;i++)
     addr[i]=cornermove[move][addr[i]];
 }
+#else
+uint8_t turncorners(uint8_t* addr,const uint8_t move,const uint8_t n=24){
+  uint8_t cost=0;
+  for(uint8_t i=0;i<n;i++){
+    uint8_t tmp=cornermove[move][addr[i]];
+    cost+=addr[i]!=tmp;
+    addr[i]=tmp;
+  }
+  return cost*(3+(18<=move));
+}
+#endif
 
 cube turncube(cube Cube,const uint8_t move){        //this should implicitly use a copy
   turnedges(Cube.edge,move);
@@ -136,8 +166,10 @@ uint8_t readtabval(uint8_t k,uint64_t pos){
   return readnibble(~table[k][pos/2],pos%2);
 #elif tablecompression==1
 
-#else
+#elif tablecompression==2
 
+#else
+  return ~table[k][pos];
 #endif
 }
 
@@ -149,8 +181,10 @@ void settabval(uint8_t k,uint64_t pos,uint8_t mod){
   table[k][pos/2]=~setnibble(~table[k][pos/2],mod,pos%2);
 #elif tablecompression==1
 
-#else
+#elif tablecompression==2
 
+#else
+  table[k][pos]=~mod;
 #endif
 }
 

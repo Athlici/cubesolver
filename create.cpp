@@ -1,7 +1,11 @@
 uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
+#if addtables==0
+  void     (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
+#else
+  uint8_t  (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
+#endif
   void     (*adrfunc[3])(uint8_t*,uint64_t)        = {&adredges, &adrcenters, &adrcorners};
   uint64_t (*posfunc[3])(uint8_t*)                 = {&posedges, &poscenters, &poscorners};
-  void     (*movfunc[3])(uint8_t*,uint8_t,uint8_t) = {&turnedges,&turncenters,&turncorners};
   const uint8_t movespace[3] = {18,36,36};
   uint8_t tmp[3]={7,centercount,cornercount};
   uint8_t n=tmp[k];
@@ -12,17 +16,20 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
       count++;
       uint8_t current[n],next[n];
       (*adrfunc[k])(current,mover);
-//      if(depth==2){
-//      for(uint8_t i=0;i<6;i++)
-//        cout << current[i]+0 << ",";
-//      cout << current[6]+0 << "},{";
-//      }
-      for(uint8_t i=0;i<movespace[k];i++){			//some of these moves are redundant, TODO: eliminate by checking depth
+      for(uint8_t i=0;i<movespace[k];i++){  //some moves are redundant
         memcpy(next,current,n);
+#if addtables==0
         (*movfunc[k])(next,i,n);
+#else
+        uint8_t cost=(*movfunc[k])(next,i,n);
+#endif
         uint64_t pos=(*posfunc[k])(next);
         if(depth<readtabval(k,pos))
+#if addtables==0
           settabval(k,pos,depth+1);
+#else
+          settabval(k,pos,depth+cost);
+#endif
 	  }
 	}
   }
@@ -32,7 +39,11 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
 
 void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ centers, 2→ corners
   FILE* file  = fopen(tablepath[k],"rb");
+#if addtables==0        //TODO:make general
   table[k] = (uint8_t*) calloc(1,tablecount[k]/2);
+#else
+  table[k] = (uint8_t*) calloc(1,tablecount[k]);
+#endif
   if(table[k]==NULL){
     cout << "allocation failure?";
     exit(1);
@@ -40,7 +51,7 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
   if(file!=0){
 #if tablecompression==0
     fread(table[k],1,tablecount[k]/2,file);
-#else
+#elif tablecompression==1 
     if(k==0){
       table[k] = (uint8_t*) calloc(tablesize[k],1);
       fread(table[k],1,tablesize[k],file);
@@ -71,6 +82,9 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
       }
       free(buffer);
     }
+#elif tablecompression==2
+#else
+    fread(table[k],1,tablecount[k],file);
 #endif
     cout << "loaded " << tablename[k] << " table from disk.\n";
     fclose(file);
@@ -84,7 +98,11 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
     cout << "generating " << tablename[k] <<" table.\n";		//little status update
 
     uint64_t count=1;
+#if addtables==0
     for(uint8_t depth=0;count>0;depth++){
+#else
+    for(uint8_t depth=0;depth<254;depth++){
+#endif
       count=0;
       future<uint64_t> par[corecount];
       for(uint8_t i=0;i<corecount;i++)
@@ -98,7 +116,11 @@ void gentable(uint8_t k) {						//generalized table creation 0→ edges, 1→ ce
 
   FILE* file=fopen(tablepath[k],"wb");
   if(file!=0){
+#if addtables==0        //TODO:Create correct dependency
     fwrite(table[k],1,tablecount[k]/2,file);
+#else
+    fwrite(table[k],1,tablecount[k],file);
+#endif
     fclose(file);
   }
   cout << tablename[k] << " table created\n"; 

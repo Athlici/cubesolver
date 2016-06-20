@@ -15,13 +15,13 @@
 //Utilise rotation/mirror symmetrie to reduce position count
 #define symred 1
 //Whether to use additive tables or plain maximum ones
-#define addtables 0
-//How to compress the tables in memory, 0: nibbles, 1: 2bit + lookup tree, 2: mod 3
-#define tablecompression 0
+#define addtables 1
+//How to compress the tables in memory, 0: nibbles, 1: 2bit + lookup tree, 2: mod 3, 3:Bytes
+#define tablecompression 3
 //How to use the disk during table creation, 0: don't, 1: 2bit in memory, 2: memory cached bfs
 #define disktablegen 0
 //how many threads to use to generate the tables
-#define corecount 8
+#define corecount 4
 
 using namespace std;
 
@@ -30,7 +30,7 @@ typedef struct {
   uint8_t edge[7];
   uint8_t center[24];
   uint8_t corner[24];
-} cube ;
+} cube;
 
 #include "tablecount.cpp"
 uint8_t* table[3];
@@ -48,6 +48,10 @@ int main(int argc, char** argv) {
 
   initsymfuncs();
 
+  gentable(2);
+  gentable(1);
+
+/*
   for(uint8_t i=0;i<3;i++)                //generate the tables, one after another
     gentable(i);
   
@@ -75,7 +79,7 @@ int main(int argc, char** argv) {
       cout << solution[j][i]+0 << ";"; 
     cout << "\n";
   }
-
+*/
 /*  //test edge commutativity
 for(uint8_t i=0;i<3;i++){
   for(uint8_t j=0;j<3;j++){
