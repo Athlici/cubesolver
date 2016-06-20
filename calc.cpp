@@ -156,6 +156,7 @@ uint64_t poscorners(uint8_t* a){
   sort(pos,pos+cornercount);
   uint32_t x=binpos(pos,cornercount);
 #if symred==1
+  __builtin_prefetch(srposcorn+x,0,0);
   symcorners(a,readnibble(cornsymred[x/2],x%2));
 #endif
   uint32_t bmp=0;
@@ -164,7 +165,7 @@ uint64_t poscorners(uint8_t* a){
     bmp+=(1<<a[i]);
   for(uint8_t i=0;i<cornercount;i++){
     uint32_t mask=bmp&((1<<a[i])-1);        //create a mask including only x<a[i]
-    for(uint8_t j=0;j<24;j+=8)    //and reduce a[i] appropiatly
+    for(uint8_t j=0;j<24;j+=8)              //and reduce a[i] appropiatly
       perm[i]+=BitsSetTable256[(mask>>j)%256];
   }
 #if symred==1
@@ -250,7 +251,7 @@ void adrcenters(uint8_t* res,uint64_t x){
       if(foo[j]<=res[i])
         res[i]++;
 }
-
+//TODO: Add prefetching!
 uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
   uint8_t max=readtabval(0,posedges(Cube.edge));
 #if centercount==12
