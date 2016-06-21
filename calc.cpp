@@ -253,7 +253,11 @@ void adrcenters(uint8_t* res,uint64_t x){
 }
 //TODO: Add prefetching!
 uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
+#if addtables==0
   uint8_t max=readtabval(0,posedges(Cube.edge));
+#else
+  uint16_t res=3*readtabval(0,posedges(Cube.edge));
+#endif
 #if centercount==12
   const uint8_t centerrots[2]={0,12};
 #else
@@ -261,9 +265,13 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
 #endif
   for(uint8_t i=0;i<24;i+=centercount){
     rotatecenters(Cube.center+i,Cube.center+i,centerrots[i/centercount],centercount);
+#if addtables==0
     uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
     if(tmp>max)
       max=tmp;
+#else
+    res+=readtabval(1,poscenters(Cube.center+i));
+#endif
   }
 #if cornercount==8
   const uint8_t cornerrots[3]={0,13,22};
@@ -272,9 +280,17 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
     rotatecorners(Cube.corner+i,Cube.corner+i,cornerrots[i/cornercount],cornercount);
+#if addtables==0
     uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
     if(tmp>max)
       max=tmp;
+#else
+    res+=readtabval(2,poscorners(Cube.corner+i));
+#endif
   }
+#if addtables==0
   return max;
+#else
+  return res/48;
+#endif
 }
