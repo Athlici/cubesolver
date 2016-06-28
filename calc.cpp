@@ -290,11 +290,14 @@ uint64_t addr=poscenters(Cube.center),lastaddr;
     addr=poscorners(Cube.corner+i);
 #if addtables==0
     __builtin_prefetch(table[2]+addr/2,0,0);
-    uint8_t tmp=readtabval(2,lastaddr);
+    uint8_t tmp=readtabval(2-(i==0),lastaddr);
     if(tmp>max) max=tmp;
 #else
     __builtin_prefetch(table[2]+addr,0,0);
-    res+=readtabval(2-(i==0),lastaddr);
+    if(i==0)
+      res+=readtabval(1,lastaddr);
+    else
+      res+=readtabval(2,lastaddr);
 #endif
   lastaddr=posedges(Cube.edge);
 #if addtables==0
