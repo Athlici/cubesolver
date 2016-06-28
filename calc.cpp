@@ -253,24 +253,30 @@ void adrcenters(uint8_t* res,uint64_t x){
 }
 //TODO: Add prefetching!
 uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is without consequences
+uint64_t addr=poscenters(Cube.center),lastaddr;
 #if addtables==0
-  uint8_t max=readtabval(0,posedges(Cube.edge));
+  uint8_t max=255;
+  __builtin_prefetch(table[1]+addr/2,0,0);
 #else
-  uint16_t res=12*readtabval(0,posedges(Cube.edge));
+  uint16_t res=0;
+  __builtin_prefetch(table[1]+addr,0,0);
 #endif
 #if centercount==12
   const uint8_t centerrots[2]={0,12};
 #else
-  const uint8_t centerrots[3]={0,0,0};  //Im not sure these do even exist without changing the movearrays?
+  const uint8_t centerrots[3]={0,0,0};  //Im unsure these do even exist without changing the movearrays?
 #endif
-  for(uint8_t i=0;i<24;i+=centercount){
+  for(uint8_t i=centercount;i<24;i+=centercount){
     rotatecenters(Cube.center+i,Cube.center+i,centerrots[i/centercount],centercount);
+    lastaddr=addr;
+    addr=poscenters(Cube.center+i);
 #if addtables==0
-    uint8_t tmp=readtabval(1,poscenters(Cube.center+i));
-    if(tmp>max)
-      max=tmp;
+    __builtin_prefetch(table[1]+addr/2,0,0);
+    uint8_t tmp=readtabval(1,lastaddr);
+    if(tmp>max) max=tmp;
 #else
-    res+=readtabval(1,poscenters(Cube.center+i));
+    __builtin_prefetch(table[1]+addr,0,0);
+    res+=readtabval(1,lastaddr);
 #endif
   }
 #if cornercount==8
@@ -280,12 +286,27 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
 #endif
   for(uint8_t i=0;i<24;i+=cornercount){
     rotatecorners(Cube.corner+i,Cube.corner+i,cornerrots[i/cornercount],cornercount);
+    lastaddr=addr;
+    addr=poscorners(Cube.corner+i);
 #if addtables==0
-    uint8_t tmp=readtabval(2,poscorners(Cube.corner+i));
-    if(tmp>max)
-      max=tmp;
+    __builtin_prefetch(table[2]+addr/2,0,0);
+    uint8_t tmp=readtabval(2,lastaddr);
+    if(tmp>max) max=tmp;
 #else
-    res+=readtabval(2,poscorners(Cube.corner+i));
+    __builtin_prefetch(table[2]+addr,0,0);
+    res+=readtabval(2-(i==0),lastaddr);
+#endif
+  lastaddr=posedges(Cube.edge);
+#if addtables==0
+    __builtin_prefetch(table[0]+lastaddr/2,0,2);
+    uint8_t tmp=readtabval(2,addr);
+    if(tmp>max) max=tmp;
+    uint8_t tmp=readtabval(0,lastaddr);
+    if(tmp>max) max=tmp;
+#else
+    __builtin_prefetch(table[0]+lastaddr,0,2);
+    res+=readtabval(2,addr);
+    res+=12*readtabval(0,lastaddr);
 #endif
   }
 #if addtables==0
