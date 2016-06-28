@@ -15,13 +15,13 @@
 //Utilise rotation/mirror symmetrie to reduce position count
 #define symred 1
 //Whether to use additive tables or plain maximum ones
-#define addtables 0
+#define addtables 1
 //How to compress the tables in memory, 0: nibbles, 1: 2bit + lookup tree, 2: mod 3, 3:Bytes
-#define tablecompression 0
+#define tablecompression 3
 //How to use the disk during table creation, 0: don't, 1: 2bit in memory, 2: memory cached bfs
 #define disktablegen 0
 //how many threads to use to generate the tables
-#define corecount 8
+#define corecount 4
 
 using namespace std;
 
@@ -56,19 +56,20 @@ int main(int argc, char** argv) {
   //the following are example positions for testing purposes
   
   uint8_t n = 15;
-  
-  //cube Cube=goal();
-  //Cube.corner[4]=5;
-  //Cube.corner[5]=4;
-  
+/*  
+  cube Cube=goal();
+  Cube.corner[4]=5;
+  Cube.corner[5]=4;
+*/  
   cube Cube=goal();
   uint8_t moves[15]={29, 3, 33, 21, 10, 34, 1, 35, 11, 25, 16, 5, 35, 16, 0};
   for(uint8_t i=0;i<n;i++){
     Cube=turncube(Cube,moves[i]);
     cout << minDepth(Cube)+0 << "\n";
   }
+
   //printcube(Cube);
-/*  
+  
   cout << minDepth(goal())+0 << "\n";
   
   cout << minDepth(Cube)+0 << "\n";
@@ -80,7 +81,7 @@ int main(int argc, char** argv) {
       cout << solution[j][i]+0 << ";"; 
     cout << "\n";
   }
-*/
+
 /*  //test edge commutativity
 for(uint8_t i=0;i<3;i++){
   for(uint8_t j=0;j<3;j++){

@@ -24,10 +24,11 @@ uint64_t genpar(uint8_t k,uint8_t l,uint8_t depth){
         uint8_t cost=(*movfunc[k])(next,i,n);
 #endif
         uint64_t pos=(*posfunc[k])(next);
-        if(depth<readtabval(k,pos))
 #if addtables==0
+        if(depth<readtabval(k,pos))
           settabval(k,pos,depth+1);
 #else
+        if(depth+cost<readtabval(k,pos))
           settabval(k,pos,depth+cost);
 #endif
 	  }

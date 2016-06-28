@@ -256,7 +256,7 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
 #if addtables==0
   uint8_t max=readtabval(0,posedges(Cube.edge));
 #else
-  uint16_t res=3*readtabval(0,posedges(Cube.edge));
+  uint16_t res=12*readtabval(0,posedges(Cube.edge));
 #endif
 #if centercount==12
   const uint8_t centerrots[2]={0,12};
@@ -291,6 +291,6 @@ uint8_t minDepth(cube Cube){     //make sure the destruction of the cube is with
 #if addtables==0
   return max;
 #else
-  return res/48;
+  return (res+47)/48;
 #endif
 }
